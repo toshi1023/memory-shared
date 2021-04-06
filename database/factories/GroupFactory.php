@@ -22,7 +22,9 @@ class GroupFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name'              => $this->faker->colorName,
+            'host_user_id'      => $this->faker->numberBetween(1, 10),
+            'update_user_id'    => $this->faker->numberBetween(1, 10),
         ];
     }
 }

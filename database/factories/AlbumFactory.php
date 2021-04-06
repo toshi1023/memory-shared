@@ -22,7 +22,10 @@ class AlbumFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name'              => $this->faker->city,
+            'group_id'          => $this->faker->numberBetween(1, 10),
+            'host_user_id'      => $this->faker->numberBetween(1, 10),
+            'update_user_id'    => $this->faker->numberBetween(1, 10),
         ];
     }
 }

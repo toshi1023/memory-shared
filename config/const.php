@@ -12,6 +12,7 @@ return [
         'ADMIN_WORD'         => '管理者',
         'STOP_WORD'          => 'アカウント停止中',
     ],
+    // GroupHistory関連で使う定数
     'GroupHistory' => [
         'APPLY'         => 1,
         'APPROVAL'      => 2,
@@ -20,6 +21,7 @@ return [
         'APPROVAL_WORD'      => '承認済み',
         'REJECT_WORD'        => '却下',
     ],
+    // PushHistory関連で使う定数
     'PushHistory' => [
         'EVERYONE'      => 1,
         'CONDITION'     => 2,

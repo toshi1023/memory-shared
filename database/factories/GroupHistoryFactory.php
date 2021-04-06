@@ -22,7 +22,10 @@ class GroupHistoryFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'user_id'           => $this->faker->numberBetween(1, 10),
+            'group_id'          => $this->faker->numberBetween(1, 10),
+            'status'            => $this->faker->numberBetween(1, 2),
+            'update_user_id'    => $this->faker->numberBetween(1, 10),
         ];
     }
 }
