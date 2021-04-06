@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateImageCommentsTable extends Migration
+class CreateMessageHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,17 @@ class CreateImageCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('image_comments', function (Blueprint $table) {
+        Schema::create('message_histories', function (Blueprint $table) {
             $table->bigIncrements('id')->comment('ID');
-            $table->text('content')->comment('コメント');
-            $table->bigInteger('image_id')->unsigned()->comment('画像ID');
-            $table->integer('user_id')->unsigned()->comment('ユーザID');
+            $table->text('content')->comment('内容');
+            $table->integer('own_id')->unsigned()->comment('送信者のID');
+            $table->integer('user_id')->unsigned()->comment('受信者のID');
             $table->integer('update_user_id')->unsigned()->comment('更新ユーザ');
 
             $table->timestamps();
 
             // 外部キー制約
-            $table->foreign('image_id')->references('id')->on('user_images')->onDelete('cascade');
+            $table->foreign('own_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->softDeletes();
@@ -37,6 +37,6 @@ class CreateImageCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('image_comments');
+        Schema::dropIfExists('message_histories');
     }
 }
