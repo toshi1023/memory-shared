@@ -11,4 +11,12 @@ class Album extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = ['id'];
+
+    /**
+     * usersテーブルと1対多のリレーション構築(多側の設定)
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
 }

@@ -37,4 +37,36 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * image_commentsテーブルと1対多のリレーション構築(1側の設定)
+     */
+    public function imageComments()
+    {
+        return $this->hasMany('App\Models\ImageComment');
+    }
+    
+    /**
+     * video_commentsテーブルと1対多のリレーション構築(1側の設定)
+     */
+    public function videoComments()
+    {
+        return $this->hasMany('App\Models\VideoComment');
+    }
+    
+    /**
+     * groupsテーブルと1対多のリレーション構築(1側の設定)
+     */
+    public function Groups()
+    {
+        return $this->hasMany('App\Models\Group');
+    }
+    
+    /**
+     * albumsテーブルと1対多のリレーション構築(1側の設定)
+     */
+    public function Albums()
+    {
+        return $this->hasMany('App\Models\Album');
+    }
 }
