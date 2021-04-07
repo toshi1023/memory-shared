@@ -16,6 +16,7 @@ class CreateGroupsTable extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->increments('id')->comment('ID');
             $table->string('name')->comment('グループ名');
+            $table->text('discription')->nullable()->comment('紹介文');
             $table->string('image_file')->nullable()->comment('画像名');
             $table->integer('host_user_id')->unsigned()->nullable()->comment('ホストID');
             $table->text('memo')->nullable()->comment('備考');

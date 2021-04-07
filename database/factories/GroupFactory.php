@@ -21,8 +21,22 @@ class GroupFactory extends Factory
      */
     public function definition()
     {
+        $discription = [
+            '梅田カフェ巡り！ほっと一息つけるカフェタイムを楽しみにでかけるグループです！',
+            '予想を超えます！100店近くのお店が軒を連ねる新梅田食道街でハシゴ酒しよう！',
+            '大阪駅のランチ会★',
+            'いつメン京都旅行★',
+            'バスケサークルBASKE★の思い出共有グループです',
+            '北海道海の幸満喫旅行サークル！毎年2回企画しています！！',
+            '神戸駅の友達作りランチ会！',
+            '伏見稲荷山めぐり★参加者いつでも大歓迎です！',
+            'Complexファンクラブコミュニティです',
+            'ヴィッセル神戸応援コミュニティです'
+        ];
+
         return [
             'name'              => $this->faker->colorName,
+            'discription'       => $discription[$this->faker->numberBetween(0, 9)],
             'host_user_id'      => $this->faker->numberBetween(1, 10),
             'update_user_id'    => $this->faker->numberBetween(1, 10),
         ];
