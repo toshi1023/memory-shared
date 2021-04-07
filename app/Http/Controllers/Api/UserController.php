@@ -10,7 +10,7 @@ class UserController extends Controller
     public function index(Request $request, User $model)
     {
         $db = $model;
-        $data = $db->select('status')->first();
+        $data = $db->select()->first();
 
         return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
     }

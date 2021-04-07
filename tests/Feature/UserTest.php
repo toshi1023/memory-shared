@@ -35,11 +35,10 @@ class UserTest extends TestCase
     {
         $response = $this->get('api/users');
 
-        $response->assertExactJson([
-            'status' => config('const.User.MEMBER'),
+        $response->assertOk()
+        ->assertJsonFragment([
+            'status' => config('const.User.ADMIN'),
         ]);
-
-        $response->assertStatus(200);
     }
     
 }
