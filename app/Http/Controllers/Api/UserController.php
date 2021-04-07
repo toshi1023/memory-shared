@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request, User $model)
     {
-        // return http_response_code(200);
+        $db = $model;
+        $data = $db->select('status')->first();
+
+        return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
     }
 }

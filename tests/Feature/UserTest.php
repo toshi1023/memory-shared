@@ -21,20 +21,25 @@ class UserTest extends TestCase
     /**
      * @test
      */
-    public function api_usersにGETメソッドでアクセス()
-    {
-        $response = $this->get('api/users');
-
-        $response->assertStatus(200);
-    }
-
-    /**
-     * @test
-     */
     public function usersテーブルにデータが入っているか確認()
     {
         $this->assertDatabaseHas('users', [
             'status' => config('const.User.MEMBER'),
         ]);
     }
+
+    /**
+     * @test
+     */
+    public function api_usersにGETメソッドでアクセス()
+    {
+        $response = $this->get('api/users');
+
+        $response->assertExactJson([
+            'status' => config('const.User.MEMBER'),
+        ]);
+
+        $response->assertStatus(200);
+    }
+    
 }
