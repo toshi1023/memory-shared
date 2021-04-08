@@ -14,5 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/users', 'Api\UserController@index');
-Route::get('/albums', 'Api\AlbumController@index');
+/************************************************
+ *  アプリ側ルーティング(非ログイン)
+ ************************************************/
+Route::get('/login', 'Api\UserController@index');
+
+ /************************************************
+ *  アプリ側ルーティング(ログイン)
+ ************************************************/
+Route::middleware('auth:sanctum')->group(function(){
+
+    Route::get('/users', 'Api\UserController@index');
+    Route::get('/albums', 'Api\AlbumController@index');
+
+});

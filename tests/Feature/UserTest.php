@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Laravel\Sanctum\Sanctum;
+use App\Models\User;
 
 class UserTest extends TestCase
 {
@@ -16,6 +18,12 @@ class UserTest extends TestCase
     public function setUp(): void{
         parent::setUp();
         $this->artisan('db:seed', ['--class' => 'UsersTableSeeder']);
+
+        // 認証済みユーザの作成
+        Sanctum::actingAs(
+            User::factory()->create(),
+            ['*']
+        );
     }
 
     /**
