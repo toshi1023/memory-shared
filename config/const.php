@@ -36,4 +36,10 @@ return [
         'AFTER_WORD'         => '送信後',
         'ERROR_WORD'         => '送信エラー',
     ],
+    // システムメッセージで使う定数
+    'SystemMessage' => [
+        'SYSTEM_ERR'         => 'システム障害が発生しました。内容は次の通りです。 → ',
+        'UNAUTHORIZATION'    => 'ログイン権限がありません',
+        'LOGIN_ERR'          => 'メールアドレスもしくはパスワードが一致しません'
+    ],
 ];

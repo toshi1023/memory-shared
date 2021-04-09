@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\Route;
 /************************************************
  *  アプリ側ルーティング(非ログイン)
  ************************************************/
-Route::get('/login', 'Api\AuthController@login');
-Route::get('/reset-password/{token}', 'Api\AuthController@passwordReset');
+Route::post('/login', 'Api\AuthController@login')->name('login');
+Route::post('/reset-password/{token}', 'Api\AuthController@passwordReset')->name('passwordReset');
 
  /************************************************
  *  アプリ側ルーティング(ログイン)

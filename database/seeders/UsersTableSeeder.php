@@ -27,6 +27,6 @@ class UsersTableSeeder extends Seeder
             'update_user_id'    => 1,
         ]);
 
-        \App\Models\User::factory(10)->create();
+        // \App\Models\User::factory(10)->create();
     }
 }
