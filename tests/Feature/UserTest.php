@@ -152,4 +152,22 @@ class UserTest extends TestCase
             }
         }
     }
+
+    /**
+     * @test
+     */
+    public function logoutの動作を確認()
+    {
+        $response = $this->json('POST', route('logout'), [
+            'id' => $this->admin->id
+        ]);
+
+        // 正しいレスポンスが返ることを確認
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                'info_message' => config('const.SystemMessage.LOGOUT_INFO')
+            ]);
+        $this->assertGuest();
+    }
 }

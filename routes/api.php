@@ -27,5 +27,6 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::get('/users', 'Api\UserController@index');
     Route::get('/albums', 'Api\AlbumController@index');
-
+    
+    Route::post('/logout', 'Api\AuthController@logout')->name('logout');
 });

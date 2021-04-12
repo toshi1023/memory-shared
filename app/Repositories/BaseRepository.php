@@ -26,7 +26,7 @@ abstract class  BaseRepository
      *   ※引数2の条件指定方法
      *     例）['id' => 'desc']  もしくは  ['@custom' => 'updated_at desc']
      */
-    public function baseSerchQuery($conditions=[], $order=[], bool $softDelete=false)
+    public function baseSearchQuery($conditions=[], $order=[], bool $softDelete=false)
     {
         $query = $this->model::query();
 
@@ -37,7 +37,7 @@ abstract class  BaseRepository
         $query->select($this->model->getTable().".*");
 
         // 検索条件
-        $query = self::getConditions($query, $this->model->getTable(), $conditions);
+        $query = $this->baseGetConditions($query, $this->model->getTable(), $conditions);
 
         // ソート条件
         foreach($order as $key => $value) {

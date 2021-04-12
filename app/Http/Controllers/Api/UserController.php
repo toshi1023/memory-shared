@@ -15,9 +15,12 @@ class UserController extends Controller
         $this->db = $database;
     }
 
+    /**
+     * ユーザ一覧の表示用アクション
+     */
     public function index(Request $request)
     {
-        $data = $this->db->baseQuery();
+        $data = $this->db->baseSearchQuery()->first();
         
         return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
     }
