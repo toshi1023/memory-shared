@@ -10,5 +10,6 @@ class UserVideo extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
 }
