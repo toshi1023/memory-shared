@@ -9,6 +9,7 @@ use Laravel\Sanctum\Sanctum;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Exception;
 
 class UserTest extends TestCase
 {
@@ -38,10 +39,6 @@ class UserTest extends TestCase
             ]),
             ['*']
         );
-        // Sanctum::actingAs(
-        //     User::factory()->create(),
-        //     ['*']
-        // );
     }
 
     /**
@@ -114,4 +111,42 @@ class UserTest extends TestCase
         ]);
     }
     
+    /**
+     * @test
+     */
+    public function softDeleteの動作を確認()
+    {
+        // ユーザの生成
+        $user = 
+        Sanctum::actingAs(
+            User::factory()->create(),
+            ['*']
+        );
+        User::factory()->create();
+        
+        // 論理削除
+        $user->delete();
+
+        // 論理削除済みのユーザを取得
+        $user = User::onlyTrashed()->whereNotNull('id')->get();
+
+        // 論理削除されていないユーザをすべて取得
+        $user2 = User::all();
+
+        // 論理削除済みのユーザも含めたユーザ全体を取得
+        $allUser = User::withTrashed()->whereNotNull('id')->get();
+
+        // ソフトデリートの判別カラムに値がある場合
+        foreach ($user2 as $key => $value) {
+            if($key == 'deleted_at' && !$value) {
+                throw new Exception('softDelete does not work');
+            }
+        }
+        // 論理削除フラグがtrueで、かつ判別カラムの値が事前に取得した論理削除済みユーザと一致しない場合
+        foreach ($allUser->toArray() as $key => $value) {
+            if($value['deleted_at'] && $value['deleted_at'] !== $user->toArray()[0]['deleted_at']) {
+                throw new Exception('softDelete does not work');
+            }
+        }
+    }
 }
