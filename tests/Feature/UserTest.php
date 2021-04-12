@@ -56,7 +56,10 @@ class UserTest extends TestCase
         // 正しいレスポンスが返り、ユーザ名が取得できることを確認
         $response
             ->assertStatus(200)
-            ->assertJson(['name' => $this->admin->name]);
+            ->assertJson([
+                'user' => ['name' => $this->admin->name],
+                'info_message' => config('const.SystemMessage.LOGIN_INFO')
+            ]);
 
         // 指定したユーザーが認証されていることを確認
         $this->assertAuthenticatedAs($this->admin);

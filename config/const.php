@@ -38,6 +38,8 @@ return [
     ],
     // システムメッセージで使う定数
     'SystemMessage' => [
+        'LOGIN_INFO'         => 'ログインに成功しました',
+        'LOGOUT_INFO'        => 'ログアウトしました',
         'SYSTEM_ERR'         => 'システム障害が発生しました。内容は次の通りです。 → ',
         'UNAUTHORIZATION'    => 'ログイン権限がありません',
         'LOGIN_ERR'          => 'メールアドレスもしくはパスワードが一致しません'

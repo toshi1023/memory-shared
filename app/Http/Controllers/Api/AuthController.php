@@ -27,7 +27,7 @@ class AuthController extends Controller
                 'password' => 'required'
             ]);
             if(Auth::guard('web')->attempt($credentials)) {
-                return response()->json(Auth::user(), 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json(["user" => Auth::user(), "info_message" => config('const.SystemMessage.LOGIN_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
             }
             // 認証に失敗した場合
             return response()->json(["message:" => config('const.SystemMessage.LOGIN_ERR')], 401, [], JSON_UNESCAPED_UNICODE);
@@ -42,8 +42,7 @@ class AuthController extends Controller
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function logout(Request $request) {
-        $this->guard()->logout();
-        $request->session()->invalidate();
-        return redirect('/');
+        Auth::guard('web')->logout();
+        return response()->json(["info_message" => config('const.SystemMessage.LOGOUT_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
     }
 }
