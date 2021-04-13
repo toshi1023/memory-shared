@@ -19,14 +19,15 @@ use Illuminate\Support\Facades\Route;
  ************************************************/
 Route::post('/login', 'Api\AuthController@login')->name('login');
 Route::post('/reset-password/{token}', 'Api\AuthController@passwordReset')->name('passwordReset');
+Route::post('/logout', 'Api\AuthController@logout')->name('logout');
 
  /************************************************
  *  アプリ側ルーティング(ログイン)
  ************************************************/
 Route::middleware('auth:sanctum')->group(function(){
 
-    Route::get('/users', 'Api\UserController@index');
+    Route::resource('/users', 'Api\UserController');
     Route::get('/albums', 'Api\AlbumController@index');
     
-    Route::post('/logout', 'Api\AuthController@logout')->name('logout');
+
 });
