@@ -37,18 +37,21 @@ abstract class  BaseRepository
         $query->select($this->model->getTable().".*");
 
         // 検索条件
-        $query = $this->baseGetConditions($query, $this->model->getTable(), $conditions);
+        if($conditions) $query = $this->baseGetConditions($query, $this->model->getTable(), $conditions);
 
         // ソート条件
-        foreach($order as $key => $value) {
-            // カスタムオーダーの場合
-            if (preg_match('/@custom/', $key)) {
-                // 文字列をorder by節の値として指定するために使用
-                $query->orderByRaw($value);
-            } else {
-                $query->orderBy($key, $value);
+        if($order) {
+            foreach($order as $key => $value) {
+                // カスタムオーダーの場合
+                if (preg_match('/@custom/', $key)) {
+                    // 文字列をorder by節の値として指定するために使用
+                    $query->orderByRaw($value);
+                } else {
+                    $query->orderBy($key, $value);
+                }
             }
         }
+        // クエリ結果をリターン
         return $query;
     }
 
