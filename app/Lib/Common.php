@@ -31,17 +31,17 @@ class Common {
      *   キーは頭文字に"sort_"が必要
      *   例）idをソートするときは、sort_id
      */
-    public static function setOrders(Request $request)
+    public static function setOrder(Request $request)
     {
         foreach($request->all() as $key => $value) {
             // ソート条件のみを設定(頭文字に"sort_"がつくキー)
             if(preg_match('/sort_/', substr($key, 0, 5))) {
-                $conditions = [
+                $order = [
                     // "sort_"以降の文字列をキーに設定
                     (string)substr($key, 5, strlen($value)) => $value,
                 ];
             }
         }
-        return $conditions;
+        return $order;
     }
 }

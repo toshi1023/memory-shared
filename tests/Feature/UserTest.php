@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+ini_set("memory_limit", "256M");
+
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -172,6 +174,7 @@ class UserTest extends TestCase
 
         // 一覧ページ用の正常な検索動作を確認
         $response = $this->get('api/users?name='.$this->admin->name.'&status='.$this->admin->status);
+        // $response = $this->get('api/users?email='.$this->admin->email.'&status='.$this->admin->status);
 
         $response->assertOk()
         ->assertJsonFragment([

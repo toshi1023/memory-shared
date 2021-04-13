@@ -19,10 +19,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return $this->baseGetModel(User::class);
     }
 
-    public function baseQuery()
+    public function searchQuery($conditions=[], $order=[], bool $softDelete=false)
     {
-        $query = $this->model::query();
-
-        return $query->select()->first();
+        return $this->baseSearchQuery($conditions, $order, $softDelete)->get();
     }
 }

@@ -24,12 +24,13 @@ class UserController extends Controller
     {
         // 検索条件
         $conditions = [];
-        if($request->name) $conditions = Common::setConditions($request);
+        if($request->email || $request->name) $conditions = Common::setConditions($request);
         
         // ソート条件
         $order = [];
+        if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
         
-        $data = $this->db->baseSearchQuery($conditions, $order)->get();
+        $data = $this->db->searchQuery($conditions, $order);
         
         return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
     }
@@ -37,6 +38,7 @@ class UserController extends Controller
     /**
      * 【ハンバーガーメニュー】
      * ユーザ詳細の表示用アクション
+     *   ※$user: nameカラムの値を設定する
      */
     public function show(Request $request, $user)
     {
@@ -45,7 +47,7 @@ class UserController extends Controller
             'name' => $user
         ];
         
-        $data = $this->db->baseSearchQuery($conditions)->first();
+        $data = $this->db->searchQuery($conditions);
 
         return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
     }

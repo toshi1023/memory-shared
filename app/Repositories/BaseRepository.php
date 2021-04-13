@@ -118,4 +118,22 @@ abstract class  BaseRepository
         }
         return $query;
     }
+
+    /**
+     * 表示件数を限定
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 表示件数
+     */
+    public function baseSearchQueryLimit($conditions=[], $order=[], int $limit)
+    {
+        return $this->baseSearchQuery($conditions, $order, false)->limit($limit);
+    }
+
+    /**
+     * ページネーションを設定
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 表示件数
+     */
+    public function baseSearchQueryPaginate($conditions=[], $order=[], int $paginate)
+    {
+        return $this->baseSearchQuery($conditions, $order, false)->paginate($paginate);
+    }
 }
