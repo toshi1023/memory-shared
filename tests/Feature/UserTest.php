@@ -16,6 +16,7 @@ class UserTest extends TestCase
     use RefreshDatabase;
 
     protected $admin;
+    protected $user;
 
     /**
      * テストの前処理を実行
@@ -26,7 +27,6 @@ class UserTest extends TestCase
 
         // 認証済みユーザの作成
         $this->admin = 
-        Sanctum::actingAs(
             User::create([
                 'name'              => 'root',
                 'email'             => 'root@xxx.co.jp',
@@ -36,9 +36,19 @@ class UserTest extends TestCase
                 'user_agent'        => '',
                 'remember_token'    => Str::random(10),
                 'update_user_id'    => 1,
-            ]),
-            ['*']
-        );
+            ]);
+
+        // 認証済みでないユーザの作成
+        $this->user = User::factory()->create();
+    }
+
+    /**
+     * ユーザを認証済みにしてリターン
+     * 引数: ユーザ情報
+     */
+    public function getActingAs($user)
+    {
+        return Sanctum::actingAs($user, ['*']);
     }
 
     /**
@@ -48,21 +58,21 @@ class UserTest extends TestCase
     {
         // 作成したテストユーザのemailとpasswordで認証リクエスト
         $response = $this->json('POST', route('login'), [
-            'email' => $this->admin->email,
-            'password' => 'root1234',
-            'status'   => config('const.User.ADMIN')
+            'email' => $this->user->email,
+            'password' => 'test1234',
+            'status'   => config('const.User.MEMBER')
         ]);
 
         // 正しいレスポンスが返り、ユーザ名が取得できることを確認
         $response
             ->assertStatus(200)
             ->assertJson([
-                'user' => ['name' => $this->admin->name],
+                'user' => ['name' => $this->user->name],
                 'info_message' => config('const.SystemMessage.LOGIN_INFO')
             ]);
 
         // 指定したユーザーが認証されていることを確認
-        $this->assertAuthenticatedAs($this->admin);
+        $this->assertAuthenticatedAs($this->user);
     }
 
     /**
@@ -72,15 +82,15 @@ class UserTest extends TestCase
     {
         // 作成したテストユーザのemailとpasswordで認証リクエスト
         $response = $this->json('POST', route('login'), [
-            'email' => $this->admin->email,
-            'password' => 'root1234',
+            'email' => $this->user->email,
+            'password' => 'test1234',
             'status'   => config('const.User.STOP')
         ]);
 
         // 権限がない旨のエラーメッセージを取得できることを確認
         $response
             ->assertStatus(401)
-            ->assertJson(["message:" => config('const.SystemMessage.UNAUTHORIZATION')]);
+            ->assertJson(["error_message" => config('const.SystemMessage.UNAUTHORIZATION')]);
     }
 
     /**
@@ -90,7 +100,7 @@ class UserTest extends TestCase
     {
         // 作成したテストユーザのemailとpasswordで認証リクエスト
         $response = $this->json('POST', route('login'), [
-            'email' => $this->admin->email,
+            'email' => $this->user->email,
             'password' => 'error',
             'status'   => config('const.User.MEMBER')
         ]);
@@ -98,7 +108,7 @@ class UserTest extends TestCase
         // 認証失敗のエラーメッセージを取得できることを確認
         $response
             ->assertStatus(401)
-            ->assertJson(["message:" => config('const.SystemMessage.LOGIN_ERR')]);
+            ->assertJson(["error_message" => config('const.SystemMessage.LOGIN_ERR')]);
     }
 
     /**
@@ -106,8 +116,11 @@ class UserTest extends TestCase
      */
     public function api_usersにGETメソッドでアクセス()
     {
-        $response = $this->get('api/users');
+        // ユーザを認証済みに書き換え
+        $this->getActingAs($this->admin);
 
+        $response = $this->get('api/users');
+        
         $response->assertOk()
         ->assertJsonFragment([
             'status' => config('const.User.ADMIN'),
@@ -120,11 +133,7 @@ class UserTest extends TestCase
     public function softDeleteの動作を確認()
     {
         // ユーザの生成
-        $user = 
-        Sanctum::actingAs(
-            User::factory()->create(),
-            ['*']
-        );
+        $user = $this->getActingAs(User::factory()->create());
         User::factory()->create();
         
         // 論理削除
@@ -156,12 +165,45 @@ class UserTest extends TestCase
     /**
      * @test
      */
-    public function logoutの動作を確認()
+    public function 検索付きのクエリ動作を確認()
     {
-        $response = $this->json('POST', route('logout'), [
-            'id' => $this->admin->id
+        // ユーザを認証済みに書き換え
+        $this->getActingAs($this->admin);
+
+        // 一覧ページ用の正常な検索動作を確認
+        $response = $this->get('api/users?name='.$this->admin->name.'&status='.$this->admin->status);
+
+        $response->assertOk()
+        ->assertJsonFragment([
+            'status' => config('const.User.ADMIN'),
         ]);
 
+        // 一覧ページ用の検索動作の失敗を確認
+        $response = $this->get('api/users?name='.$this->admin->name.'&status='.config('const.User.MEMBER'));
+        $response->assertOk()
+        ->assertJsonMissing([
+            'status' => config('const.User.ADMIN'),
+        ]);
+
+        // 詳細ページ用のデータ取得を確認
+        $response = $this->get('api/users/root');
+
+        $response->assertOk()
+        ->assertJsonFragment([
+            'status' => config('const.User.ADMIN'),
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function logoutの動作を確認()
+    {
+        // ユーザを認証済みに書き換え
+        $response = $this->actingAs($this->admin)->json('POST', route('logout'), [
+            'id' => $this->admin->id
+        ]);
+        
         // 正しいレスポンスが返ることを確認
         $response
             ->assertStatus(200)
