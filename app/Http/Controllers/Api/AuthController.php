@@ -26,10 +26,10 @@ class AuthController extends Controller
                 'email' => 'required|email',
                 'password' => 'required'
             ]);
-            
             if(Auth::attempt($credentials)) {
                 return response()->json(["user" => Auth::user(), "info_message" => config('const.SystemMessage.LOGIN_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
             }
+
             // 認証に失敗した場合
             return response()->json(["error_message" => config('const.SystemMessage.LOGIN_ERR')], 401, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
@@ -46,7 +46,6 @@ class AuthController extends Controller
         try {
             if($request->id === Auth::user()->id) {
                 Auth::logout();
-                // Auth::guard('web')->logout();
                 return response()->json(["info_message" => config('const.SystemMessage.LOGOUT_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
             }
         } catch (Exception $e) {
