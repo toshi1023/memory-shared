@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
@@ -126,7 +127,7 @@ abstract class  BaseRepository
      * 表示件数を限定
      * 引数1: 検索条件, 引数2: ソート条件, 引数3: 表示件数
      */
-    public function baseSearchQueryLimit($conditions=[], $order=[], int $limit)
+    public function baseSearchQueryLimit($conditions=[], $order=[], int $limit=10)
     {
         return $this->baseSearchQuery($conditions, $order, false)->limit($limit);
     }
@@ -135,7 +136,7 @@ abstract class  BaseRepository
      * ページネーションを設定
      * 引数1: 検索条件, 引数2: ソート条件, 引数3: 表示件数
      */
-    public function baseSearchQueryPaginate($conditions=[], $order=[], int $paginate)
+    public function baseSearchQueryPaginate($conditions=[], $order=[], int $paginate=10)
     {
         return $this->baseSearchQuery($conditions, $order, false)->paginate($paginate);
     }
