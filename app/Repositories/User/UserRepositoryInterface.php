@@ -8,5 +8,5 @@ interface UserRepositoryInterface
     public function searchQuery($conditions=[], $order=[], bool $softDelete=false);
     public function baseSearchQueryLimit($conditions=[], $order=[], int $limit);
     public function baseSearchQueryPaginate($conditions=[], $order=[], int $paginate);
-
+    public function save($data, $model=null, $transaction=true);
 }

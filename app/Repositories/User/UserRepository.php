@@ -14,13 +14,20 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $this->model = $model;
     }
 
-    public function getModel()
-    {
-        return $this->baseGetModel(User::class);
-    }
-
+    /**
+     * 基本クエリ
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
+     */
     public function searchQuery($conditions=[], $order=[], bool $softDelete=false)
     {
         return $this->baseSearchQuery($conditions, $order, $softDelete)->get();
+    }
+
+    /**
+     * データ保存
+     */
+    public function save($data, $model=null, $transaction=true)
+    {
+        return $this->baseSave($data, $model, $transaction);
     }
 }

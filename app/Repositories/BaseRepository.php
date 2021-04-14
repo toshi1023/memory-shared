@@ -3,6 +3,9 @@
 namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 abstract class  BaseRepository
 {
@@ -135,5 +138,54 @@ abstract class  BaseRepository
     public function baseSearchQueryPaginate($conditions=[], $order=[], int $paginate)
     {
         return $this->baseSearchQuery($conditions, $order, false)->paginate($paginate);
+    }
+
+    /**
+     * 指定データ保存
+     * 引数1: 保存データ, 引数2: モデルクラス (例) User::class, 引数3: トランザクションフラグ
+     * @param $data
+     * @param Model $model
+     * @param bool $transaction
+     * @return Model|mixed
+     * @throws Exception
+     */
+    protected function baseSave($data, $model=null, $transaction=true) {
+        if ($transaction) DB::beginTransaction();
+
+        try {
+            // Modelの指定がある場合
+            if($model) {
+                $model = $this->baseGetModel($model);
+            } else {
+                $model = $this->model;
+            }
+
+            // UPDATE
+            if (key_exists('id', $data) && $data['id']) {
+                $model = $model::query()->where('id', $data["id"])->first();
+            }
+            // 更新者ID
+            $model->update_user_id  = $this->baseGetUserId();
+            
+            // 保存処理
+            $model->fill($data);
+            $model->save();
+
+            if ($transaction) DB::commit();
+            return $model;
+        } catch (Exception $e) {
+            if ($transaction) DB::rollBack();
+            
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').__FUNCTION__.":".$e->getMessage());
+            throw new Exception($e);
+        }
+    }
+
+     /**
+     * ログイン中ユーザーID取得
+     * @return \Illuminate\Contracts\Auth\Authenticatable|int|null
+     */
+    private function baseGetUserId() {
+        return Auth::user()->id;
     }
 }
