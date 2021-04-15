@@ -4,6 +4,7 @@ namespace App\Lib;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Exception;
 
 /**
  * 共通処理クラス
@@ -103,20 +104,15 @@ class Common {
         if ($file){
             try {
                 //s3アップロード開始
-                // バケットの`aws-hcs-image/{テーブル名}/{ニックネーム名}`フォルダへアップロード
+                // バケットの`aws-hcs-image/{カテゴリー名}/{ニックネーム名}`フォルダへアップロード
                 $path = Storage::disk('s3')->putFileAs($category.'/'.$foldername, $file, $filename, 'public');
-                // アップロードしたファイルのURLを取得し、DBにセット
-                $photo_path = Storage::disk('s3')->url($path);
 
-                return [true, $photo_path];
+                return true;
 
             } catch (Exception $e) {
                 Log::error(config('const.SystemMessage.SYSTEM_ERR').'App\Lib\Common::'.__FUNCTION__.":".$e->getMessage());
-                return [false, null];
+                return false;
             }
-        } else {
-            // アップロードファイルがなければデフォルトの画像を設定
-            return [true, env('AWS_NOIMAGE')];
         }
     }
 }

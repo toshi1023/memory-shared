@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Requests\UserRegisterRequest;
 use App\Lib\Common;
+use Exception;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -40,6 +43,7 @@ class UserController extends Controller
 
             return response()->json([
               'error_message' => config('const.User.GET_ERR'),
+              'status'        => 500,
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }
     }
@@ -65,6 +69,7 @@ class UserController extends Controller
 
             return response()->json([
               'error_message' => config('const.User.GET_ERR'),
+              'status'        => 500,
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }
     }
@@ -103,7 +108,6 @@ class UserController extends Controller
 
             return response()->json([
                 'info_message' => config('const.User.REGISTER_INFO'),
-                'status'        => 200,
               ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
