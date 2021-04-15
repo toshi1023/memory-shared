@@ -3,6 +3,7 @@ namespace App\Lib;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 /**
  * 共通処理クラス
@@ -71,12 +72,51 @@ class Common {
             $password .= $password_list[array_rand($password_list)];
         }
 
-        // アプリ表示用にカスタマイズ
+        // アプリ表示用にカスタマイズ(表示例: XXXX-XXXX-XXXX)
         if($custom) {
             $confirmPassword = str_split($password, 4);
             $password = $confirmPassword[0].'-'.$confirmPassword[1].'-'.$confirmPassword[2];
         } 
         
         return $password;
+    }
+
+    /**
+     * ファイル名の設定
+     * 引数：ファイル情報
+     */
+    public static function getFilename($file)
+    {
+        $tmp_name   = md5(microtime());                    // ファイル名取得(microtime() : Unixタイムスタンプ)
+        $ext        = $file->getClientOriginalExtension(); // 拡張子GET
+        $image_name = $tmp_name.".".$ext;
+
+        return $image_name;
+    }
+
+    /**
+     * ファイルアップロード用メソッド
+     * 第1引数:ファイル, 第2引数: カテゴリー, 第3引数:フォルダ名に使用するための値, 第4引数：ファイル名
+     */
+    public static function fileSave($file, $category, $foldername, $filename)
+    {
+        if ($file){
+            try {
+                //s3アップロード開始
+                // バケットの`aws-hcs-image/{テーブル名}/{ニックネーム名}`フォルダへアップロード
+                $path = Storage::disk('s3')->putFileAs($category.'/'.$foldername, $file, $filename, 'public');
+                // アップロードしたファイルのURLを取得し、DBにセット
+                $photo_path = Storage::disk('s3')->url($path);
+
+                return [true, $photo_path];
+
+            } catch (Exception $e) {
+                Log::error(config('const.SystemMessage.SYSTEM_ERR').'App\Lib\Common::'.__FUNCTION__.":".$e->getMessage());
+                return [false, null];
+            }
+        } else {
+            // アップロードファイルがなければデフォルトの画像を設定
+            return [true, env('AWS_NOIMAGE')];
+        }
     }
 }

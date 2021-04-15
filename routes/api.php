@@ -26,7 +26,11 @@ Route::post('/logout', 'Api\AuthController@logout')->name('logout');
  ************************************************/
 Route::middleware('auth:sanctum')->group(function(){
 
-    Route::resource('/users', 'Api\UserController');
+    /********** ユーザ管理(users) **********/
+    Route::resource('/users',       'Api\UserController');
+    Route::post('/users/validate',  'Api\UserController@userValidate');
+    
+    /********** アルバム管理(albums) **********/
     Route::get('/albums', 'Api\AlbumController@index');
     
 
