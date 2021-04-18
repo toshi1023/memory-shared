@@ -173,7 +173,7 @@ class UserTest extends TestCase
         $this->getActingAs($this->admin);
 
         // 一覧ページ用の正常な検索動作を確認
-        $response = $this->get('api/users?name='.$this->admin->name.'&status='.$this->admin->status);
+        $response = $this->get('api/users?name@like='.$this->admin->name.'&status='.$this->admin->status);
         // $response = $this->get('api/users?email='.$this->admin->email.'&status='.$this->admin->status);
 
         $response->assertOk()
@@ -182,7 +182,7 @@ class UserTest extends TestCase
         ]);
 
         // 一覧ページ用の検索動作の失敗を確認
-        $response = $this->get('api/users?name='.$this->admin->name.'&status='.config('const.User.MEMBER'));
+        $response = $this->get('api/users?name@like='.$this->admin->name.'&status='.config('const.User.MEMBER'));
         $response->assertOk()
         ->assertJsonMissing([
             'status' => config('const.User.ADMIN'),

@@ -30,7 +30,7 @@ class UserController extends Controller
         try {
             // 検索条件
             $conditions = [];
-            if($request->email || $request->name) $conditions = Common::setConditions($request);
+            if($request->email || $request->input('name@like')) $conditions = Common::setConditions($request);
             
             // ソート条件
             $order = [];
