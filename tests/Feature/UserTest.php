@@ -122,7 +122,7 @@ class UserTest extends TestCase
         $this->getActingAs($this->admin);
 
         $response = $this->get('api/users');
-        
+
         $response->assertOk()
         ->assertJsonFragment([
             'status' => config('const.User.ADMIN'),

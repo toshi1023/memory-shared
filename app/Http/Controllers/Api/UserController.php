@@ -9,6 +9,7 @@ use App\Lib\Common;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -88,6 +89,7 @@ class UserController extends Controller
      */
     public function store(UserRegisterRequest $request)
     {
+        DB::beginTransaction();
         try {
             // ファイル名の生成
             $filename = null;
@@ -106,10 +108,12 @@ class UserController extends Controller
                 Common::fileSave($request->file('image_file'), config('const.Aws.USER'), Auth::user()->name, $filename);
             }
 
+            DB::commit();
             return response()->json([
                 'info_message' => config('const.User.REGISTER_INFO'),
-              ], 200, [], JSON_UNESCAPED_UNICODE);
+            ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
+            DB::rollback();
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 
             // 作成失敗時はエラーメッセージを返す

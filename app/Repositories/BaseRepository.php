@@ -150,9 +150,7 @@ abstract class  BaseRepository
      * @return Model|mixed
      * @throws Exception
      */
-    protected function baseSave($data, $model=null, $transaction=true) {
-        if ($transaction) DB::beginTransaction();
-
+    protected function baseSave($data, $model=null) {
         try {
             // Modelの指定がある場合
             if($model) {
@@ -172,11 +170,8 @@ abstract class  BaseRepository
             $model->fill($data);
             $model->save();
 
-            if ($transaction) DB::commit();
             return $model;
         } catch (Exception $e) {
-            if ($transaction) DB::rollBack();
-            
             Log::error(config('const.SystemMessage.SYSTEM_ERR').__FUNCTION__.":".$e->getMessage());
             throw new Exception($e);
         }

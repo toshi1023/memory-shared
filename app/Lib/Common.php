@@ -50,7 +50,7 @@ class Common {
     /**
      * ワンタイムパスワード発行
      * 引数: アプリ表示用のカスタムフラグ
-     *   ※12文字で設定(大文字英数字で表示)
+     *   ※12文字で設定(大文字英字と小文字数字で表示)
      *   ※1とI、0とOは設定から省く
      * @param $id
      * @return string
@@ -96,16 +96,15 @@ class Common {
     }
 
     /**
-     * ファイルアップロード用メソッド
+     * ファイルアップロード用メソッド(アップロード先: S3)
      * 第1引数:ファイル, 第2引数: カテゴリー, 第3引数:フォルダ名に使用するための値, 第4引数：ファイル名
      */
     public static function fileSave($file, $category, $foldername, $filename)
     {
         if ($file){
             try {
-                //s3アップロード開始
-                // バケットの`aws-hcs-image/{カテゴリー名}/{ニックネーム名}`フォルダへアップロード
-                $path = Storage::disk('s3')->putFileAs($category.'/'.$foldername, $file, $filename, 'public');
+                // バケットの`{バケット名}/{カテゴリー名}/{ニックネーム名}`フォルダへアップロード
+                Storage::disk('s3')->putFileAs($category.'/'.$foldername, $file, $filename, 'public');
 
                 return true;
 

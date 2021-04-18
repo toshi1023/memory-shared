@@ -18,11 +18,17 @@ class AddUserFilePath
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
-
-        if($response->image_file) {
-            $response->image_file = 
-                env('AWS_BUCKET_URL').'/'.config('const.Aws.USER').'/'.Auth::user()->name.'/'.$response->image_file;
+        
+        $data = [];
+        foreach($response->getData() as $key => $value) {
+            // 画像ファイルがある場合はパスを補完
+            if($value->image_file) {
+                $value->image_file = 
+                    env('AWS_BUCKET_URL').'/'.config('const.Aws.USER').'/'.Auth::user()->name.'/'.$value->image_file;
+            }
+            $data[$key] = $value;
         }
+        $response->setData($data);
 
         return $response;
     }

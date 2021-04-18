@@ -26,8 +26,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     /**
      * データ保存
      */
-    public function save($data, $model=null, $transaction=true)
+    public function save($data, $model=null)
     {
-        return $this->baseSave($data, $model, $transaction);
+        return $this->baseSave($data, $model);
     }
 }
