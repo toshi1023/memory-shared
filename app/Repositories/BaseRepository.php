@@ -23,6 +23,16 @@ abstract class  BaseRepository
     }
 
     /**
+     * 特定のリポジトリをインスタンス化
+     * 引数:インターフェースクラス (例) UserRepositoryInterface::class
+     */
+    protected function baseGetRepository($repository)
+    {
+        // 指定したテーブルをインスタンス化して返す
+        return $this->model = app()->make($repository);
+    }
+
+    /**
      * 検索クエリの基盤
      * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
      *   ※引数1の条件指定方法

@@ -105,7 +105,7 @@ class UserController extends Controller
 
             // ファイルの保存処理
             if($request->file('image_file')) {
-                Common::fileSave($request->file('image_file'), config('const.Aws.USER'), Auth::user()->name, $filename);
+                Common::fileSave($request->file('image_file'), config('const.Aws.USER'), $request->name, $filename);
             }
 
             DB::commit();
@@ -119,6 +119,89 @@ class UserController extends Controller
             // 作成失敗時はエラーメッセージを返す
             return response()->json([
               'error_message' => config('const.User.REGISTER_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
+     * ユーザ更新処理用アクション
+     */
+    public function update(UserRegisterRequest $request)
+    {
+        DB::beginTransaction();
+        try {
+
+            $data = $request->all();
+            
+            // ファイル名の生成
+            $filename = null;
+            if ($request->file('image_file')){
+              $filename = Common::getFilename($request->file('image_file'));
+              $data['image_file'] = $filename;
+            }
+    
+            // データの保存処理
+            $this->db->save($data);
+
+            // ファイルの保存処理
+            if($request->file('image_file')) {
+                Common::fileSave($request->file('image_file'), config('const.Aws.USER'), $request->name, $filename);
+            }
+
+            DB::commit();
+            return response()->json([
+                'info_message' => config('const.User.REGISTER_INFO'),
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            DB::rollback();
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            // 作成失敗時はエラーメッセージを返す
+            return response()->json([
+              'error_message' => config('const.User.REGISTER_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
+     * 【navメニュー】
+     * 同じグループに参加中のユーザ一覧
+     */
+    public function friends(Request $request)
+    {
+        try {
+            // 検索条件
+            $mygroup_conditions = [
+                'user_id' => Auth::user()->id,
+                'status'  => config('const.GroupHistory.APPROVAL')
+            ];
+
+            $groups = $this->db->getGroups($mygroup_conditions);
+
+            $data = [];
+            foreach($groups as $key => $value) {
+                // 検索条件
+                $friends_conditions = [
+                    $key => $value
+                ];
+
+                $friends = $this->db->getFriends($friends_conditions);
+            }
+            
+            // ソート条件
+            $order = [];
+            if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
+    
+            $data = $this->db->searchQuery($conditions, $order);
+            
+            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            return response()->json([
+              'error_message' => config('const.User.GET_ERR'),
               'status'        => 500,
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }

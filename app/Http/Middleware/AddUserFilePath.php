@@ -19,7 +19,7 @@ class AddUserFilePath
         $response = $next($request);
         
         // エラーを返した場合はそのまま返す
-        if($response->status() === 400 || $response->status() === 401 || $response->status() === 500) return $response;
+        if($response->status() !== 200) return $response;
         
         $data = [];
         foreach($response->getData() as $key => $value) {

@@ -4,6 +4,7 @@ namespace App\Repositories\User;
 
 use App\Models\User;
 use App\Repositories\BaseRepository;
+use App\Repositories\GroupHistory\GroupHistoryRepositoryInterface;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
@@ -29,5 +30,25 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function save($data, $model=null)
     {
         return $this->baseSave($data, $model);
+    }
+
+    /**
+     * 参加中のグループを取得
+     * 引数: 検索条件
+     */
+    public function getGroups($conditions)
+    {
+        $groupHistoryRepository = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
+
+        return $groupHistoryRepository->baseSearchQuery($conditions)->select('group_id')->get();
+    }
+
+    /**
+     * 参加中のグループの参加者を取得
+     * 引数: 検索条件
+     */
+    public function getFriends()
+    {
+
     }
 }
