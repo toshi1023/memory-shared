@@ -16,8 +16,8 @@ class Group extends Model
     /**
      * usersテーブルと1対多のリレーション構築(多側の設定)
      */
-    public function user()
+    public function users()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsToMany('App\Models\User', 'group_histories', 'id', 'user_id');
     }
 }

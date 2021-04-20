@@ -62,7 +62,7 @@ class User extends Authenticatable
      */
     public function Groups()
     {
-        return $this->hasMany('App\Models\Group');
+        return $this->belongsToMany('App\Models\Group', 'group_histories', 'id', 'group_id');
     }
     
     /**

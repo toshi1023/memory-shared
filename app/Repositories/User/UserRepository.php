@@ -5,6 +5,7 @@ namespace App\Repositories\User;
 use App\Models\User;
 use App\Repositories\BaseRepository;
 use App\Repositories\GroupHistory\GroupHistoryRepositoryInterface;
+use App\Repositories\Group\GroupRepositoryInterface;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
@@ -58,8 +59,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function getFriends($conditions, $order=[], bool $softDelete=false)
     {
-        $groupHistoryRepository = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
+        $groupRepository = $this->baseGetRepository(GroupRepositoryInterface::class);
 
-        return $groupHistoryRepository->getFriends($conditions, $order, $softDelete);
+        return $groupRepository->getFriends($conditions, $order, $softDelete);
     }
 }

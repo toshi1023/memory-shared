@@ -190,7 +190,7 @@ class UserController extends Controller
                     $values[] = $value;
                 }
             }
-            $friends_conditions['@ingroup_id'] = $values;
+            $friends_conditions['@inid'] = $values;
             // ソート条件
             $order = [];
             if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
