@@ -169,32 +169,33 @@ class UserController extends Controller
      * 【navメニュー】
      * 同じグループに参加中のユーザ一覧
      */
-    public function friends(Request $request)
+    public function friends(Request $request, $user)
     {
         try {
+            $user = $this->db->searchFirst(['name' => $user]);
+            
             // 検索条件
             $mygroup_conditions = [
-                'user_id' => Auth::user()->id,
+                // 'user_id' => Auth::user()->id,
+                'user_id' => $user->id,
                 'status'  => config('const.GroupHistory.APPROVAL')
             ];
 
             $groups = $this->db->getGroups($mygroup_conditions);
 
-            $data = [];
-            foreach($groups as $key => $value) {
-                // 検索条件
-                $friends_conditions = [
-                    $key => $value
-                ];
-
-                $friends = $this->db->getFriends($friends_conditions);
+            // 検索条件
+            $values = [];
+            foreach($groups->toArray() as $index => $property) {
+                foreach($property as $key => $value) {
+                    $values[] = $value;
+                }
             }
-            
+            $friends_conditions['@ingroup_id'] = $values;
             // ソート条件
             $order = [];
             if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
-    
-            $data = $this->db->searchQuery($conditions, $order);
+
+            $data = $this->db->getFriends($friends_conditions, $order);
             
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
