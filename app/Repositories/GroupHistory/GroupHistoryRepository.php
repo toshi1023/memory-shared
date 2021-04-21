@@ -33,7 +33,7 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
 
     /**
      * フレンドIDの取得
-     * 引数: 検索条件
+     * 引数: 検索条件(group_idを指定)
      */
     public function getFriends($conditions)
     {
