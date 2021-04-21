@@ -45,7 +45,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                           $query->select('users.id', 'users.name', 'users.email', 'users.status')
                                 ->where('users.status', '=', config('const.User.MEMBER'));
                       }]);
-        dd($query->toSql());
+        // dd($query->toSql());
         return $query->get();
     }
 }

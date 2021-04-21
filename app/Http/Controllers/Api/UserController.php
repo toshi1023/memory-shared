@@ -172,21 +172,24 @@ class UserController extends Controller
     public function friends(Request $request, $user)
     {
         try {
+            // テスト用
             $user = $this->db->searchFirst(['name' => $user]);
             
             // 検索条件
             $mygroup_conditions = [
-                // 'user_id' => Auth::user()->id,
-                'user_id' => $user->id,
+                // 'user_id' => Auth::user()->id,  // 本番用
+                'user_id' => $user->id,            // テスト用
                 'status'  => config('const.GroupHistory.APPROVAL')
             ];
 
+            // 所属グループの取得
             $groups = $this->db->getGroups($mygroup_conditions);
 
             // 検索条件
             $values = [];
             foreach($groups->toArray() as $index => $property) {
                 foreach($property as $key => $value) {
+                    // group_idの値をセット
                     $values[] = $value;
                 }
             }
@@ -195,7 +198,9 @@ class UserController extends Controller
             $order = [];
             if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
 
+            DB::enableQueryLog();
             $data = $this->db->getFriends($friends_conditions, $order);
+            dd(DB::getQueryLog());
             
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {

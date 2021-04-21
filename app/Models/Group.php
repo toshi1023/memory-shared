@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Group extends Model
 {
@@ -18,6 +19,6 @@ class Group extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('App\Models\User', 'group_histories', 'id', 'user_id');
+        return $this->belongsToMany('App\Models\User', 'group_histories', 'group_id', 'user_id');
     }
 }
