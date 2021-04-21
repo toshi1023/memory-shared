@@ -11,6 +11,8 @@ use Laravel\Sanctum\Sanctum;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Group;
+use App\Models\GroupHistory;
 use Exception;
 
 class UserTest extends TestCase
@@ -42,6 +44,9 @@ class UserTest extends TestCase
 
         // 認証済みでないユーザの作成
         $this->user = User::factory()->create();
+
+        // グループの作成
+        Group::factory()->create();
     }
 
     /**
@@ -196,6 +201,37 @@ class UserTest extends TestCase
             'status' => config('const.User.ADMIN'),
         ]);
     }
+
+    /**
+     * @test
+     */
+    // public function friendsの動作を確認()
+    // {
+    //     // ユーザを認証済みに書き換え
+    //     $this->getActingAs($this->admin);
+
+    //     // グループ参加履歴の作成
+    //     GroupHistory::create([
+    //         'user_id'              => $this->admin->id,
+    //         'group_id'             => 1,
+    //         'status'               => config('const.GroupHistory.APPROVAL'),
+    //         'update_user_id'       => $this->admin->id
+    //     ]);
+    //     GroupHistory::create([
+    //         'user_id'              => $this->user->id,
+    //         'group_id'             => 1,
+    //         'status'               => config('const.GroupHistory.APPROVAL'),
+    //         'update_user_id'       => $this->user->id
+    //     ]);
+
+    //     // 一覧ページ用の正常な検索動作を確認
+    //     $response = $this->get('api/users/'.$this->admin->name.'/friends');
+
+    //     $response->assertOk()
+    //     ->assertJsonFragment([
+    //         'id' => 2,
+    //     ]);
+    // }
 
     /**
      * @test
