@@ -186,21 +186,13 @@ class UserController extends Controller
             $groups = $this->db->getGroups($mygroup_conditions);
 
             // 検索条件
-            $values = [];
-            foreach($groups->toArray() as $index => $property) {
-                foreach($property as $key => $value) {
-                    // group_idの値をセット
-                    $values[] = $value;
-                }
-            }
-            $friends_conditions['@inid'] = $values;
+            $friends_conditions['@ingroup_id'] = Common::setInCondition($groups->toArray());
             // ソート条件
             $order = [];
             if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
 
-            DB::enableQueryLog();
+            // フレンド情報取得
             $data = $this->db->getFriends($friends_conditions, $order);
-            dd(DB::getQueryLog());
             
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {

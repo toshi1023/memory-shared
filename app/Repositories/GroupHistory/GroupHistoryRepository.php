@@ -30,4 +30,18 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
     {
         return $this->baseSave($data, $model);
     }
+
+    /**
+     * フレンドIDの取得
+     * 引数: 検索条件
+     */
+    public function getFriends($conditions)
+    {
+        $query = $this->baseSearchQuery($conditions)
+                      ->select('user_id')
+                      ->distinct()
+                      ->get();
+
+        return $query;
+    }
 }

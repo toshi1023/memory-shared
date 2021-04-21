@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Repositories\BaseRepository;
 use App\Repositories\GroupHistory\GroupHistoryRepositoryInterface;
 use App\Repositories\Group\GroupRepositoryInterface;
+use App\Lib\Common;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
@@ -59,8 +60,16 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function getFriends($conditions, $order=[], bool $softDelete=false)
     {
-        $groupRepository = $this->baseGetRepository(GroupRepositoryInterface::class);
+        // フレンドのIDを取得
+        $groupHistoryRepository = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
 
-        return $groupRepository->getFriends($conditions, $order, $softDelete);
+        $users = $groupHistoryRepository->getFriends($conditions);
+
+        // 取得したフレンドIDを検索条件に設定
+        $friends_conditions['@inid'] = Common::setInCondition($users->toArray());
+        // $this->modelの値をUserクラスのインスタンスに書き換え
+        $this->baseGetModel(User::class);
+
+        return $this->searchQuery($friends_conditions, $order, $softDelete);
     }
 }

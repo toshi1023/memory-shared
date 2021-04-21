@@ -13,7 +13,7 @@ abstract class  BaseRepository
     protected $model;
 
     /**
-     * 特定のモデルをインスタンス化
+     * 指定したモデルをインスタンス化
      * 引数:モデルクラス (例) User::class
      */
     protected function baseGetModel($model): Model

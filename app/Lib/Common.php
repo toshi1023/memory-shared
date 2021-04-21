@@ -48,6 +48,23 @@ class Common {
     }
 
     /**
+     * in条件用の配列生成
+     * 引数: 検索条件
+     */
+    public static function setInCondition(array $conditions)
+    {
+        $values = [];
+        foreach($conditions as $index => $property) {
+            foreach($property as $key => $value) {
+                // group_idの値をセット
+                $values[] = $value;
+            }
+        }
+
+        return $values;
+    }
+
+    /**
      * ワンタイムパスワード発行
      * 引数: アプリ表示用のカスタムフラグ
      *   ※12文字で設定(大文字英字と小文字数字で表示)
