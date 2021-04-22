@@ -114,7 +114,7 @@ class Common {
 
     /**
      * ファイルアップロード用メソッド(アップロード先: S3)
-     * 第1引数:ファイル, 第2引数: カテゴリー, 第3引数:フォルダ名に使用するための値, 第4引数：ファイル名
+     * 引数1: ファイル, 引数2: カテゴリー, 引数3: フォルダ名に使用するための値, 引数4: ファイル名
      */
     public static function fileSave($file, $category, $foldername, $filename)
     {
@@ -129,6 +129,24 @@ class Common {
                 Log::error(config('const.SystemMessage.SYSTEM_ERR').'App\Lib\Common::'.__FUNCTION__.":".$e->getMessage());
                 return false;
             }
+        }
+    }
+
+    /**
+     * ファイルパス補完用メソッド
+     * 引数1: データ, 引数2: カテゴリー
+     */
+    public static function setFilePath($data, $category)
+    {   
+        try {
+            if($data->image_file) {
+                $data->image_file = 
+                    env('AWS_BUCKET_URL').'/'.$category.'/'.$data->name.'/'.$data->image_file;
+            }
+            // ファイルデータを返却
+            return $data->image_file;
+        } catch (Exception $e) {
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').'App\Lib\Common::'.__FUNCTION__.":".$e->getMessage());
         }
     }
 }

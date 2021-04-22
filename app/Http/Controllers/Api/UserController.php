@@ -62,8 +62,8 @@ class UserController extends Controller
                 'name' => $user
             ];
             
-            $data = $this->db->searchQuery($conditions);
-    
+            $data = $this->db->searchFirst($conditions);
+            
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
