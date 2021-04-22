@@ -21,6 +21,7 @@ class UserTest extends TestCase
 
     protected $admin;
     protected $user;
+    protected $group;
 
     /**
      * テストの前処理を実行
@@ -46,7 +47,12 @@ class UserTest extends TestCase
         $this->user = User::factory()->create();
 
         // グループの作成
-        Group::factory()->create();
+        $this->group = Group::create([
+            'name'              => 'RoyalBlue',
+            'discription'       => '梅田カフェ巡り！ほっと一息つけるカフェタイムを楽しみにでかけるグループです！',
+            'host_user_id'      => $this->admin->id,
+            'update_user_id'    => $this->admin->id,
+        ]);
     }
 
     /**
@@ -205,33 +211,33 @@ class UserTest extends TestCase
     /**
      * @test
      */
-    // public function friendsの動作を確認()
-    // {
-    //     // ユーザを認証済みに書き換え
-    //     $this->getActingAs($this->admin);
+    public function friendsの動作を確認()
+    {
+        // ユーザを認証済みに書き換え
+        $this->getActingAs($this->admin);
 
-    //     // グループ参加履歴の作成
-    //     GroupHistory::create([
-    //         'user_id'              => $this->admin->id,
-    //         'group_id'             => 1,
-    //         'status'               => config('const.GroupHistory.APPROVAL'),
-    //         'update_user_id'       => $this->admin->id
-    //     ]);
-    //     GroupHistory::create([
-    //         'user_id'              => $this->user->id,
-    //         'group_id'             => 1,
-    //         'status'               => config('const.GroupHistory.APPROVAL'),
-    //         'update_user_id'       => $this->user->id
-    //     ]);
+        // グループ参加履歴の作成
+        GroupHistory::create([
+            'user_id'              => $this->admin->id,
+            'group_id'             => $this->group->id,
+            'status'               => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'       => $this->admin->id
+        ]);
+        GroupHistory::create([
+            'user_id'              => $this->user->id,
+            'group_id'             => $this->group->id,
+            'status'               => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'       => $this->user->id
+        ]);
 
-    //     // 一覧ページ用の正常な検索動作を確認
-    //     $response = $this->get('api/users/'.$this->admin->name.'/friends');
+        // 一覧ページ用の正常な検索動作を確認
+        $response = $this->get('api/users/'.$this->admin->name.'/friends');
 
-    //     $response->assertOk()
-    //     ->assertJsonFragment([
-    //         'id' => 2,
-    //     ]);
-    // }
+        $response->assertOk()
+        ->assertJsonFragment([
+            'name' => $this->user->name,
+        ]);
+    }
 
     /**
      * @test
