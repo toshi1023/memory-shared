@@ -15,6 +15,11 @@ return [
         'REGISTER_INFO'      => 'ユーザ情報を登録しました',
         'REGISTER_ERR'       => 'ユーザ情報の登録に失敗しました',
     ],
+    'Group' => [
+        'GET_ERR'            => 'グループ情報を取得出来ませんでした',
+        'REGISTER_INFO'      => 'グループ情報を登録しました',
+        'REGISTER_ERR'       => 'グループ情報の登録に失敗しました',
+    ],
     // GroupHistory関連で使用する定数
     'GroupHistory' => [
         'APPLY'         => 1,
