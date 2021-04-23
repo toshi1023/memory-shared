@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\Group\GroupRepositoryInterface;
+use App\Http\Requests\GroupRegisterRequest;
 use App\Lib\Common;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -36,6 +37,11 @@ class GroupController extends Controller
             if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
     
             $data = $this->db->searchQuery($conditions, $order);
+
+            // グループが存在しない場合
+            if(empty($data->toArray())) {
+                return response()->json(['error_message' => config('const.Group.SEARCH_ERR')], 200, [], JSON_UNESCAPED_UNICODE);    
+            }
             
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
@@ -62,6 +68,11 @@ class GroupController extends Controller
             ];
             
             $data = $this->db->baseSearchFirst($conditions);
+
+            // グループが存在しない場合
+            if(empty($data)) {
+                return response()->json(['error_message' => config('const.Group.SEARCH_ERR')], 200, [], JSON_UNESCAPED_UNICODE);    
+            }
             
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
@@ -69,6 +80,96 @@ class GroupController extends Controller
 
             return response()->json([
               'error_message' => config('const.Group.GET_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
+     * グループバリデーション用メソッド
+     *   ※データ登録時には非同期処理で常時確認に使用
+     */
+    public function userValidate(GroupRegisterRequest $request)
+    {
+        return;
+    }
+
+    /**
+     * グループ登録処理用アクション
+     */
+    public function store(GroupRegisterRequest $request)
+    {
+        DB::beginTransaction();
+        try {
+            // ファイル名の生成
+            $filename = null;
+            if ($request->file('image_file')){
+              $filename = Common::getFilename($request->file('image_file'));
+            }
+    
+            $data = $request->all();
+            $data['image_file'] = $filename;
+    
+            // データの保存処理
+            $this->db->save($data);
+
+            // ファイルの保存処理
+            if($request->file('image_file')) {
+                Common::fileSave($request->file('image_file'), config('const.Aws.Group'), $request->name, $filename);
+            }
+
+            DB::commit();
+            return response()->json([
+                'info_message' => config('const.Group.REGISTER_INFO'),
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            DB::rollback();
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            // 作成失敗時はエラーメッセージを返す
+            return response()->json([
+              'error_message' => config('const.Group.REGISTER_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
+     * ユーザ更新処理用アクション
+     */
+    public function update(GroupRegisterRequest $request)
+    {
+        DB::beginTransaction();
+        try {
+
+            $data = $request->all();
+            
+            // ファイル名の生成
+            $filename = null;
+            if ($request->file('image_file')){
+              $filename = Common::getFilename($request->file('image_file'));
+              $data['image_file'] = $filename;
+            }
+    
+            // データの保存処理
+            $this->db->save($data);
+
+            // ファイルの保存処理
+            if($request->file('image_file')) {
+                Common::fileSave($request->file('image_file'), config('const.Aws.Group'), $request->name, $filename);
+            }
+
+            DB::commit();
+            return response()->json([
+                'info_message' => config('const.Group.REGISTER_INFO'),
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            DB::rollback();
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            // 作成失敗時はエラーメッセージを返す
+            return response()->json([
+              'error_message' => config('const.Group.REGISTER_ERR'),
               'status'        => 500,
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }

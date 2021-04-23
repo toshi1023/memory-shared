@@ -12,11 +12,13 @@ return [
         'ADMIN_WORD'         => '管理者',
         'STOP_WORD'          => 'アカウント停止中',
         'GET_ERR'            => 'ユーザ情報を取得出来ませんでした',
+        'SEARCH_ERR'         => '指定したユーザは存在しません',
         'REGISTER_INFO'      => 'ユーザ情報を登録しました',
         'REGISTER_ERR'       => 'ユーザ情報の登録に失敗しました',
     ],
     'Group' => [
         'GET_ERR'            => 'グループ情報を取得出来ませんでした',
+        'SEARCH_ERR'         => '指定したグループは存在しません',
         'REGISTER_INFO'      => 'グループ情報を登録しました',
         'REGISTER_ERR'       => 'グループ情報の登録に失敗しました',
     ],

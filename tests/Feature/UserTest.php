@@ -159,6 +159,14 @@ class UserTest extends TestCase
         ->assertJsonFragment([
             'status' => config('const.User.ADMIN'),
         ]);
+
+        // 存在しないユーザを検索
+        $response = $this->get('api/users/test');
+        
+        $response->assertOk()
+        ->assertJsonFragment([
+            'error_message' => config('const.User.SEARCH_ERR')
+        ]);
     }
     
     /**
@@ -226,6 +234,14 @@ class UserTest extends TestCase
         $response->assertOk()
         ->assertJsonFragment([
             'status' => config('const.User.ADMIN'),
+        ]);
+
+        // 存在しないユーザを検索
+        $response = $this->get('api/users?name@like=test');
+        
+        $response->assertOk()
+        ->assertJsonFragment([
+            'error_message' => config('const.User.SEARCH_ERR')
         ]);
     }
 

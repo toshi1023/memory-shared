@@ -38,6 +38,10 @@ class UserController extends Controller
     
             $data = $this->db->searchQuery($conditions, $order);
             
+            // ユーザが存在しない場合
+            if(empty($data->toArray())) {
+                return response()->json(['error_message' => config('const.User.SEARCH_ERR')], 200, [], JSON_UNESCAPED_UNICODE);    
+            }
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
@@ -63,6 +67,11 @@ class UserController extends Controller
             ];
             
             $data = $this->db->baseSearchFirst($conditions);
+
+            // ユーザが存在しない場合
+            if(empty($data)) {
+                return response()->json(['error_message' => config('const.User.SEARCH_ERR')], 200, [], JSON_UNESCAPED_UNICODE);    
+            }
             
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {

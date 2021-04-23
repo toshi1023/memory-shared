@@ -29,9 +29,9 @@ Route::post('/logout', 'Api\AuthController@logout')->name('logout');
 Route::middleware('auth:sanctum')->group(function(){
 
     /********** ユーザ管理(users) **********/
-    Route::resource('/users',       'Api\UserController')->middleware('add.user.filepath');
+    Route::resource('/users',           'Api\UserController')->middleware('add.user.filepath');
     Route::get('/users/{user}/friends', 'Api\UserController@friends')->name('users.friends');
-    Route::post('/users/validate',  'Api\UserController@userValidate');
+    Route::post('/users/validate',      'Api\UserController@userValidate');
 
     /********** グループ管理(groups) **********/
     Route::resource('/groups',       'Api\GroupController')->middleware('add.group.filepath');
