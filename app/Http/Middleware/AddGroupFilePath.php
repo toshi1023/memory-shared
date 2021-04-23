@@ -6,10 +6,10 @@ use App\Lib\Common;
 use Closure;
 use Illuminate\Http\Request;
 
-class AddUserFilePath
+class AddGroupFilePath
 {
     /**
-     * responseにimage_fileがある場合はファイルパスを補完する
+     * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -32,7 +32,7 @@ class AddUserFilePath
             if(!property_exists($value, 'image_file')) return $response;
             
             // 画像ファイルがある場合はパスを補完
-            $value->image_file = Common::setFilePath($value, config('const.Aws.USER'));
+            $value->image_file = Common::setFilePath($value, config('const.Aws.Group'));
             $data[$key] = $value;
         }
 
@@ -46,7 +46,7 @@ class AddUserFilePath
             if(!property_exists($response->getData(), 'image_file')) return $response;
 
             // 画像ファイルがある場合はパスを補完
-            if($key === 'image_file') $value = Common::setFilePath($response->getData(), config('const.Aws.USER'));
+            if($key === 'image_file') $value = Common::setFilePath($response->getData(), config('const.Aws.Group'));
 
             $data[$key] = $value;
         }
