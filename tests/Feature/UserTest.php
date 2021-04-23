@@ -59,7 +59,7 @@ class UserTest extends TestCase
      * ユーザを認証済みにしてリターン
      * 引数: ユーザ情報
      */
-    public function getActingAs($user)
+    private function getActingAs($user)
     {
         return Sanctum::actingAs($user, ['*']);
     }
@@ -129,10 +129,31 @@ class UserTest extends TestCase
      */
     public function api_usersにGETメソッドでアクセス()
     {
+        // 認証前
+        $response = $this->get('api/users');
+        // リダイレクトが発生する
+        $response->assertStatus(302);
+
         // ユーザを認証済みに書き換え
         $this->getActingAs($this->admin);
 
         $response = $this->get('api/users');
+
+        $response->assertOk()
+        ->assertJsonFragment([
+            'status' => config('const.User.ADMIN'),
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function showアクションにGETメソッドでアクセス()
+    {
+        // ユーザを認証済みに書き換え
+        $this->getActingAs($this->admin);
+
+        $response = $this->get('api/users/'.$this->admin->name);
 
         $response->assertOk()
         ->assertJsonFragment([
