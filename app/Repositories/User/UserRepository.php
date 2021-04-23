@@ -27,15 +27,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
-     * 1件のみ取得
-     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
-     */
-    public function searchFirst($conditions=[], $order=[], bool $softDelete=false)
-    {
-        return $this->baseSearchQuery($conditions, $order, $softDelete)->first();
-    }
-
-    /**
      * データ保存
      */
     public function save($data, $model=null)

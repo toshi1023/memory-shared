@@ -62,7 +62,7 @@ class UserController extends Controller
                 'name' => $user
             ];
             
-            $data = $this->db->searchFirst($conditions);
+            $data = $this->db->baseSearchFirst($conditions);
             
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
@@ -173,7 +173,7 @@ class UserController extends Controller
     {
         try {
             // テスト用
-            $user = $this->db->searchFirst(['name' => $user]);
+            $user = $this->db->baseSearchFirst(['name' => $user]);
             
             // 検索条件
             $mygroup_conditions = [

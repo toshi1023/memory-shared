@@ -40,7 +40,7 @@ abstract class  BaseRepository
      *   ※引数2の条件指定方法
      *     例）['id' => 'desc']  もしくは  ['@custom' => 'updated_at desc']
      */
-    public function baseSearchQuery($conditions=[], $order=[], bool $softDelete=false)
+    protected function baseSearchQuery($conditions=[], $order=[], bool $softDelete=false)
     {
         $query = $this->model::query();
 
@@ -131,6 +131,15 @@ abstract class  BaseRepository
             }
         }
         return $query;
+    }
+
+    /**
+     * 1件のみ取得
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
+     */
+    public function baseSearchFirst($conditions=[], $order=[], bool $softDelete=false)
+    {
+        return $this->baseSearchQuery($conditions, $order, $softDelete)->first();
     }
 
     /**
