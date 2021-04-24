@@ -22,6 +22,73 @@ class UserController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="/users",
+     *     description="ユーザ情報をすべて取得する",
+     *     produces={"application/json"},
+     *     tags={"users"},
+     *     @OA\Parameter(
+     *         name="name@like",
+     *         description="ユーザ名の検索値(あいまい検索に対応)",
+     *         in="query",
+     *         required=false,
+     *         type="string"
+     *     ),
+     *     @OA\Parameter(
+     *         name="email",
+     *         description="メールアドレスの検索値(あいまい検索に対応)",
+     *         in="query",
+     *         required=false,
+     *         type="string"
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_name",
+     *         description="ユーザ名でソート",
+     *         in="query",
+     *         required=false,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 description="ユーザデータを返す",
+     *                 example="name: root ...etc"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="検索結果が0件だった場合",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="検索結果が0件であることを表すメッセージを表示",
+     *                 example="指定したユーザは存在しません"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="ユーザ情報を取得出来ませんでした"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * 【ハンバーガーメニュー】
      * ユーザ一覧の表示用アクション
      */
@@ -30,7 +97,7 @@ class UserController extends Controller
         try {
             // 検索条件
             $conditions = [];
-            if($request->email || $request->input('name@like')) $conditions = Common::setConditions($request);
+            if($request->input('email@like') || $request->input('name@like')) $conditions = Common::setConditions($request);
             
             // ソート条件
             $order = [];
@@ -52,6 +119,7 @@ class UserController extends Controller
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }
     }
+    
 
     /**
      * 【ハンバーガーメニュー】

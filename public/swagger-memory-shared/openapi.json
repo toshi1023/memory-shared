@@ -1,0 +1,76 @@
+{
+    "openapi": "3.0.0",
+    "paths": {
+        "/users": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "description": "ユーザ情報をすべて取得する",
+                "operationId": "App\\Http\\Controllers\\Api\\UserController::index",
+                "parameters": [
+                    {
+                        "name": "name@like",
+                        "in": "query",
+                        "description": "ユーザ名の検索値(あいまい検索に対応)",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "メールアドレスの検索値(あいまい検索に対応)",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "sort_name",
+                        "in": "query",
+                        "description": "ユーザ名でソート",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "ユーザデータを返す",
+                                            "type": "object",
+                                            "example": "name: root ...etc"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "ユーザ情報を取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        }
+    }
+}
