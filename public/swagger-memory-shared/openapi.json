@@ -1,12 +1,12 @@
 {
     "openapi": "3.0.0",
     "paths": {
-        "/users": {
+        "/api/users": {
             "get": {
                 "tags": [
                     "users"
                 ],
-                "description": "ユーザ情報をすべて取得する",
+                "description": "statusがMEMBERのユーザ情報をすべて取得する",
                 "operationId": "App\\Http\\Controllers\\Api\\UserController::index",
                 "parameters": [
                     {
@@ -39,9 +39,82 @@
                                 "schema": {
                                     "properties": {
                                         "data": {
-                                            "description": "ユーザデータを返す",
+                                            "description": "statusがMEMBERのユーザデータを返す",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "ユーザ情報を取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/api/users/{ユーザ名}": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "description": "指定したユーザの情報をすべて取得する",
+                "operationId": "App\\Http\\Controllers\\Api\\UserController::show",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ユーザ名",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "存在するユーザかつステータスがMEMBERのユーザデータを返す",
                                             "type": "object",
                                             "example": "name: root ...etc"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "存在しないユーザのページをリクエストした場合",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "検索結果が0件であることを表すメッセージを表示",
+                                            "type": "string",
+                                            "example": "指定したユーザは存在しません"
                                         }
                                     },
                                     "type": "object"

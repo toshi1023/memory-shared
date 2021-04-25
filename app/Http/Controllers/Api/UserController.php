@@ -23,8 +23,8 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/users",
-     *     description="ユーザ情報をすべて取得する",
+     *     path="/api/users",
+     *     description="statusがMEMBERのユーザ情報をすべて取得する",
      *     produces={"application/json"},
      *     tags={"users"},
      *     @OA\Parameter(
@@ -56,21 +56,7 @@ class UserController extends Controller
      *             @OA\Property(
      *                 property="data",
      *                 type="object",
-     *                 description="ユーザデータを返す",
-     *                 example="name: root ...etc"
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="検索結果が0件だった場合",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(
-     *                 property="error_message",
-     *                 type="string",
-     *                 description="検索結果が0件であることを表すメッセージを表示",
-     *                 example="指定したユーザは存在しません"
+     *                 description="statusがMEMBERのユーザデータを返す",
      *             )
      *         )
      *     ),
@@ -97,6 +83,7 @@ class UserController extends Controller
         try {
             // 検索条件
             $conditions = [];
+            $conditions['status'] = config('const.User.MEMBER');
             if($request->input('email@like') || $request->input('name@like')) $conditions = Common::setConditions($request);
             
             // ソート条件
@@ -105,10 +92,6 @@ class UserController extends Controller
     
             $data = $this->db->searchQuery($conditions, $order);
             
-            // ユーザが存在しない場合
-            if(empty($data->toArray())) {
-                return response()->json(['error_message' => config('const.User.SEARCH_ERR')], 200, [], JSON_UNESCAPED_UNICODE);    
-            }
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
@@ -122,6 +105,58 @@ class UserController extends Controller
     
 
     /**
+     * @OA\Get(
+     *     path="/api/users/{ユーザ名}",
+     *     description="指定したユーザの情報をすべて取得する",
+     *     produces={"application/json"},
+     *     tags={"users"},
+     *     @OA\Parameter(
+     *         name="user",
+     *         description="ユーザ名",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 description="存在するユーザかつステータスがMEMBERのユーザデータを返す",
+     *                 example="name: root ...etc"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="存在しないユーザのページをリクエストした場合",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="検索結果が0件であることを表すメッセージを表示",
+     *                 example="指定したユーザは存在しません"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="ユーザ情報を取得出来ませんでした"
+     *             )
+     *         )
+     *     ),
+     * )
      * 【ハンバーガーメニュー】
      * ユーザ詳細の表示用アクション
      *   ※$user: nameカラムの値を設定する
@@ -131,14 +166,15 @@ class UserController extends Controller
         try {
             // 検索条件の設定
             $conditions = [
-                'name' => $user
+                'name'      => $user,
+                'status'    => config('const.User.MEMBER')
             ];
             
             $data = $this->db->baseSearchFirst($conditions);
 
             // ユーザが存在しない場合
             if(empty($data)) {
-                return response()->json(['error_message' => config('const.User.SEARCH_ERR')], 200, [], JSON_UNESCAPED_UNICODE);    
+                return response()->json(['error_message' => config('const.User.SEARCH_ERR')], 404, [], JSON_UNESCAPED_UNICODE);    
             }
             
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);

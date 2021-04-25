@@ -17,6 +17,10 @@ return [
         'REGISTER_ERR'       => 'ユーザ情報の登録に失敗しました',
     ],
     'Group' => [
+        'PUBLIC'             => 0,
+        'PRIVATE'            => 1,
+        'PUBLIC_WORD'        => '公開',
+        'PRIVATE_WORD'       => '非公開',
         'GET_ERR'            => 'グループ情報を取得出来ませんでした',
         'SEARCH_ERR'         => '指定したグループは存在しません',
         'REGISTER_INFO'      => 'グループ情報を登録しました',

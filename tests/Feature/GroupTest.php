@@ -78,15 +78,8 @@ class GroupTest extends TestCase
 
         $response->assertOk()
         ->assertJsonFragment([
+            'private_flg'  => config('const.Group.PUBLIC'),
             'host_user_id' => $this->admin->id,
-        ]);
-
-        // 存在しないグループを検索
-        $response = $this->get('api/groups/test');
-        
-        $response->assertOk()
-        ->assertJsonFragment([
-            'error_message' => config('const.Group.SEARCH_ERR')
         ]);
     }
 
@@ -108,7 +101,7 @@ class GroupTest extends TestCase
         // 存在しないグループを検索
         $response = $this->get('api/groups/test');
         
-        $response->assertOk()
+        $response->assertStatus(404)
         ->assertJsonFragment([
             'error_message' => config('const.Group.SEARCH_ERR')
         ]);

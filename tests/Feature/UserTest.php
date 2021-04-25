@@ -141,7 +141,7 @@ class UserTest extends TestCase
 
         $response->assertOk()
         ->assertJsonFragment([
-            'status' => config('const.User.ADMIN'),
+            'status' => config('const.User.MEMBER'),
         ]);
     }
 
@@ -153,17 +153,26 @@ class UserTest extends TestCase
         // ユーザを認証済みに書き換え
         $this->getActingAs($this->admin);
 
-        $response = $this->get('api/users/'.$this->admin->name);
+        // 正常なリクエスト
+        $response = $this->get('api/users/'.$this->user->name);
 
         $response->assertOk()
         ->assertJsonFragment([
-            'status' => config('const.User.ADMIN'),
+            'status' => config('const.User.MEMBER'),
         ]);
 
-        // 存在しないユーザを検索
+        // MEMBERステータス以外をリクエスト
+        $response = $this->get('api/users/'.$this->admin->name);
+
+        $response->assertStatus(404)
+        ->assertJsonFragment([
+            'error_message' => config('const.User.SEARCH_ERR')
+        ]);
+
+        // 存在しないユーザをリクエスト
         $response = $this->get('api/users/test');
         
-        $response->assertOk()
+        $response->assertStatus(404)
         ->assertJsonFragment([
             'error_message' => config('const.User.SEARCH_ERR')
         ]);
@@ -213,12 +222,11 @@ class UserTest extends TestCase
         $this->getActingAs($this->admin);
 
         // 一覧ページ用の正常な検索動作を確認
-        $response = $this->get('api/users?name@like='.$this->admin->name.'&status='.$this->admin->status);
-        // $response = $this->get('api/users?email='.$this->admin->email.'&status='.$this->admin->status);
+        $response = $this->get('api/users?name@like='.$this->user->name.'&status='.$this->user->status);
 
         $response->assertOk()
         ->assertJsonFragment([
-            'status' => config('const.User.ADMIN'),
+            'status' => config('const.User.MEMBER'),
         ]);
 
         // 一覧ページ用の検索動作の失敗を確認
@@ -229,19 +237,11 @@ class UserTest extends TestCase
         ]);
 
         // 詳細ページ用のデータ取得を確認
-        $response = $this->get('api/users/root');
+        $response = $this->get('api/users/'.$this->user->name);
 
         $response->assertOk()
         ->assertJsonFragment([
-            'status' => config('const.User.ADMIN'),
-        ]);
-
-        // 存在しないユーザを検索
-        $response = $this->get('api/users?name@like=test');
-        
-        $response->assertOk()
-        ->assertJsonFragment([
-            'error_message' => config('const.User.SEARCH_ERR')
+            'status' => config('const.User.MEMBER'),
         ]);
     }
 

@@ -30,6 +30,7 @@ class GroupController extends Controller
         try {
             // 検索条件
             $conditions = [];
+            $conditions['private_flg'] = config('const.Group.PUBLIC');
             if($request->input('name@like')) $conditions = Common::setConditions($request);
             
             // ソート条件
@@ -38,11 +39,6 @@ class GroupController extends Controller
     
             $data = $this->db->searchQuery($conditions, $order);
 
-            // グループが存在しない場合
-            if(empty($data->toArray())) {
-                return response()->json(['error_message' => config('const.Group.SEARCH_ERR')], 200, [], JSON_UNESCAPED_UNICODE);    
-            }
-            
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
@@ -71,7 +67,7 @@ class GroupController extends Controller
 
             // グループが存在しない場合
             if(empty($data)) {
-                return response()->json(['error_message' => config('const.Group.SEARCH_ERR')], 200, [], JSON_UNESCAPED_UNICODE);    
+                return response()->json(['error_message' => config('const.Group.SEARCH_ERR')], 404, [], JSON_UNESCAPED_UNICODE);    
             }
             
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
