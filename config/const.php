@@ -15,6 +15,8 @@ return [
         'SEARCH_ERR'         => '指定したユーザは存在しません',
         'REGISTER_INFO'      => 'ユーザ情報を登録しました',
         'REGISTER_ERR'       => 'ユーザ情報の登録に失敗しました',
+        'DELETE_INFO'        => '退会が完了しました',
+        'DELETE_ERR'         => 'サーバーエラーにより退会に失敗しました。管理者にお問い合わせください'
     ],
     'Group' => [
         'PUBLIC'             => 0,

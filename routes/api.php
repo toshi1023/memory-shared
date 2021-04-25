@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', 'Api\AuthController@login')->name('login');
 Route::post('/reset-password/{token}', 'Api\AuthController@passwordReset')->name('passwordReset');
 Route::post('/logout', 'Api\AuthController@logout')->name('logout');
-Route::resource('/users',       'Api\UserController')->middleware('add.user.filepath');
+// Route::resource('/users',       'Api\UserController')->middleware('add.user.filepath');
 // Route::get('/users/{user}/friends', 'Api\UserController@friends')->name('users.friends');
 
  /************************************************
@@ -29,7 +29,7 @@ Route::resource('/users',       'Api\UserController')->middleware('add.user.file
 Route::middleware('auth:sanctum')->group(function(){
 
     /********** ユーザ管理(users) **********/
-    // Route::resource('/users',           'Api\UserController')->middleware('add.user.filepath');
+    Route::resource('/users',           'Api\UserController')->middleware('add.user.filepath');
     Route::get('/users/{user}/friends', 'Api\UserController@friends')->name('users.friends');
     Route::post('/users/validate',      'Api\UserController@userValidate');
 

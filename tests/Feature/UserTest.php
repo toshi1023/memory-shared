@@ -279,6 +279,22 @@ class UserTest extends TestCase
     /**
      * @test
      */
+    public function user削除の動作を確認()
+    {
+        // ユーザを認証済みに書き換え
+        $this->getActingAs($this->admin);
+
+        $response = $this->delete('api/users/'.$this->admin->name);
+
+        $response->assertOk()
+        ->assertJsonFragment([
+            'info_message' => config('const.User.DELETE_INFO'),
+        ]);
+    }
+
+    /**
+     * @test
+     */
     public function logoutの動作を確認()
     {
         // ユーザを認証済みに書き換え

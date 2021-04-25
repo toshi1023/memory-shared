@@ -22,6 +22,18 @@ class UserController extends Controller
     }
 
     /**
+     * @OA\Schema(
+     *     schema="user_list",
+     *     required={"id", "name", "email", "status", "image_file"},
+     *     @OA\Property(property="id", type="integer", example=1),
+     *     @OA\Property(property="name", type="string", example="test1"),
+     *     @OA\Property(property="email", type="string", example="test1@xxx.co.jp"),
+     *     @OA\Property(property="status", type="integer", example="1"),
+     *     @OA\Property(property="image_file", type="string", example="xxxxoooo.png"),
+     * )
+     */
+
+    /**
      * @OA\Get(
      *     path="/api/users",
      *     description="statusがMEMBERのユーザ情報をすべて取得する",
@@ -55,8 +67,11 @@ class UserController extends Controller
      *             type="object",
      *             @OA\Property(
      *                 property="data",
-     *                 type="object",
+     *                 type="array",
      *                 description="statusがMEMBERのユーザデータを返す",
+     *                 @OA\Items(
+     *                      ref="#/components/schemas/user_list"
+     *                 ),
      *             )
      *         )
      *     ),
@@ -106,7 +121,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/users/{ユーザ名}",
+     *     path="/api/users/{user}",
      *     description="指定したユーザの情報をすべて取得する",
      *     produces={"application/json"},
      *     tags={"users"},
@@ -119,39 +134,15 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Success (存在するユーザかつステータスがMEMBERのユーザデータを返す)",
+     *         description="Success",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
-     *                 property="id",
-     *                 type="integer",
-     *                 description="ユーザID",
-     *                 example="1"
-     *             ),
-     *             @OA\Property(
-     *                 property="name",
-     *                 type="string",
-     *                 description="ユーザ名",
-     *                 example="root"
-     *             ),
-     *             @OA\Property(
-     *                 property="email",
-     *                 type="string",
-     *                 description="メールアドレス",
-     *                 example="root@xxx.co.jp"
-     *             ),
-     *             @OA\Property(
-     *                 property="status",
-     *                 type="integer",
-     *                 description="ステータス",
-     *                 example="1"
-     *             ),
-     *             @OA\Property(
-     *                 property="image_file",
-     *                 type="string",
-     *                 description="プロフィール画像のファイル名",
-     *                 example="xxxxoooo.png"
-     *             ),
+     *                 property="data",
+     *                 type="object",
+     *                 description="存在するユーザかつステータスがMEMBERのユーザデータ",
+     *                 ref="#/components/schemas/user_list"
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -181,6 +172,7 @@ class UserController extends Controller
      *         )
      *     ),
      * )
+     * 
      * 【ハンバーガーメニュー】
      * ユーザ詳細の表示用アクション
      *   ※$user: nameカラムの値を設定する
@@ -297,6 +289,37 @@ class UserController extends Controller
             // 作成失敗時はエラーメッセージを返す
             return response()->json([
               'error_message' => config('const.User.REGISTER_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
+     * アカウント退会用アクション
+     */
+    public function destroy(Request $request, $user)
+    {
+        try {
+            DB::beginTransaction();
+
+            // 検索条件の設定
+            $conditions = [
+                'name'      => $user
+            ];
+            
+            $data = $this->db->searchFirst($conditions);
+
+            // データ削除
+            $this->db->baseDelete($data->id);
+            
+            DB::commit();
+            return response()->json(['info_message' => config('const.User.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            DB::rollback();
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            return response()->json([
+              'error_message' => config('const.User.DELETE_ERR'),
               'status'        => 500,
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }

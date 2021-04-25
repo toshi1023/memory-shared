@@ -196,6 +196,16 @@ abstract class  BaseRepository
         }
     }
 
+    /**
+     * 指定したデータを削除
+     * 引数: ID
+     */
+    public function baseDelete($id)
+    {
+        $model = $this->baseSearchFirst(['id' => $id]);
+        return $model->delete();
+    }
+
      /**
      * ログイン中ユーザーID取得
      * @return \Illuminate\Contracts\Auth\Authenticatable|int|null
