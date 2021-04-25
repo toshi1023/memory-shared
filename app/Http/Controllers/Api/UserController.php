@@ -119,15 +119,39 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Success",
+     *         description="Success (存在するユーザかつステータスがMEMBERのユーザデータを返す)",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
-     *                 property="data",
-     *                 type="object",
-     *                 description="存在するユーザかつステータスがMEMBERのユーザデータを返す",
-     *                 example="name: root ...etc"
-     *             )
+     *                 property="id",
+     *                 type="integer",
+     *                 description="ユーザID",
+     *                 example="1"
+     *             ),
+     *             @OA\Property(
+     *                 property="name",
+     *                 type="string",
+     *                 description="ユーザ名",
+     *                 example="root"
+     *             ),
+     *             @OA\Property(
+     *                 property="email",
+     *                 type="string",
+     *                 description="メールアドレス",
+     *                 example="root@xxx.co.jp"
+     *             ),
+     *             @OA\Property(
+     *                 property="status",
+     *                 type="integer",
+     *                 description="ステータス",
+     *                 example="1"
+     *             ),
+     *             @OA\Property(
+     *                 property="image_file",
+     *                 type="string",
+     *                 description="プロフィール画像のファイル名",
+     *                 example="xxxxoooo.png"
+     *             ),
      *         )
      *     ),
      *     @OA\Response(
@@ -170,7 +194,7 @@ class UserController extends Controller
                 'status'    => config('const.User.MEMBER')
             ];
             
-            $data = $this->db->baseSearchFirst($conditions);
+            $data = $this->db->searchFirst($conditions);
 
             // ユーザが存在しない場合
             if(empty($data)) {

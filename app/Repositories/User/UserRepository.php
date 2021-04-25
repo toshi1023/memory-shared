@@ -23,7 +23,42 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function searchQuery($conditions=[], $order=[], bool $softDelete=false)
     {
-        return $this->baseSearchQuery($conditions, $order, $softDelete)->get();
+        return $this->baseSearchQuery($conditions, $order, $softDelete)
+                    ->select('id', 'name', 'email', 'status', 'image_file')
+                    ->get();
+    }
+
+    /**
+     * 1件のみ取得
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
+     */
+    public function searchFirst($conditions=[], $order=[], bool $softDelete=false)
+    {
+        return $this->baseSearchQuery($conditions, $order, $softDelete)
+                    ->select('id', 'name', 'email', 'status', 'image_file')
+                    ->first();
+    }
+
+    /**
+     * 表示件数を限定
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 表示件数
+     */
+    public function searchQueryLimit($conditions=[], $order=[], int $limit=10)
+    {
+        return $this->baseSearchQuery($conditions, $order, false)
+                    ->select('id', 'name', 'email', 'status', 'image_file')            
+                    ->limit($limit);
+    }
+
+    /**
+     * ページネーションを設定
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 表示件数
+     */
+    public function searchQueryPaginate($conditions=[], $order=[], int $paginate=10)
+    {
+        return $this->baseSearchQuery($conditions, $order, false)
+                    ->select('id', 'name', 'email', 'status', 'image_file')
+                    ->paginate($paginate);
     }
 
     /**

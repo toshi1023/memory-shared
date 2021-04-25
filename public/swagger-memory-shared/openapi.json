@@ -89,15 +89,35 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Success",
+                        "description": "Success (存在するユーザかつステータスがMEMBERのユーザデータを返す)",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "data": {
-                                            "description": "存在するユーザかつステータスがMEMBERのユーザデータを返す",
-                                            "type": "object",
-                                            "example": "name: root ...etc"
+                                        "id": {
+                                            "description": "ユーザID",
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "name": {
+                                            "description": "ユーザ名",
+                                            "type": "string",
+                                            "example": "root"
+                                        },
+                                        "email": {
+                                            "description": "メールアドレス",
+                                            "type": "string",
+                                            "example": "root@xxx.co.jp"
+                                        },
+                                        "status": {
+                                            "description": "ステータス",
+                                            "type": "integer",
+                                            "example": "1"
+                                        },
+                                        "image_file": {
+                                            "description": "プロフィール画像のファイル名",
+                                            "type": "string",
+                                            "example": "xxxxoooo.png"
                                         }
                                     },
                                     "type": "object"
