@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function(){
 
     /********** グループ管理(groups) **********/
     Route::resource('/groups',       'Api\GroupController')->middleware('add.group.filepath');
+    Route::post('/groups/validate',  'Api\GroupController@groupValidate');
     
     /********** アルバム管理(albums) **********/
     Route::get('/albums', 'Api\AlbumController@index');

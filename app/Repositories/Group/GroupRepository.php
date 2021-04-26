@@ -24,7 +24,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
     {
         return $this->baseSearchQuery($conditions, $order, $softDelete)->get();
     }
-
+    
     /**
      * データ保存
      */

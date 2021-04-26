@@ -32,6 +32,20 @@ class UserController extends Controller
      *     @OA\Property(property="image_file", type="string", example="xxxxoooo.png"),
      * )
      */
+    /**
+     * @OA\Schema(
+     *     schema="user_register",
+     *     required={"id", "name", "email", "password", "status", "user_agent", "image_file"},
+     *     @OA\Property(property="id", type="integer", example=1),
+     *     @OA\Property(property="name", type="string", example="test1"),
+     *     @OA\Property(property="password", type="string", example="test1234"),
+     *     @OA\Property(property="email", type="string", example="test1@xxx.co.jp"),
+     *     @OA\Property(property="status", type="integer", example="1"),
+     *     @OA\Property(property="user_agent", type="string", example="Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_8_8) AppleWebKit/5330 (KHTML, like Gecko) Chrome/36.0.833.0 Mobile Safari/5330"),
+     *     @OA\Property(property="image_file", type="string", example="xxxxoooo.png"),
+     * )
+     */
+
 
     /**
      * @OA\Get(
@@ -214,6 +228,51 @@ class UserController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *     path="/api/users",
+     *     description="ユーザデータを保存する",
+     *     produces={"application/json"},
+     *     tags={"users"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="request",
+     *                 type="object",
+     *                 description="リクエストボディのjsonのプロパティの例",
+     *                 ref="#/components/schemas/user_register"
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="info_message",
+     *                 type="string",
+     *                 description="保存成功のメッセージを表示",
+     *                 example="ユーザ情報を登録しました"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="ユーザ情報の登録に失敗しました"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * ユーザ登録処理用アクション
      */
     public function store(UserRegisterRequest $request)

@@ -27,6 +27,8 @@ return [
         'SEARCH_ERR'         => '指定したグループは存在しません',
         'REGISTER_INFO'      => 'グループ情報を登録しました',
         'REGISTER_ERR'       => 'グループ情報の登録に失敗しました',
+        'DELETE_INFO'        => 'グループの削除が完了しました',
+        'DELETE_ERR'         => 'サーバーエラーによりグループの削除に失敗しました。管理者にお問い合わせください'
     ],
     // GroupHistory関連で使用する定数
     'GroupHistory' => [
