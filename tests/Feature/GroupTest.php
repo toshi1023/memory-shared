@@ -106,4 +106,20 @@ class GroupTest extends TestCase
             'error_message' => config('const.Group.SEARCH_ERR')
         ]);
     }
+
+    /**
+     * @test
+     */
+    public function group削除の動作を確認()
+    {
+        // ユーザを認証済みに書き換え
+        $this->getActingAs($this->admin);
+
+        $response = $this->delete('api/groups/'.$this->group->name);
+
+        $response->assertOk()
+        ->assertJsonFragment([
+            'info_message' => config('const.Group.DELETE_INFO'),
+        ]);
+    }
 }

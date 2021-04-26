@@ -392,7 +392,7 @@ class UserController extends Controller
     {
         try {
             // テスト用
-            $user = $this->db->baseSearchFirst(['name' => $user]);
+            $user = $this->db->searchFirst(['name' => $user]);
             
             // 検索条件
             $mygroup_conditions = [
