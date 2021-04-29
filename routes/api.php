@@ -22,6 +22,8 @@ Route::post('/reset-password/{token}', 'Api\AuthController@passwordReset')->name
 Route::post('/logout', 'Api\AuthController@logout')->name('logout');
 // Route::resource('/users',       'Api\UserController')->middleware('add.user.filepath');
 // Route::get('/users/{user}/friends', 'Api\UserController@friends')->name('users.friends');
+Route::get('/users/{user}/groups',  'Api\UserController@participating')->name('users.participating');
+// Route::resource('/albums',       'Api\AlbumController')->middleware('add.group.filepath');
 
  /************************************************
  *  アプリ側ルーティング(ログイン)
@@ -31,14 +33,15 @@ Route::middleware('auth:sanctum')->group(function(){
     /********** ユーザ管理(users) **********/
     Route::resource('/users',           'Api\UserController')->middleware('add.user.filepath');
     Route::get('/users/{user}/friends', 'Api\UserController@friends')->name('users.friends');
+    // Route::get('/users/{user}/groups',  'Api\UserController@participating')->name('users.participating');
     Route::post('/users/validate',      'Api\UserController@userValidate');
-
+    
     /********** グループ管理(groups) **********/
     Route::resource('/groups',       'Api\GroupController')->middleware('add.group.filepath');
     Route::post('/groups/validate',  'Api\GroupController@groupValidate');
     
     /********** アルバム管理(albums) **********/
-    Route::get('/albums', 'Api\AlbumController@index');
+    Route::resource('/albums',       'Api\AlbumController')->middleware('add.group.filepath');
     
 
 });

@@ -84,12 +84,12 @@ abstract class  BaseRepository
             } else if (preg_match('/@not/', $key)) {
                 // NOT検索
                 $query->where(str_replace("@not", "", $key), '!=', $value);
-            } else if (preg_match('/@>=/', $key)) {
+            } else if (preg_match('/@>equal/', $key)) {
                 // 大なりイコール
-                $query->where(str_replace("@>=", "", $key), '>=', $value);
-            } else if (preg_match('/@<=/', $key)) {
+                $query->where(str_replace("@>equal", "", $key), '>=', $value);
+            } else if (preg_match('/@<equal/', $key)) {
                 // 小なりイコール
-                $query->where(str_replace("@<=", "", $key), '<=', $value);
+                $query->where(str_replace("@<equal", "", $key), '<=', $value);
             } else if (preg_match('/@</', $key)) {
                 // 大なり
                 $query->where(str_replace("@<", "", $key), '<', $value);

@@ -423,4 +423,44 @@ class UserController extends Controller
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }
     }
+
+    /**
+     * 【navメニュー】
+     * 参加グループの一覧
+     */
+    public function participating(Request $request, $user)
+    {
+        try {
+            // テスト用
+            $user = $this->db->searchFirst(['name' => $user]);
+            
+            // 検索条件
+            $mygroup_conditions = [
+                // 'user_id' => Auth::user()->id,  // 本番用
+                'user_id' => $user->id,            // テスト用
+                'status'  => config('const.GroupHistory.APPROVAL')
+            ];
+
+            // 所属グループの取得
+            $groups = $this->db->getGroups($mygroup_conditions);
+
+            // 検索条件
+            $group_conditions['@ingroup_id'] = Common::setInCondition($groups->toArray());
+            // ソート条件
+            $order = [];
+            if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
+
+            // フレンド情報取得
+            $data = $this->db->getParticipating($group_conditions, $order);
+            
+            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            return response()->json([
+              'error_message' => config('const.User.GET_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
 }

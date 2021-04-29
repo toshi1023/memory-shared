@@ -10,6 +10,8 @@ use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\Group\GroupRepository;
 use App\Repositories\GroupHistory\GroupHistoryRepositoryInterface;
 use App\Repositories\GroupHistory\GroupHistoryRepository;
+use App\Repositories\Album\AlbumRepositoryInterface;
+use App\Repositories\Album\AlbumRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(UserRepositoryInterface::class, UserRepository::class);
         $this->app->singleton(GroupRepositoryInterface::class, GroupRepository::class);
         $this->app->singleton(GroupHistoryRepositoryInterface::class, GroupHistoryRepository::class);
+        $this->app->singleton(AlbumRepositoryInterface::class, AlbumRepository::class);
     }
 
     /**

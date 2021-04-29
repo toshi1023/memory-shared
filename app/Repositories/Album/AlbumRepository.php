@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Repositories\Group;
+namespace App\Repositories\Album;
 
-use App\Models\Group;
+use App\Models\Album;
 use App\Repositories\BaseRepository;
-use App\Lib\Common;
+use Illuminate\Support\Facades\DB;
 
-class GroupRepository extends BaseRepository implements GroupRepositoryInterface
+class AlbumRepository extends BaseRepository implements AlbumRepositoryInterface
 {
     protected $model;
 
-    public function __construct(Group $model)
+    public function __construct(Album $model)
     {
         $this->model = $model;
     }
@@ -31,5 +31,4 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
     {
         return $this->baseSave($data, $model);
     }
-
 }

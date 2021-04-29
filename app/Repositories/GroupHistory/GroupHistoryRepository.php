@@ -44,4 +44,17 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
 
         return $query;
     }
+
+    /**
+     * 指定ユーザの参加中グループIDの取得
+     * 引数: 検索条件(user_idを指定)
+     */
+    public function getParticipating($conditions)
+    {
+        $query = $this->baseSearchQuery($conditions)
+                      ->select('group_id')
+                      ->get();
+
+        return $query;
+    }
 }

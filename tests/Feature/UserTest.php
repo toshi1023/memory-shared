@@ -279,6 +279,46 @@ class UserTest extends TestCase
     /**
      * @test
      */
+    public function groupsの動作を確認()
+    {
+        // ユーザを認証済みに書き換え
+        $this->getActingAs($this->admin);
+
+        // グループの作成
+        $group = Group::create([
+            'name'              => 'RedRock',
+            'discription'       => '神戸駅の友達作りランチ会！',
+            'host_user_id'      => $this->admin->id,
+            'update_user_id'    => $this->admin->id,
+        ]);
+
+        // グループ参加履歴の作成
+        GroupHistory::create([
+            'user_id'              => $this->admin->id,
+            'group_id'             => $this->group->id,
+            'status'               => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'       => $this->admin->id
+        ]);
+        GroupHistory::create([
+            'user_id'              => $this->admin->id,
+            'group_id'             => $group->id,
+            'status'               => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'       => $this->admin->id
+        ]);
+
+        // 一覧ページ用の正常な検索動作を確認
+        $response = $this->get('api/users/'.$this->admin->name.'/groups');
+
+        $response->assertOk()
+        ->assertJsonFragment([
+            'name' => $this->group->name,
+            'name' => $group->name
+        ]);
+    }
+
+    /**
+     * @test
+     */
     public function user削除の動作を確認()
     {
         // ユーザを認証済みに書き換え

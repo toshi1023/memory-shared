@@ -39,6 +39,14 @@ return [
         'APPROVAL_WORD'      => '承認済み',
         'REJECT_WORD'        => '却下',
     ],
+    'Album' => [
+        'GET_ERR'            => 'アルバム情報を取得出来ませんでした',
+        'SEARCH_ERR'         => '指定したアルバムは存在しません',
+        'REGISTER_INFO'      => 'アルバム情報を登録しました',
+        'REGISTER_ERR'       => 'アルバム情報の登録に失敗しました',
+        'DELETE_INFO'        => 'アルバムの削除が完了しました',
+        'DELETE_ERR'         => 'サーバーエラーによりアルバムの削除に失敗しました。管理者にお問い合わせください'
+    ],
     // PushHistory関連で使用する定数
     'PushHistory' => [
         'EVERYONE'      => 1,

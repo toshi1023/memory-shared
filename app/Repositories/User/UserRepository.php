@@ -98,4 +98,23 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
         return $this->searchQuery($friends_conditions, $order, $softDelete);
     }
+
+    /**
+     * 参加中グループの取得
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
+     */
+    public function getParticipating($conditions, $order=[], bool $softDelete=false)
+    {
+        // フレンドのIDを取得
+        $groupHistoryRepository = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
+
+        $groups = $groupHistoryRepository->getParticipating($conditions);
+
+        // 取得したグループIDを検索条件に設定
+        $groups_conditions['@inid'] = Common::setInCondition($groups->toArray());
+        // グループの取得
+        $groupRepository = $this->baseGetRepository(GroupRepositoryInterface::class);
+
+        return $groupRepository->searchQuery($groups_conditions, $order, $softDelete);
+    }
 }
