@@ -42,6 +42,22 @@ class User extends Authenticatable
     ];
 
     /**
+     * user_imagesテーブルと1対多のリレーション構築(1側の設定)
+     */
+    public function userImages()
+    {
+        return $this->hasMany('App\Models\UserImage');
+    }
+
+    /**
+     * user_videosテーブルと1対多のリレーション構築(1側の設定)
+     */
+    public function userVideos()
+    {
+        return $this->hasMany('App\Models\UserVideo');
+    }
+
+    /**
      * image_commentsテーブルと1対多のリレーション構築(1側の設定)
      */
     public function imageComments()

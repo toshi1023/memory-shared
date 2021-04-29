@@ -12,4 +12,20 @@ class UserVideo extends Model
 
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
+
+    /**
+     * usersテーブルと1対多のリレーション構築(多側の設定)
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
+    /**
+     * albumsテーブルと1対多のリレーション構築(多側の設定)
+     */
+    public function album()
+    {
+        return $this->belongsTo('App\Models\Album');
+    }
 }

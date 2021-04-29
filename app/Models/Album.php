@@ -20,4 +20,20 @@ class Album extends Model
     {
         return $this->belongsTo('App\Models\User');
     }
+
+    /**
+     * user_imagesテーブルと1対多のリレーション構築(1側の設定)
+     */
+    public function userImages()
+    {
+        return $this->hasMany('App\Models\UserImage');
+    }
+
+    /**
+     * user_videosテーブルと1対多のリレーション構築(1側の設定)
+     */
+    public function userVideos()
+    {
+        return $this->hasMany('App\Models\UserVideo');
+    }
 }
