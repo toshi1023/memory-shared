@@ -131,22 +131,4 @@ class Common {
             }
         }
     }
-
-    /**
-     * ファイルパス補完用メソッド
-     * 引数1: データ, 引数2: カテゴリー
-     */
-    public static function setFilePath($data, $category)
-    {   
-        try {
-            if($data->image_file) {
-                $data->image_file = 
-                    env('AWS_BUCKET_URL').'/'.$category.'/'.$data->name.'/'.$data->image_file;
-            }
-            // ファイルデータを返却
-            return $data->image_file;
-        } catch (Exception $e) {
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').'App\Lib\Common::'.__FUNCTION__.":".$e->getMessage());
-        }
-    }
 }

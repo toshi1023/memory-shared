@@ -50,8 +50,38 @@ class AlbumController extends Controller
                 $order = Common::setOrder($request);
             }
     
-            $data = $this->db->searchQuery($conditions, $order);
+            $data = $this->db->baseSearchQueryPaginate($conditions, $order, 20);
 
+            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            return response()->json([
+              'error_message' => config('const.Album.GET_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
+     * アルバム詳細
+     */
+    public function show(Request $request, $album)
+    {
+        try {
+            $data = [];
+
+            // 検索条件
+            $conditions = [];
+            $conditions['name'] = $album;
+            // dd($this->db);
+            // アルバム情報取得
+            $data['album'] = $this->db->baseSearchFirst($conditions);
+            // 画像情報取得
+            $data['image'] = $this->db->getImages(['album_id' => $data['album']->id]);
+            // 動画情報取得
+            // $data['video'] = $this->db->getVideos(['album_id' => $data['album']->id]);
+            // dd($data);
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());

@@ -12,6 +12,10 @@ use App\Repositories\GroupHistory\GroupHistoryRepositoryInterface;
 use App\Repositories\GroupHistory\GroupHistoryRepository;
 use App\Repositories\Album\AlbumRepositoryInterface;
 use App\Repositories\Album\AlbumRepository;
+use App\Repositories\UserImage\UserImageRepositoryInterface;
+use App\Repositories\UserImage\UserImageRepository;
+use App\Repositories\UserVideo\UserVideoRepositoryInterface;
+use App\Repositories\UserVideo\UserVideoRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -26,6 +30,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(GroupRepositoryInterface::class, GroupRepository::class);
         $this->app->singleton(GroupHistoryRepositoryInterface::class, GroupHistoryRepository::class);
         $this->app->singleton(AlbumRepositoryInterface::class, AlbumRepository::class);
+        $this->app->singleton(UserImageRepositoryInterface::class, UserImageRepository::class);
+        $this->app->singleton(UserVideoRepositoryInterface::class, UserVideoRepository::class);
     }
 
     /**

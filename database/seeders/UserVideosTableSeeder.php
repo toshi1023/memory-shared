@@ -13,6 +13,6 @@ class UserVideosTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \App\Models\UserVideo::factory(20)->create();
     }
 }

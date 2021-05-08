@@ -15,7 +15,7 @@ class CreateUserImagesTable extends Migration
     {
         Schema::create('user_images', function (Blueprint $table) {
             $table->bigIncrements('id')->comment('ID');
-            $table->string('name')->comment('画像名');                      // サーバーサイドの画像名
+            $table->string('image_file')->comment('画像名');                      // サーバーサイドの画像名
             $table->integer('user_id')->unsigned()->comment('ユーザID');
             $table->integer('album_id')->unsigned()->comment('アルバムID');
             $table->json('black_list')->nullable()->comment('ブラックリスト');

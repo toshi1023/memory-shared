@@ -74,7 +74,6 @@ return [
     'Aws' => [
         'USER'               => 'User',
         'GROUP'              => 'Group',
-        'MAIN_IMAGE'         => 'MainImage',
-        'MAIN_VIDEO'         => 'MainVideo',
+        'MAIN'               => 'Main',
     ]
 ];

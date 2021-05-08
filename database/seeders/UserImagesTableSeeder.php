@@ -13,6 +13,6 @@ class UserImagesTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \App\Models\UserImage::factory(20)->create();
     }
 }

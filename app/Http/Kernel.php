@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'add.user.filepath' => \App\Http\Middleware\AddUserFilePath::class,
         'add.group.filepath' => \App\Http\Middleware\AddGroupFilePath::class,
+        'add.main.filepath' => \App\Http\Middleware\AddMainFilePath::class,
     ];
 }

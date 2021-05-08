@@ -42,6 +42,22 @@ class User extends Authenticatable
     ];
 
     /**
+     * アクセサ許可リスト
+     */
+    protected $appends = ['image_url']; 
+
+    /**
+     * 画像のパスを取得
+     */
+    public function getImageUrlAttribute()
+    {
+        // 画像パスを設定
+        if($this->image_file) {
+            return env('AWS_BUCKET_URL').'/'.config('const.Aws.USER').'/'.$this->name.'/'.$this->image_file;
+        }
+    }
+
+    /**
      * user_imagesテーブルと1対多のリレーション構築(1側の設定)
      */
     public function userImages()

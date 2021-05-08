@@ -12,6 +12,16 @@ class UserImage extends Model
 
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
+    protected $appends = ['image_url']; 
+
+    /**
+     * 画像のパスを取得
+     */
+    public function getImageUrlAttribute()
+    {
+        // 画像パスを設定
+        return env('AWS_BUCKET_URL').'/'.config('const.Aws.MAIN').'/'.$this->album_id.'/'.$this->image_file;
+    }
 
     /**
      * usersテーブルと1対多のリレーション構築(多側の設定)
