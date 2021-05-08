@@ -74,14 +74,14 @@ class AlbumController extends Controller
             // 検索条件
             $conditions = [];
             $conditions['name'] = $album;
-            // dd($this->db);
+
             // アルバム情報取得
             $data['album'] = $this->db->baseSearchFirst($conditions);
             // 画像情報取得
             $data['image'] = $this->db->getImages(['album_id' => $data['album']->id]);
             // 動画情報取得
-            // $data['video'] = $this->db->getVideos(['album_id' => $data['album']->id]);
-            // dd($data);
+            $data['video'] = $this->db->getVideos(['album_id' => $data['album']->id]);
+            
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());

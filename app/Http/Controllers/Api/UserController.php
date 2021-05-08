@@ -433,7 +433,7 @@ class UserController extends Controller
         try {
             // テスト用
             $user = $this->db->searchFirst(['name' => $user]);
-            
+
             // 検索条件
             $mygroup_conditions = [
                 // 'user_id' => Auth::user()->id,  // 本番用

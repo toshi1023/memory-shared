@@ -115,14 +115,14 @@ class AlbumTest extends TestCase
         $this->getActingAs($this->admin);
 
         // created_atの正常な検索動作を確認
-        $response = $this->get('api/albums/?group_id='.$this->group->id.'&created_at@>equal='.$datetime);
+        $response = $this->get('api/albums/?group_id='.$this->group->id.'&created_at@>equal='.$today);
 
         $response->assertOk()
         ->assertJsonFragment([
             'name' => $this->album->name,
         ]);
 
-        $response = $this->get('api/albums/?group_id='.$this->group->id.'&created_at@<equal='.$datetime);
+        $response = $this->get('api/albums/?group_id='.$this->group->id.'&created_at@<equal='.$today);
 
         $response->assertOk()
         ->assertJsonFragment([
