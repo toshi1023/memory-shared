@@ -29,7 +29,7 @@ abstract class  BaseRepository
     protected function baseGetRepository($repository)
     {
         // 指定したテーブルをインスタンス化して返す
-        return $this->model = app()->make($repository);
+        return app()->make($repository);
     }
 
     /**

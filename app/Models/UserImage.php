@@ -12,7 +12,11 @@ class UserImage extends Model
 
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
-    protected $appends = ['image_url']; 
+    protected $appends = ['image_url'];
+    protected $casts = [
+        'black_list'  => 'json',
+        'white_list'  => 'json',
+    ];
 
     /**
      * 画像のパスを取得

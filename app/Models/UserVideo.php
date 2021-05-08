@@ -12,7 +12,11 @@ class UserVideo extends Model
 
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
-    protected $appends = ['video_url']; 
+    protected $appends = ['video_url'];
+    protected $casts = [
+        'black_list'  => 'json',
+        'white_list'  => 'json',
+    ];
 
     /**
      * 動画のパスを取得

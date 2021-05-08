@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Repositories\Group\GroupRepositoryInterface;
 use App\Http\Requests\GroupRegisterRequest;
 use App\Lib\Common;
+use App\Models\GroupHistory;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -107,12 +108,22 @@ class GroupController extends Controller
             $data['image_file'] = $filename;
     
             // データの保存処理
-            $this->db->save($data);
+            $group = $this->db->save($data);
 
             // ファイルの保存処理
             if($request->file('image_file')) {
                 Common::fileSave($request->file('image_file'), config('const.Aws.Group'), $request->name, $filename);
             }
+
+            // グループ履歴の作成
+            $historyData = [
+                'group_id'  => $group->id,
+                'user_id'   => $group->host_user_id,
+                'status'    => config('const.GroupHistory.APPROVAL')
+            ];
+
+            // グループ履歴の保存
+            $this->db->save($historyData, GroupHistory::class);
 
             DB::commit();
             return response()->json([
@@ -131,7 +142,7 @@ class GroupController extends Controller
     }
 
     /**
-     * ユーザ更新処理用アクション
+     * グループ更新処理用アクション
      */
     public function update(GroupRegisterRequest $request)
     {

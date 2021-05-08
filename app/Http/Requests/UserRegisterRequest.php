@@ -69,7 +69,7 @@ class UserRegisterRequest extends FormRequest
         $res = response()->json([
             'status' => 400,
             'errors' => $validator->errors(),
-        ],400);
+        ], 400, [], JSON_UNESCAPED_UNICODE);
         throw new HttpResponseException($res);
     }
 }

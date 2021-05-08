@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Laravel\Sanctum\Sanctum;
 use App\Models\User;
 use App\Models\Group;
+use App\Models\GroupHistory;
 use App\Models\Album;
 use Carbon\Carbon;
 
@@ -21,6 +22,8 @@ class AlbumTest extends TestCase
     protected $user;
     protected $group;
     const ALBUM = 'album1';
+    const ALBUM2 = 'album2';
+    const ALBUM3 = 'album3';
 
     /**
      * テストの前処理を実行
@@ -53,6 +56,13 @@ class AlbumTest extends TestCase
             'update_user_id'    => $this->admin->id,
         ]);
 
+        // グループ履歴の作成
+        GroupHistory::create([
+            'user_id'       => $this->admin->id,
+            'group_id'      => $this->group->id,
+            'status'        => config('const.GroupHistory.APPROVAL')
+        ]);
+
         // アルバムの作成
         $this->album = Album::create([
             'name'           => self::ALBUM,
@@ -77,14 +87,14 @@ class AlbumTest extends TestCase
     public function api_albumsにGETメソッドでアクセス()
     {
         // 認証前
-        $response = $this->get('/api/albums?group_id='.$this->group->id);
+        $response = $this->get('/api/groups/'.$this->group->name.'/albums');
 
         $response->assertStatus(302);
 
         // 認証後
         $this->getActingAs($this->admin);
 
-        $response = $this->get('/api/albums?group_id='.$this->group->id);
+        $response = $this->get('/api/groups/'.$this->group->name.'/albums');
 
         $response->assertOk()
         ->assertJsonFragment([
@@ -103,7 +113,7 @@ class AlbumTest extends TestCase
 
         // アルバムの作成
         $album = Album::create([
-            'name'              => 'album2',
+            'name'              => self::ALBUM2,
             'group_id'          => $this->group->id,
             'host_user_id'      => $this->admin->id,
             'update_user_id'    => $this->admin->id,
@@ -115,18 +125,117 @@ class AlbumTest extends TestCase
         $this->getActingAs($this->admin);
 
         // created_atの正常な検索動作を確認
-        $response = $this->get('api/albums/?group_id='.$this->group->id.'&created_at@>equal='.$today);
+        $response = $this->get('/api/groups/'.$this->group->name.'/albums?created_at@>equal='.$today);
 
         $response->assertOk()
         ->assertJsonFragment([
             'name' => $this->album->name,
         ]);
 
-        $response = $this->get('api/albums/?group_id='.$this->group->id.'&created_at@<equal='.$today);
+        $response = $this->get('/api/groups/'.$this->group->name.'/albums?created_at@<equal='.$today);
 
         $response->assertOk()
         ->assertJsonFragment([
             'name' => $album->name,
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function アルバム作成の動作を確認()
+    {
+        // ユーザを認証済みに書き換え
+        $this->getActingAs($this->admin);
+
+        // アルバム作成(失敗例: アルバム作成権限がない場合)
+        // ※自作ルールの動作を確認
+        $data = [
+            'name'           => self::ALBUM3,
+            'group_id'       => $this->group->id,
+            'host_user_id'   => $this->user->id,
+            'update_user_id' => $this->user->id
+        ];
+
+        $response = $this->post('/api/groups/'.$this->group->name.'/albums', $data);
+
+        $response->assertStatus(400)
+        ->assertJsonFragment([
+            'errors' => [
+                'host_user_id' => ['このグループでアルバムを作成する権限がありません'],
+        ]]);
+
+        // アルバム作成(成功例)
+        $data = [
+            'name'           => self::ALBUM3,
+            'group_id'       => $this->group->id,
+            'host_user_id'   => $this->admin->id,
+            'update_user_id' => $this->admin->id
+        ];
+
+        $response = $this->post('/api/groups/'.$this->group->name.'/albums', $data);
+
+        $response->assertOk()
+        ->assertJsonFragment([
+            'info_message' => config('const.Album.REGISTER_INFO')
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function アルバム更新の動作を確認()
+    {
+        // ユーザを認証済みに書き換え
+        $this->getActingAs($this->admin);
+
+        // アルバム更新(失敗例: アルバム更新権限がない場合)
+        // ※自作ルールの動作を確認
+        $data = [
+            'id'             => $this->album->id,
+            'name'           => self::ALBUM3,
+            'group_id'       => $this->group->id,
+            'host_user_id'   => $this->user->id,
+            'update_user_id' => $this->user->id
+        ];
+
+        $response = $this->put('/api/groups/'.$this->group->name.'/albums/'.$this->album->name, $data);
+
+        $response->assertStatus(400)
+        ->assertJsonFragment([
+            'errors' => [
+                'host_user_id' => ['このグループでアルバムを作成する権限がありません', 'アルバム作成者以外はアルバム情報を更新できません'],
+        ]]);
+
+        // アルバム作成(成功例)
+        $data = [
+            'name'           => self::ALBUM3,
+            'group_id'       => $this->group->id,
+            'host_user_id'   => $this->admin->id,
+            'update_user_id' => $this->admin->id
+        ];
+
+        $response = $this->put('/api/groups/'.$this->group->name.'/albums/'.$this->album->name, $data);
+
+        $response->assertOk()
+        ->assertJsonFragment([
+            'info_message' => config('const.Album.REGISTER_INFO')
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function album削除の動作を確認()
+    {
+        // ユーザを認証済みに書き換え
+        $this->getActingAs($this->admin);
+
+        $response = $this->delete('/api/groups/'.$this->group->name.'/albums/'.$this->album->name);
+
+        $response->assertOk()
+        ->assertJsonFragment([
+            'info_message' => config('const.Album.DELETE_INFO'),
         ]);
     }
 }

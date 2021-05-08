@@ -25,6 +25,7 @@ Route::post('/logout', 'Api\AuthController@logout')->name('logout');
 // Route::get('/users/{user}/groups',  'Api\UserController@participating')->name('users.participating');
 // Route::resource('/groups',       'Api\GroupController');
 // Route::resource('/albums',       'Api\AlbumController');
+// Route::post('/albums/validate',  'Api\AlbumController@albumValidate');
 
  /************************************************
  *  アプリ側ルーティング(ログイン)
@@ -42,7 +43,8 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/groups/validate',  'Api\GroupController@groupValidate');
     
     /********** アルバム管理(albums) **********/
-    Route::resource('/albums',       'Api\AlbumController');
+    Route::resource('/groups/{group}/albums',       'Api\AlbumController');
+    Route::post('/groups/{group}/albums/validate',  'Api\AlbumController@albumValidate');
     
 
 });

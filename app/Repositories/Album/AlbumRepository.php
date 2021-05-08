@@ -3,7 +3,9 @@
 namespace App\Repositories\Album;
 
 use App\Models\Album;
+use App\Models\Group;
 use App\Repositories\BaseRepository;
+use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\UserImage\UserImageRepositoryInterface;
 use App\Repositories\UserVideo\UserVideoRepositoryInterface;
 
@@ -24,6 +26,19 @@ class AlbumRepository extends BaseRepository implements AlbumRepositoryInterface
     {
         return $this->baseSearchQuery($conditions, $order, $softDelete)->get();
     }
+
+    /**
+     * 選択したグループ情報を取得
+     * 引数1: 検索条件
+     */
+    public function getGroup($conditions)
+    {
+        $groupRepository = $this->baseGetRepository(GroupRepositoryInterface::class);
+        $query = $groupRepository->baseSearchFirst($conditions);
+        
+        return $query;
+    }
+
 
     /**
      * 選択したアルバム情報と関係するイメージを取得

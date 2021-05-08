@@ -5,10 +5,10 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\Rule;
-use App\Rules\GroupUpdateRule;
+use App\Rules\GroupMemberRule;
+use App\Rules\AlbumUpdateRule;
 
-class GroupRegisterRequest extends FormRequest
+class AlbumRegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,10 +28,9 @@ class GroupRegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            // グループのバリデーションチェック
-            'name'                  => ['required', 'max:50', Rule::unique('groups')->ignore($this->id, 'id')],
-            'image_file'            => 'image|mimes:jpeg,png,jpg,gif|max:1024',
-            'host_user_id'          => ['required', new GroupUpdateRule]
+            // アルバムのバリデーションチェック
+            'name'                  => ['required', 'max:50'],
+            'host_user_id'          => ['required', new GroupMemberRule, new AlbumUpdateRule]
         ];
     }
 
@@ -41,10 +40,7 @@ class GroupRegisterRequest extends FormRequest
     public function messages()
     {
         return [
-            "name.unique"                   => "このグループ名は既に存在します",
-            "name.max"                      => "グループ名は50文字以内で入力してください",
-            "mines"                         => "指定された拡張子（PNG/JPG/GIF）ではありません。",
-            "image_file.max"                => "1Mを超えています。",
+            "name.max"              => "アルバム名は50文字以内で入力してください",
         ];
     }
 
