@@ -88,7 +88,7 @@ class AlbumController extends Controller
             $data['image'] = $this->db->getImages(['album_id' => $data['album']->id]);
             // 動画情報取得
             $data['video'] = $this->db->getVideos(['album_id' => $data['album']->id]);
-
+            
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());

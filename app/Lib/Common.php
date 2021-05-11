@@ -112,6 +112,15 @@ class Common {
         return $image_name;
     }
 
+     /**
+     * ファイル名から拡張子取得(.付き)
+     * @param $name
+     * @return bool|string
+     */
+    public static function getExt($name) {
+        return substr($name, strrpos($name, '.'));
+    }
+
     /**
      * ファイルアップロード用メソッド(アップロード先: S3)
      * 引数1: ファイル, 引数2: カテゴリー, 引数3: フォルダ名に使用するための値, 引数4: ファイル名

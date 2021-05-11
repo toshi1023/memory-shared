@@ -36,7 +36,7 @@ class UserVideoFactory extends Factory
         ];
 
         return [
-            'image_file'        => Str::random(10).'mp4',
+            'image_file'        => Str::random(10).'.mp4',
             'title'             => $title[$this->faker->numberBetween(0, 9)],
             'user_id'           => $this->faker->numberBetween(1, 3),
             'album_id'          => $this->faker->numberBetween(1, 10),

@@ -47,6 +47,12 @@ return [
         'DELETE_INFO'        => 'アルバムの削除が完了しました',
         'DELETE_ERR'         => 'サーバーエラーによりアルバムの削除に失敗しました。管理者にお問い合わせください'
     ],
+    'UserImage' => [
+        'REGISTER_INFO'      => '画像を保存しました',
+        'REGISTER_ERR'       => '画像の保存に失敗しました',
+        'DELETE_INFO'        => '画像の削除が完了しました',
+        'DELETE_ERR'         => 'サーバーエラーにより画像の削除に失敗しました。管理者にお問い合わせください'
+    ],
     // PushHistory関連で使用する定数
     'PushHistory' => [
         'EVERYONE'      => 1,
