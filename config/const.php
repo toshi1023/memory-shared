@@ -48,6 +48,7 @@ return [
         'DELETE_ERR'         => 'サーバーエラーによりアルバムの削除に失敗しました。管理者にお問い合わせください'
     ],
     'UserImage' => [
+        'BEFORE_SAVE_NAME'   => 'before_save',
         'REGISTER_INFO'      => '画像を保存しました',
         'REGISTER_ERR'       => '画像の保存に失敗しました',
         'DELETE_INFO'        => '画像の削除が完了しました',

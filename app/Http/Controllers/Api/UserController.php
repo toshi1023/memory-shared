@@ -325,8 +325,8 @@ class UserController extends Controller
             // ファイル名の生成
             $filename = null;
             if ($request->file('image_file')){
-              $filename = Common::getFilename($request->file('image_file'));
-              $data['image_file'] = $filename;
+                $filename = Common::getFilename($request->file('image_file'));
+                $data['image_file'] = $filename;
             }
     
             // データの保存処理

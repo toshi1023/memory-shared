@@ -112,6 +112,19 @@ class Common {
         return $image_name;
     }
 
+    /**
+     * ユニークなファイル名の設定
+     * 引数1：ファイル情報, 引数2: id (※ユニークであることが必須)
+     */
+    public static function getUniqueFilename($file, $id)
+    {
+        $tmp_name   = md5(microtime()).$id;                // ファイル名取得(microtime() : Unixタイムスタンプ)
+        $ext        = $file->getClientOriginalExtension(); // 拡張子GET
+        $image_name = $tmp_name.".".$ext;
+
+        return $image_name;
+    }
+
      /**
      * ファイル名から拡張子取得(.付き)
      * @param $name
