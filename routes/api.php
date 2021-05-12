@@ -52,4 +52,7 @@ Route::middleware('auth:sanctum')->group(function(){
     
     /********** 動画管理(user_videos) **********/
     Route::resource('/groups/{group}/albums/{album}/video',       'Api\UserVideoController')->only('store', 'destroy');
+
+    /********** ニュース管理(news) **********/
+    Route::resource('/news',       'Api\NewsController');
 });
