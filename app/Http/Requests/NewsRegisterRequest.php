@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use App\Rules\NewsRegisterRule;
 
 class NewsRegisterRequest extends FormRequest
 {
@@ -26,7 +27,8 @@ class NewsRegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'     => ['required', 'max:50'],
+            'title'             => ['required', 'max:50'],
+            'update_user_id'    => [new NewsRegisterRule]
         ];
     }
 

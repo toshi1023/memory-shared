@@ -55,4 +55,5 @@ Route::middleware('auth:sanctum')->group(function(){
 
     /********** ニュース管理(news) **********/
     Route::resource('/news',       'Api\NewsController');
+    Route::post('/news/validate',  'Api\NewsController@newsValidate');
 });

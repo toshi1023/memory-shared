@@ -16,6 +16,8 @@ use App\Repositories\UserImage\UserImageRepositoryInterface;
 use App\Repositories\UserImage\UserImageRepository;
 use App\Repositories\UserVideo\UserVideoRepositoryInterface;
 use App\Repositories\UserVideo\UserVideoRepository;
+use App\Repositories\News\NewsRepositoryInterface;
+use App\Repositories\News\NewsRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -32,6 +34,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(AlbumRepositoryInterface::class, AlbumRepository::class);
         $this->app->singleton(UserImageRepositoryInterface::class, UserImageRepository::class);
         $this->app->singleton(UserVideoRepositoryInterface::class, UserVideoRepository::class);
+        $this->app->singleton(NewsRepositoryInterface::class, NewsRepository::class);
     }
 
     /**

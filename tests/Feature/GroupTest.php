@@ -21,7 +21,7 @@ class GroupTest extends TestCase
     protected $user;
     protected $group;
 
-    const DIS = '梅田カフェ巡り！ほっと一息つけるカフェタイムを楽しみにでかけるグループです！';
+    private const DIS = '梅田カフェ巡り！ほっと一息つけるカフェタイムを楽しみにでかけるグループです！';
 
     /**
      * テストの前処理を実行
@@ -29,7 +29,7 @@ class GroupTest extends TestCase
     public function setUp(): void{
         parent::setUp();
 
-        // 認証済みユーザの作成
+        // 管理者ユーザの作成
         $this->admin = 
             User::create([
                 'name'              => 'root',

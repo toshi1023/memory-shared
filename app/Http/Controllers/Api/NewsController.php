@@ -82,7 +82,7 @@ class NewsController extends Controller
      * ニュースバリデーション用メソッド
      *   ※データ登録時には非同期処理で常時確認に使用
      */
-    public function groupValidate(NewsRegisterRequest $request)
+    public function newsValidate(NewsRegisterRequest $request)
     {
         return;
     }
