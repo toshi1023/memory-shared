@@ -28,6 +28,7 @@ class NewsRegisterRequest extends FormRequest
     {
         return [
             'title'             => ['required', 'max:50'],
+            'content'           => ['required'],
             'update_user_id'    => [new NewsRegisterRule]
         ];
     }

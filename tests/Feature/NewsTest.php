@@ -101,13 +101,6 @@ class NewsTest extends TestCase
 
         $response = $this->get('api/news/'.$this->news1->id);
 
-        // 検索対象ではないニュースを取得していないことを確認
-        $response->assertOk()
-        ->assertJsonMissing([
-            'title'             => $this->news2->title,
-            'content'           => $this->news2->content,
-            'update_user_id'    => $this->admin->id
-        ]);
         // 検索対象であるニュースを取得していることを確認
         $response->assertOk()
         ->assertJsonFragment([
@@ -143,7 +136,6 @@ class NewsTest extends TestCase
         $response->assertStatus(302);
 
         // ユーザを認証済みに書き換え
-        $this->getActingAs($this->admin);
         $this->getActingAs($this->user);
 
         // ニュースを作成(管理者権限のない認証済みユーザの場合)
@@ -156,7 +148,9 @@ class NewsTest extends TestCase
         ]]);
 
         // ニュースを作成(管理者権限のある認証済みユーザの場合)
+        $this->getActingAs($this->admin);
         $data['update_user_id'] = $this->admin->id;
+        
         $response = $this->post('api/news', $data);
 
         $response->assertOk()
