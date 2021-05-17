@@ -65,6 +65,20 @@ class Common {
     }
 
     /**
+     * json形式保存用の配列生成
+     * 引数: 値
+     */
+    public static function setJsonType(array $data)
+    {
+        $values = [];
+        foreach($data as $value) {
+            $values['user_list'][] = (int)$value;
+        }
+
+        return $values;
+    }
+
+    /**
      * ワンタイムパスワード発行
      * 引数: アプリ表示用のカスタムフラグ
      *   ※12文字で設定(大文字英字と小文字数字で表示)

@@ -18,7 +18,7 @@ class UserImageUploadRule implements Rule
     }
 
     /**
-     * 画像投稿者がグループに正式に参加されているかを確認
+     * 画像・動画投稿者がグループに正式に参加されているかを確認
      *
      * @param  string  $attribute
      * @param  mixed  $value
@@ -40,6 +40,6 @@ class UserImageUploadRule implements Rule
      */
     public function message()
     {
-        return 'このアルバムに画像を投稿するにはグループに加盟する必要があります';
+        return 'このアルバムに画像・動画を投稿するにはグループに加盟する必要があります';
     }
 }

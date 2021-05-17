@@ -18,6 +18,7 @@ return [
         'DELETE_INFO'        => '退会が完了しました',
         'DELETE_ERR'         => 'サーバーエラーにより退会に失敗しました。管理者にお問い合わせください'
     ],
+    // Group関連で使用する定数
     'Group' => [
         'PUBLIC'             => 0,
         'PRIVATE'            => 1,
@@ -39,6 +40,7 @@ return [
         'APPROVAL_WORD'      => '承認済み',
         'REJECT_WORD'        => '却下',
     ],
+    // Album関連で使用する定数
     'Album' => [
         'GET_ERR'            => 'アルバム情報を取得出来ませんでした',
         'SEARCH_ERR'         => '指定したアルバムは存在しません',
@@ -47,6 +49,7 @@ return [
         'DELETE_INFO'        => 'アルバムの削除が完了しました',
         'DELETE_ERR'         => 'サーバーエラーによりアルバムの削除に失敗しました。管理者にお問い合わせください'
     ],
+    // UserImage関連で使用する定数
     'UserImage' => [
         'BEFORE_SAVE_NAME'   => 'before_save',
         'REGISTER_INFO'      => '画像を保存しました',
@@ -54,6 +57,16 @@ return [
         'DELETE_INFO'        => '画像の削除が完了しました',
         'DELETE_ERR'         => 'サーバーエラーにより画像の削除に失敗しました。管理者にお問い合わせください'
     ],
+    // UserVideo関連で使用する定数
+    'UserVideo' => [
+        'BEFORE_SAVE_NAME'   => 'before_save',
+        'TITLE'              => 'NoTitle',
+        'REGISTER_INFO'      => '動画を保存しました',
+        'REGISTER_ERR'       => '動画の保存に失敗しました',
+        'DELETE_INFO'        => '動画の削除が完了しました',
+        'DELETE_ERR'         => 'サーバーエラーにより動画の削除に失敗しました。管理者にお問い合わせください'
+    ],
+    // News関連で使用する定数
     'News' => [
         'GET_ERR'            => 'ニュースを取得出来ませんでした',
         'SEARCH_ERR'         => '指定したニュースは存在しません',
