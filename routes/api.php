@@ -26,7 +26,7 @@ Route::post('/logout', 'Api\AuthController@logout')->name('logout');
 // Route::resource('/groups',       'Api\GroupController');
 // Route::resource('/groups/{group}/albums',       'Api\AlbumController');
 // Route::post('/albums/validate',  'Api\AlbumController@albumValidate');
-Route::resource('/groups/{group}/albums/{album}/image',       'Api\UserImageController')->only('store', 'destroy');
+// Route::resource('/groups/{group}/albums/{album}/image',       'Api\UserImageController')->only('store', 'destroy');
 
  /************************************************
  *  アプリ側ルーティング(ログイン)
@@ -48,7 +48,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/groups/{group}/albums/validate',  'Api\AlbumController@albumValidate');
     
     /********** 画像管理(user_images) **********/
-    // Route::resource('/groups/{group}/albums/{album}/image',       'Api\UserImageController')->only('store', 'destroy');
+    Route::resource('/groups/{group}/albums/{album}/image',       'Api\UserImageController')->only('store', 'destroy');
     Route::post('/groups/{group}/albums/{album}/image/validate',  'Api\UserImageController@userImageValidate');
     
     /********** 動画管理(user_videos) **********/

@@ -3,11 +3,11 @@
 namespace App\Repositories\Album;
 
 use App\Models\Album;
-use App\Models\Group;
 use App\Repositories\BaseRepository;
 use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\UserImage\UserImageRepositoryInterface;
 use App\Repositories\UserVideo\UserVideoRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 
 class AlbumRepository extends BaseRepository implements AlbumRepositoryInterface
 {
@@ -47,7 +47,13 @@ class AlbumRepository extends BaseRepository implements AlbumRepositoryInterface
     public function getImages($conditions, int $paginate=30)
     {
         $userImageRepository = $this->baseGetRepository(UserImageRepositoryInterface::class);
-        $query = $userImageRepository->baseSearchQueryPaginate($conditions, [], $paginate);
+        
+        $query = $userImageRepository->baseSearchQuery($conditions)
+                                     ->where('black_list', '=', null)
+                                     ->where('white_list', '=', null)
+                                     ->orWhere('black_list->'.Auth::user()->id, '!=', Auth::user()->id)
+                                     ->orWhere('white_list->'.Auth::user()->id, '=', Auth::user()->id)
+                                     ->paginate($paginate);
         
         return $query;
     }
@@ -59,7 +65,13 @@ class AlbumRepository extends BaseRepository implements AlbumRepositoryInterface
     public function getVideos($conditions, int $paginate=15)
     {
         $userVideoRepository = $this->baseGetRepository(UserVideoRepositoryInterface::class);
-        $query = $userVideoRepository->baseSearchQueryPaginate($conditions, [], $paginate);
+
+        $query = $userVideoRepository->baseSearchQuery($conditions)
+                                     ->where('black_list', '=', null)
+                                     ->where('white_list', '=', null)
+                                     ->orWhere('black_list->'.Auth::user()->id, '!=', Auth::user()->id)
+                                     ->orWhere('white_list->'.Auth::user()->id, '=', Auth::user()->id)
+                                     ->paginate($paginate);
         
         return $query;
     }

@@ -67,12 +67,13 @@ class Common {
     /**
      * json形式保存用の配列生成
      * 引数: 値
+     *  ※black_list['user_list'] でリストを取得
      */
     public static function setJsonType(array $data)
     {
         $values = [];
         foreach($data as $value) {
-            $values['user_list'][] = (int)$value;
+            $values[$value] = (int)$value;
         }
 
         return $values;
