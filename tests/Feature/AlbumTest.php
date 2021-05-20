@@ -32,7 +32,7 @@ class AlbumTest extends TestCase
         parent::setUp();
 
 
-        // 認証済みユーザの作成
+        // 管理ユーザの作成
         $this->admin = 
             User::create([
                 'name'              => 'root',
@@ -45,7 +45,7 @@ class AlbumTest extends TestCase
                 'update_user_id'    => 1,
             ]);
 
-        // 認証済みでないユーザの作成
+        // ユーザの作成
         $this->user = User::factory()->create();
 
         // グループの作成
