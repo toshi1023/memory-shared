@@ -27,6 +27,7 @@ Route::post('/logout', 'Api\AuthController@logout')->name('logout');
 // Route::resource('/groups/{group}/albums',       'Api\AlbumController');
 // Route::post('/albums/validate',  'Api\AlbumController@albumValidate');
 // Route::resource('/groups/{group}/albums/{album}/images',       'Api\UserImageController')->only('store', 'destroy');
+// Route::resource('/messages',       'Api\MessageHistoryController')->only('index', 'store');
 
  /************************************************
  *  アプリ側ルーティング(ログイン)

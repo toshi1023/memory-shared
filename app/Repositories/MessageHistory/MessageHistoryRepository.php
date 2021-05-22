@@ -4,6 +4,7 @@ namespace App\Repositories\MessageHistory;
 
 use App\Models\MessageHistory;
 use App\Repositories\BaseRepository;
+use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 
 class MessageHistoryRepository extends BaseRepository implements MessageHistoryRepositoryInterface
@@ -22,6 +23,40 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
     public function searchQuery($conditions=[], $order=[], bool $softDelete=false)
     {
         return $this->baseSearchQuery($conditions, $order, $softDelete)->get();
+    }
+
+    /**
+     * メッセージ履歴の取得
+     */
+    public function getMessages($conditions=[], bool $softDelete=false, $paginate=10)
+    {
+        // own_idがログインユーザのデータを取得
+        $anotherQuery = $this->baseSearchQuery($conditions, [], $softDelete);
+        
+        // 検索条件の設定(user_idがログインユーザ)
+        $anotherConditions = [
+            'own_id'    => $conditions['user_id'],
+            'user_id'   => $conditions['own_id']
+        ];
+        // user_idがログインユーザのデータを取得
+        $query = $this->baseSearchQuery($anotherConditions, [], $softDelete)
+                      ->union($anotherQuery)
+                      ->orderBy('id', 'asc')
+                      ->paginate($paginate);
+
+        return $query;
+    }
+
+    /**
+     * ユーザ情報の取得
+     */
+    public function getUser($conditions=[], bool $softDelete=false)
+    {
+        $userRepository = $this->baseGetRepository(UserRepositoryInterface::class);
+
+        $query = $userRepository->baseSearchFirst($conditions, [], $softDelete);
+
+        return $query;
     }
     
     /**
