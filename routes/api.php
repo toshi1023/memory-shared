@@ -21,7 +21,7 @@ Route::post('/login', 'Api\AuthController@login')->name('login');
 Route::post('/reset-password/{token}', 'Api\AuthController@passwordReset')->name('passwordReset');
 Route::post('/logout', 'Api\AuthController@logout')->name('logout');
 // Route::resource('/users',       'Api\UserController');
-// Route::get('/users/{user}/friends', 'Api\UserController@friends')->name('users.friends');
+// Route::get('/users/{user}/families', 'Api\UserController@families')->name('users.families');
 // Route::get('/users/{user}/groups',  'Api\UserController@participating')->name('users.participating');
 // Route::resource('/groups',       'Api\GroupController');
 // Route::resource('/groups/{group}/albums',       'Api\AlbumController');
@@ -36,7 +36,7 @@ Route::middleware('auth:sanctum')->group(function(){
 
     /********** ユーザ管理(users) **********/
     Route::resource('/users',           'Api\UserController');
-    Route::get('/users/{user}/friends', 'Api\UserController@friends')->name('users.friends');
+    Route::get('/users/{user}/families', 'Api\UserController@families')->name('users.families');
     Route::get('/users/{user}/groups',  'Api\UserController@participating')->name('users.participating');
     Route::post('/users/validate',      'Api\UserController@userValidate');
     

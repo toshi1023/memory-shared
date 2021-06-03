@@ -248,7 +248,7 @@ class UserTest extends TestCase
     /**
      * @test
      */
-    public function friendsの動作を確認()
+    public function familiesの動作を確認()
     {
         // ユーザを認証済みに書き換え
         $this->getActingAs($this->admin);
@@ -268,7 +268,7 @@ class UserTest extends TestCase
         ]);
 
         // 一覧ページ用の正常な検索動作を確認
-        $response = $this->get('api/users/'.$this->admin->name.'/friends');
+        $response = $this->get('api/users/'.$this->admin->name.'/families');
 
         $response->assertOk()
         ->assertJsonFragment([
