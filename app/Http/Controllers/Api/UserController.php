@@ -388,7 +388,7 @@ class UserController extends Controller
      * 【navメニュー】
      * 同じグループに参加中のユーザ一覧
      */
-    public function friends(Request $request, $user)
+    public function families(Request $request, $user)
     {
         try {
             // テスト用
@@ -450,8 +450,10 @@ class UserController extends Controller
             $order = [];
             if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
 
-            // フレンド情報取得
+            // 参加中グループ情報取得
             $data = $this->db->getParticipating($group_conditions, $order);
+
+            // 参加中グループの人数を取得
             
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {

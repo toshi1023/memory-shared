@@ -70,7 +70,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
-     * 参加中のグループを取得
+     * 参加中のグループ履歴を取得
      * 引数: 検索条件
      */
     public function getGroups($conditions)
