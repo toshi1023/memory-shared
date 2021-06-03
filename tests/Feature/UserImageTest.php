@@ -49,7 +49,7 @@ class UserImageTest extends TestCase
         // グループの作成
         $this->group = Group::create([
             'name'              => 'RoyalBlue',
-            'discription'       => '梅田カフェ巡り！ほっと一息つけるカフェタイムを楽しみにでかけるグループです！',
+            'description'       => '梅田カフェ巡り！ほっと一息つけるカフェタイムを楽しみにでかけるグループです！',
             'host_user_id'      => $this->admin->id,
             'update_user_id'    => $this->admin->id,
         ]);

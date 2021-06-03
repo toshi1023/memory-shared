@@ -48,7 +48,7 @@ class GroupTest extends TestCase
         // グループの作成
         $this->group = Group::create([
             'name'              => 'RoyalBlue',
-            'discription'       => self::DIS,
+            'description'       => self::DIS,
             'host_user_id'      => $this->admin->id,
             'update_user_id'    => $this->admin->id,
         ]);
@@ -120,7 +120,7 @@ class GroupTest extends TestCase
         // グループ作成(失敗例: アルバム名が重複する場合)
         $data = [
             'name'              => $this->group->name,
-            'discription'       => 'まったり旅をするグループです',
+            'description'       => 'まったり旅をするグループです',
             'host_user_id'      => $this->admin->id,
             'update_user_id'    => $this->admin->id,
         ];
@@ -136,7 +136,7 @@ class GroupTest extends TestCase
         // グループ作成(成功例)
         $data = [
             'name'              => 'Group1',
-            'discription'       => 'まったり旅をするグループです',
+            'description'       => 'まったり旅をするグループです',
             'host_user_id'      => $this->admin->id,
             'update_user_id'    => $this->admin->id,
         ];
@@ -161,7 +161,7 @@ class GroupTest extends TestCase
         $data = [
             'id'                => $this->group->id,
             'name'              => $this->group->name,
-            'discription'       => $this->group->discription,
+            'description'       => $this->group->description,
             'private_flg'       => config('const.Group.PRIVATE'),
             'host_user_id'      => $this->user->id,
             'update_user_id'    => $this->user->id,
@@ -179,7 +179,7 @@ class GroupTest extends TestCase
         $data = [
             'id'                => $this->group->id,
             'name'              => $this->group->name,
-            'discription'       => $this->group->discription,
+            'description'       => $this->group->description,
             'private_flg'       => config('const.Group.PRIVATE'),
             'host_user_id'      => $this->admin->id,
             'update_user_id'    => $this->admin->id,

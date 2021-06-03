@@ -49,7 +49,7 @@ class UserTest extends TestCase
         // グループの作成
         $this->group = Group::create([
             'name'              => 'RoyalBlue',
-            'discription'       => '梅田カフェ巡り！ほっと一息つけるカフェタイムを楽しみにでかけるグループです！',
+            'description'       => '梅田カフェ巡り！ほっと一息つけるカフェタイムを楽しみにでかけるグループです！',
             'host_user_id'      => $this->admin->id,
             'update_user_id'    => $this->admin->id,
         ]);
@@ -287,7 +287,7 @@ class UserTest extends TestCase
         // グループの作成
         $group = Group::create([
             'name'              => 'RedRock',
-            'discription'       => '神戸駅の友達作りランチ会！',
+            'description'       => '神戸駅の友達作りランチ会！',
             'host_user_id'      => $this->admin->id,
             'update_user_id'    => $this->admin->id,
         ]);

@@ -23,8 +23,24 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $hobby = [
+            '映画鑑賞',
+            'サッカー観戦',
+            'FPSゲーム',
+            'プログラミング',
+            '釣り',
+            'ドライブ',
+            'ラーメン巡り',
+            '海外旅行',
+            'ペット飼育',
+            '料理'
+        ];
+
+
         return [
             'name'              => $this->faker->name,
+            'hobby'             => $hobby[$this->faker->numberBetween(0, 9)],
+            'gender'            => $this->faker->numberBetween(0, 1),
             'email'             => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),
             'password'          => Hash::make('test1234'),

@@ -21,7 +21,7 @@ class GroupFactory extends Factory
      */
     public function definition()
     {
-        $discription = [
+        $description = [
             '梅田カフェ巡り！ほっと一息つけるカフェタイムを楽しみにでかけるグループです！',
             '予想を超えます！100店近くのお店が軒を連ねる新梅田食道街でハシゴ酒しよう！',
             '大阪駅のランチ会★',
@@ -36,7 +36,7 @@ class GroupFactory extends Factory
 
         return [
             'name'              => $this->faker->colorName,
-            'discription'       => $discription[$this->faker->numberBetween(0, 9)],
+            'description'       => $description[$this->faker->numberBetween(0, 9)],
             'private_flg'       => $this->faker->numberBetween(0, 1),
             'host_user_id'      => $this->faker->numberBetween(1, 10),
             'update_user_id'    => $this->faker->numberBetween(1, 10),
