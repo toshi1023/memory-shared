@@ -23,7 +23,7 @@ Route::post('/logout', 'Api\AuthController@logout')->name('logout');
 // Route::resource('/users',       'Api\UserController');
 // Route::get('/users/{user}/families', 'Api\UserController@families')->name('users.families');
 // Route::get('/users/{user}/groups',  'Api\UserController@participating')->name('users.participating');
-// Route::resource('/groups',       'Api\GroupController');
+Route::resource('/groups',       'Api\GroupController');
 // Route::resource('/groups/{group}/albums',       'Api\AlbumController');
 // Route::post('/albums/validate',  'Api\AlbumController@albumValidate');
 // Route::resource('/groups/{group}/albums/{album}/images',       'Api\UserImageController')->only('store', 'destroy');
@@ -41,7 +41,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/users/validate',      'Api\UserController@userValidate');
     
     /********** グループ管理(groups) **********/
-    Route::resource('/groups',       'Api\GroupController');
+    // Route::resource('/groups',       'Api\GroupController');
     Route::post('/groups/validate',  'Api\GroupController@groupValidate');
     
     /********** アルバム管理(albums) **********/

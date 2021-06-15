@@ -33,11 +33,11 @@ return [
     ],
     // GroupHistory関連で使用する定数
     'GroupHistory' => [
-        'APPLY'         => 1,
-        'APPROVAL'      => 2,
-        'REJECT'        => 3,
+        'APPLY'              => 1,
+        'APPROVAL'           => 2,
+        'REJECT'             => 3,
         'APPLY_WORD'         => '申請中',
-        'APPROVAL_WORD'      => '承認済み',
+        'APPROVAL_WORD'      => 'メンバー',
         'REJECT_WORD'        => '却下',
     ],
     // Album関連で使用する定数

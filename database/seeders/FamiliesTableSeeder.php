@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class VideoCommentsTableSeeder extends Seeder
+class FamiliesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,6 +13,6 @@ class VideoCommentsTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \App\Models\Family::factory(10)->create();
     }
 }

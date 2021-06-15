@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVideoCommentsTable extends Migration
+class CreateFamiliesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,16 @@ class CreateVideoCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('video_comments', function (Blueprint $table) {
+        Schema::create('families', function (Blueprint $table) {
             $table->bigIncrements('id')->comment('ID');
-            $table->text('content')->comment('コメント');
-            $table->bigInteger('video_id')->unsigned()->comment('動画ID');
-            $table->integer('user_id')->unsigned()->comment('ユーザID');
-            $table->integer('update_user_id')->unsigned()->nullable()->comment('更新ユーザ');
+            $table->integer('own_id')->unsigned()->comment('ユーザID(自身)');
+            $table->integer('user_id')->unsigned()->comment('ユーザID(相手)');
+            $table->integer('update_user_id')->unsigned()->comment('更新ユーザ');
 
             $table->timestamps();
 
             // 外部キー制約
-            $table->foreign('video_id')->references('id')->on('user_videos')->onDelete('cascade');
+            $table->foreign('own_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->softDeletes();
@@ -37,6 +36,6 @@ class CreateVideoCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('video_comments');
+        Schema::dropIfExists('families');
     }
 }

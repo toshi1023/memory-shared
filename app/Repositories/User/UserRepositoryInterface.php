@@ -11,6 +11,6 @@ interface UserRepositoryInterface
     public function baseDelete($id);
     public function save($data, $model=null);
     public function getGroups($conditions);
-    public function getFriends($conditions, $order=[], bool $softDelete=false);
+    public function getFamilies($conditions, $order=[], bool $softDelete=false);
     public function getParticipating($conditions, $order=[], bool $softDelete=false);
 }

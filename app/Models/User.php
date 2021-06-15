@@ -92,15 +92,16 @@ class User extends Authenticatable
     /**
      * groupsテーブルと1対多のリレーション構築(1側の設定)
      */
-    public function Groups()
+    public function groups()
     {
-        return $this->belongsToMany('App\Models\Group', 'group_histories', 'user_id', 'group_id');
+        return $this->belongsToMany('App\Models\Group', 'group_histories', 'user_id', 'group_id')
+                    ->withPivot('status', 'created_at', 'updated_at');
     }
     
     /**
      * albumsテーブルと1対多のリレーション構築(1側の設定)
      */
-    public function Albums()
+    public function albums()
     {
         return $this->hasMany('App\Models\Album');
     }

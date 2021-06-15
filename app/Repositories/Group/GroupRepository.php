@@ -21,7 +21,9 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
      */
     public function searchQuery($conditions=[], $order=[], bool $softDelete=false)
     {
-        return $this->baseSearchQuery($conditions, $order, $softDelete)->get();
+        return $this->baseSearchQuery($conditions, $order, $softDelete)
+                    ->with(['users'])
+                    ->get();
     }
     
     /**

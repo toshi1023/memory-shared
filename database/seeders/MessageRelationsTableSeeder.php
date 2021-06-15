@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class ImageCommentsTableSeeder extends Seeder
+class MessageRelationsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,6 +13,6 @@ class ImageCommentsTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \App\Models\MessageRelation::factory(10)->create();
     }
 }

@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\ImageComment;
+use App\Models\Family;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ImageCommentFactory extends Factory
+class FamilyFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = ImageComment::class;
+    protected $model = Family::class;
 
     /**
      * Define the model's default state.
@@ -22,7 +22,9 @@ class ImageCommentFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'own_id'            => $this->faker->numberBetween(1, 10),
+            'user_id'           => $this->faker->numberBetween(1, 10),
+            'update_user_id'    => $this->faker->numberBetween(1, 10),
         ];
     }
 }

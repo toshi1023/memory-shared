@@ -23,6 +23,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function searchQuery($conditions=[], $order=[], bool $softDelete=false)
     {
+        $user_id = 1;
         return $this->baseSearchQuery($conditions, $order, $softDelete)
                     ->select('id', 'name', 'email', 'status', 'image_file')
                     ->get();
@@ -84,7 +85,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      * 参加中のグループの参加者を取得
      * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
      */
-    public function getFriends($conditions, $order=[], bool $softDelete=false)
+    public function getFamilies($conditions, $order=[], bool $softDelete=false)
     {
         // フレンドのIDを取得
         $groupHistoryRepository = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
