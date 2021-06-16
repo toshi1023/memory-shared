@@ -14,6 +14,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable, SoftDeletes, HasApiTokens;
 
     protected $dates = ['deleted_at'];
+    protected $user_id = 1;
 
     /**
      * The attributes that are mass assignable.
@@ -74,19 +75,23 @@ class User extends Authenticatable
     }
 
     /**
-     * image_commentsテーブルと1対多のリレーション構築(1側の設定)
+     * familiesテーブルとリレーション構築
      */
-    public function imageComments()
+    public function families()
     {
-        return $this->hasMany('App\Models\ImageComment');
+        return $this->hasMany('App\Models\Family', 'own_id', 'id')
+                    ->where('user_id', '=', $this->user_id)
+                    ->select('id', 'own_id', 'user_id', 'created_at', 'updated_at');
     }
     
     /**
-     * video_commentsテーブルと1対多のリレーション構築(1側の設定)
+     * message_relationsテーブルとリレーション構築
      */
-    public function videoComments()
+    public function message_relations()
     {
-        return $this->hasMany('App\Models\VideoComment');
+        return $this->hasMany('App\Models\MessageRelation', 'own_id', 'id')
+                    ->where('user_id', '=', $this->user_id)
+                    ->select('id', 'own_id', 'user_id', 'created_at', 'updated_at');
     }
     
     /**

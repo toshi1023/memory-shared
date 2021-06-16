@@ -26,6 +26,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $user_id = 1;
         return $this->baseSearchQuery($conditions, $order, $softDelete)
                     ->select('id', 'name', 'email', 'status', 'image_file')
+                    ->with(['families', 'message_relations'])
                     ->get();
     }
 
