@@ -4,6 +4,7 @@ namespace App\Repositories\MessageHistory;
 
 use App\Models\MessageHistory;
 use App\Repositories\BaseRepository;
+use App\Repositories\MessageRelation\MessageRelationRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 
@@ -64,6 +65,20 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
      */
     public function save($data, $model=null)
     {
+        $messageRelationRepository = $this->baseGetRepository(MessageRelationRepositoryInterface::class);
+        
+        $mr_data = [
+            'own_id'    => $data->own_id,
+            'user_id'   => $data->user_id
+        ];
+        // message_relationsテーブルにデータがあるかどうか確認
+        $exists = $messageRelationRepository->baseSearch($mr_data)->exists();
+        
+        if(!$exists) {
+            $messageRelationRepository->baseSave($mr_data);
+        }
+
+        // message_historiesテーブルにデータを保存
         return $this->baseSave($data, $model);
     }
 }
