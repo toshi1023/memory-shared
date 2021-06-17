@@ -27,8 +27,11 @@ class MessageRelationRepository extends BaseRepository implements MessageRelatio
     /**
      * データ保存
      */
-    public function save($data, $model=null)
+    public function save($data)
     {
-        return $this->baseSave($data, $model);
+        return MessageRelation::create([
+            'user_id1' => $data->own_id,
+            'user_id2' => $data->user_id
+        ]);
     }
 }

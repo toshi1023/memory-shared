@@ -14,18 +14,17 @@ class CreateMessageRelationsTable extends Migration
     public function up()
     {
         Schema::create('message_relations', function (Blueprint $table) {
-            $table->bigIncrements('id')->comment('ID');
-            $table->integer('own_id')->unsigned()->comment('ユーザID(自身)');
-            $table->integer('user_id')->unsigned()->comment('ユーザID(相手)');
-            $table->integer('update_user_id')->unsigned()->comment('更新ユーザ');
+            $table->integer('user_id1')->unsigned()->comment('ユーザID1');
+            $table->integer('user_id2')->unsigned()->comment('ユーザID2');
 
             $table->timestamps();
 
             // 外部キー制約
-            $table->foreign('own_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id1')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id2')->references('id')->on('users')->onDelete('cascade');
 
-            $table->softDeletes();
+            // プライマリキー設定
+            $table->unique(['user_id1', 'user_id2']);
         });
     }
 

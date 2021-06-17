@@ -22,9 +22,8 @@ class FamilyFactory extends Factory
     public function definition()
     {
         return [
-            'own_id'            => $this->faker->numberBetween(1, 10),
-            'user_id'           => $this->faker->numberBetween(1, 10),
-            'update_user_id'    => $this->faker->numberBetween(1, 10),
+            'user_id1'            => $this->faker->numberBetween(1, 20),
+            'user_id2'            => $this->faker->numberBetween(1, 20)
         ];
     }
 }

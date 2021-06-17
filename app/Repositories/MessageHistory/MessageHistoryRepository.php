@@ -67,14 +67,20 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
     {
         $messageRelationRepository = $this->baseGetRepository(MessageRelationRepositoryInterface::class);
         
-        $mr_data = [
-            'own_id'    => $data->own_id,
-            'user_id'   => $data->user_id
-        ];
         // message_relationsテーブルにデータがあるかどうか確認
-        $exists = $messageRelationRepository->baseSearch($mr_data)->exists();
+        $mr_data = [
+            'user_id1'    => $data->own_id,
+            'user_id2'   => $data->user_id
+        ];        
+        $exists1 = $messageRelationRepository->baseSearch($mr_data)->exists();
+
+        $mr_data = [
+            'user_id1'    => $data->user_id,
+            'user_id2'   => $data->own_id
+        ];
+        $exists2 = $messageRelationRepository->baseSearch($mr_data)->exists();
         
-        if(!$exists) {
+        if(!$exists1 && !$exists2) {
             $messageRelationRepository->baseSave($mr_data);
         }
 

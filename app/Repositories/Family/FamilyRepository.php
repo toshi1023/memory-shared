@@ -27,8 +27,11 @@ class FamilyRepository extends BaseRepository implements FamilyRepositoryInterfa
     /**
      * データ保存
      */
-    public function save($data, $model=null)
+    public function save($data)
     {
-        return $this->baseSave($data, $model);
+        return Family::create([
+            'user_id1' => $data['user_id1'],
+            'user_id2' => $data['user_id2']
+        ]);
     }
 }
