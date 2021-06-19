@@ -24,6 +24,40 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
         return $this->baseSearchQuery($conditions, $order, $softDelete)->get();
     }
 
+    public function testfunc() {
+            // 保存したグループに所属するユーザIDをすべて取得
+            $family = $this->baseSearchQuery([
+                               'group_id'       => 1,
+                               'status'         => config('const.GroupHistory.APPROVAL'),
+                               '@notuser_id'    => 1
+                            ])
+                           ->select('user_id')->get();
+            
+            // 申請ユーザが属するグループのIDを取得
+            $group_id = $this->baseSearchQuery([
+                                'user_id'       => 1, 
+                                'status'        => config('const.GroupHistory.APPROVAL'),
+                                '@notgroup_id'  => 1
+                             ])
+                             ->select('group_id')->get();
+            
+            // familiesテーブルの新規保存処理
+            foreach($family as $value) {
+                // 対象ユーザと同じグループに属しているか確認
+                $exists = $this->baseSearchQuery([
+                                   'user_id'     => $value->user_id,
+                                   'status'      => config('const.GroupHistory.APPROVAL'),
+                                   '@ingroup_id' => $group_id->toArray()
+                               ])->exists();
+                
+                // 属していない場合、新規でfamiliesテーブルに保存
+                if(!$exists) {
+                    dump($value);
+                }
+            }
+            return;
+    }
+
     /**
      * データ保存
      */
@@ -37,37 +71,36 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
             $familyRepository = $this->baseGetRepository(FamilyRepositoryInterface::class);
 
             // 保存したグループに所属するユーザIDをすべて取得
-            $family = $this->model
-                           ->baseSearch([
-                               'group_id' => $data->group_id,
-                               'status'   => config('const.GroupHistory.APPROVAL')
-                            ])
-                           ->select('user_id');
-            
+            $family = $this->baseSearchQuery([
+                            'group_id'       => $data->group_id,
+                            'status'         => config('const.GroupHistory.APPROVAL'),
+                            '@notuser_id'    => $data->user_id
+                      ])->select('user_id')->get();
+
             // 申請ユーザが属するグループのIDを取得
-            $group_id = $this->model
-                             ->baseSearch([
-                                'user_id' => $data->user_id, 
-                                'status'  => config('const.GroupHistory.APPROVAL')
-                             ])
-                             ->select('group_id');
-            
+            $group_id = $this->baseSearchQuery([
+                            'user_id'       => $data->user_id, 
+                            'status'        => config('const.GroupHistory.APPROVAL'),
+                            '@notgroup_id'  => $data->group_id
+                        ])->select('group_id')->get();
+
             // familiesテーブルの新規保存処理
             foreach($family as $value) {
                 // 対象ユーザと同じグループに属しているか確認
-                $exists = $this->model
-                               ->baseSearch([
-                                   'user_id'     => $value,
-                                   'status'      => config('const.GroupHistory.APPROVAL'),
-                                   '@ingroup_id' => $group_id->toArray()
-                               ])->exists();
-
+                $exists = $this->baseSearchQuery([
+                                    'user_id'     => $value->user_id,
+                                    'status'      => config('const.GroupHistory.APPROVAL'),
+                                    '@ingroup_id' => $group_id->toArray()
+                                ])->exists();
+            
                 // 属していない場合、新規でfamiliesテーブルに保存
                 if(!$exists) {
-                    $familyRepository->save(['user_id1' => $data->user_id, 'user_id2' => $value]);
+                    $exists = $familyRepository->confirmFamily($data->user_id, $value->user_id);
+                    if(!$exists) {
+                        $familyRepository->save(['user_id1' => $data->user_id, 'user_id2' => $value->user_id]);
+                    }
                 }
             }
-            
         }
         return;
     }

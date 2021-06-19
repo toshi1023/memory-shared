@@ -5,6 +5,8 @@ namespace App\Repositories\Group;
 use App\Models\Group;
 use App\Repositories\BaseRepository;
 use App\Lib\Common;
+use App\Models\GroupHistory;
+use App\Repositories\GroupHistory\GroupHistoryRepositoryInterface;
 
 class GroupRepository extends BaseRepository implements GroupRepositoryInterface
 {
@@ -24,6 +26,12 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
         return $this->baseSearchQuery($conditions, $order, $softDelete)
                     ->with(['users'])
                     ->get();
+    }
+
+    public function testfunc()
+    {
+        $gh = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
+        return $gh->testfunc();
     }
     
     /**

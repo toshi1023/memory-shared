@@ -29,6 +29,8 @@ class GroupController extends Controller
     public function index(Request $request)
     {
         try {
+            $this->db->testfunc();
+            exit;
             // 検索条件
             $conditions = [];
             $conditions['private_flg'] = config('const.Group.PUBLIC');

@@ -10,4 +10,5 @@ interface FamilyRepositoryInterface
     public function baseSearchQueryPaginate($conditions=[], $order=[], int $paginate=10);
     public function baseDelete($id);
     public function save($data);
+    public function confirmFamily($user_id1, $user_id2);
 }

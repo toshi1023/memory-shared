@@ -23,7 +23,23 @@ class FamilyRepository extends BaseRepository implements FamilyRepositoryInterfa
     {
         return $this->baseSearchQuery($conditions, $order, $softDelete)->get();
     }
-    
+
+    /**
+     * familiesテーブルにデータが保存されているか確認
+     * 引数1: ユーザID, 引数2: ユーザID
+     */
+    public function confirmFamily($user_id1, $user_id2)
+    {
+        $exists = false;
+
+        $exists = $this->baseSearchQuery(['user_id1' => $user_id1, 'user_id2' => $user_id2])->exists();
+
+        if(!$exists) {
+            $exists = $this->baseSearchQuery(['user_id2' => $user_id1, 'user_id1' => $user_id2])->exists();
+        }
+
+        return $exists;
+    }
     /**
      * データ保存
      */
