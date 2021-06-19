@@ -30,7 +30,8 @@ class Group extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('App\Models\User', 'group_histories', 'group_id', 'user_id')
+        return $this->belongsToMany('App\Models\User', 'group_histories', 'group_id')
+                    ->where('users.id', '=', 1)
                     ->withPivot('status', 'created_at', 'updated_at');
     }
 }

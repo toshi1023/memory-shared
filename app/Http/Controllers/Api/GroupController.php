@@ -29,8 +29,8 @@ class GroupController extends Controller
     public function index(Request $request)
     {
         try {
-            $this->db->testfunc();
-            exit;
+            // $this->db->testfunc();
+            // exit;
             // 検索条件
             $conditions = [];
             $conditions['private_flg'] = config('const.Group.PUBLIC');
@@ -41,7 +41,7 @@ class GroupController extends Controller
             if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
     
             $data = $this->db->searchQuery($conditions, $order);
-            
+            dd($data);
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
