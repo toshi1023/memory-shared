@@ -30,8 +30,8 @@ class MessageRelationRepository extends BaseRepository implements MessageRelatio
     public function save($data)
     {
         return MessageRelation::create([
-            'user_id1' => $data->own_id,
-            'user_id2' => $data->user_id
+            'user_id1' => $data['user_id1'],
+            'user_id2' => $data['user_id2']
         ]);
     }
 }

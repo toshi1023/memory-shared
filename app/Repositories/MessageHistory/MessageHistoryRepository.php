@@ -65,26 +65,27 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
      */
     public function save($data, $model=null)
     {
+        // message_relationsテーブルに"トーク中"フラグのデータがあるかどうか確認
         $messageRelationRepository = $this->baseGetRepository(MessageRelationRepositoryInterface::class);
         
-        // message_relationsテーブルにデータがあるかどうか確認
         $mr_data = [
-            'user_id1'    => $data->own_id,
-            'user_id2'   => $data->user_id
-        ];        
+            'user_id1'    => $data->user_id,
+            'user_id2'    => $data->own_id
+        ];
         $exists1 = $messageRelationRepository->baseSearch($mr_data)->exists();
 
         $mr_data = [
-            'user_id1'    => $data->user_id,
-            'user_id2'   => $data->own_id
-        ];
+            'user_id1'    => $data->own_id,
+            'user_id2'    => $data->user_id
+        ];      
         $exists2 = $messageRelationRepository->baseSearch($mr_data)->exists();
         
+        // データが無ければ、message_relationsテーブルに"トーク中"フラグのデータを新規保存
         if(!$exists1 && !$exists2) {
-            $messageRelationRepository->baseSave($mr_data);
+            $messageRelationRepository->save($mr_data);
         }
 
-        // message_historiesテーブルにデータを保存
+        // message_historiesテーブルにメッセージデータを保存
         return $this->baseSave($data, $model);
     }
 }
