@@ -406,13 +406,13 @@ class UserController extends Controller
             $groups = $this->db->getGroups($mygroup_conditions);
 
             // 検索条件
-            $friends_conditions['@ingroup_id'] = Common::setInCondition($groups->toArray());
+            $families_conditions['@ingroup_id'] = Common::setInCondition($groups->toArray());
             // ソート条件
             $order = [];
             if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
 
             // ファミリー情報取得
-            $data = $this->db->getFamilies($friends_conditions, $order);
+            $data = $this->db->getFamilies($families_conditions, $order);
             
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -76,22 +77,58 @@ class User extends Authenticatable
 
     /**
      * familiesテーブルとリレーション構築
+     *   ※フロント画面の"ファミリー"フラグに使用
      */
-    public function families()
+    public function families1()
     {
-        return $this->hasMany('App\Models\Family', 'own_id', 'id')
-                    ->where('user_id', '=', $this->user_id)
-                    ->select('id', 'own_id', 'user_id', 'created_at', 'updated_at');
+        // 検索値を設定
+        // $user_id = Auth::user()->id;
+        $user_id = 1;
+
+        return $this->hasMany('App\Models\Family', 'user_id1', 'id')
+                    ->where('user_id2', '=', $user_id);
+    }
+
+    /**
+     * familiesテーブルとリレーション構築
+     *   ※フロント画面の"ファミリー"フラグに使用
+     */
+    public function families2()
+    {
+        // 検索値を設定
+        // $user_id = Auth::user()->id;
+        $user_id = 1;
+
+        return $this->hasMany('App\Models\Family', 'user_id2', 'id')
+                    ->where('user_id1', '=', $user_id);
     }
     
     /**
      * message_relationsテーブルとリレーション構築
+     *   ※フロント画面の"トーク中"フラグに使用
      */
-    public function message_relations()
+    public function message_relations1()
     {
-        return $this->hasMany('App\Models\MessageRelation', 'own_id', 'id')
-                    ->where('user_id', '=', $this->user_id)
-                    ->select('id', 'own_id', 'user_id', 'created_at', 'updated_at');
+        // 検索値を設定
+        // $user_id = Auth::user()->id;
+        $user_id = 1;
+
+        return $this->hasMany('App\Models\MessageRelation', 'user_id1', 'id')
+                    ->where('user_id2', '=', $user_id);
+    }
+
+    /**
+     * message_relationsテーブルとリレーション構築
+     *   ※フロント画面の"トーク中"フラグに使用
+     */
+    public function message_relations2()
+    {
+        // 検索値を設定
+        // $user_id = Auth::user()->id;
+        $user_id = 1;
+
+        return $this->hasMany('App\Models\MessageRelation', 'user_id2', 'id')
+                    ->where('user_id1', '=', $user_id);
     }
     
     /**
