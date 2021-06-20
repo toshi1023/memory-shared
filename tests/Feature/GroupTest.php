@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Group;
 use App\Models\GroupHistory;
+use Illuminate\Support\Facades\DB;
 use Exception;
 
 class GroupTest extends TestCase
@@ -83,6 +84,36 @@ class GroupTest extends TestCase
             'private_flg'  => config('const.Group.PUBLIC'),
             'host_user_id' => $this->admin->id,
         ]);
+
+        // グループの作成
+        $group = Group::create([
+            'name'              => 'RedRock',
+            'description'       => '神戸駅の友達作りランチ会！',
+            'host_user_id'      => $this->admin->id,
+            'update_user_id'    => $this->admin->id,
+        ]);
+        // グループ参加履歴の作成
+        GroupHistory::create([
+            'user_id'              => $this->admin->id,
+            'group_id'             => $this->group->id,
+            'status'               => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'       => $this->admin->id
+        ]);
+        GroupHistory::create([
+            'user_id'              => $this->admin->id,
+            'group_id'             => $group->id,
+            'status'               => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'       => $this->admin->id
+        ]);
+
+        // リレーションを設定しているgroup_historiesテーブルのデータも取得出来ているか確認
+        $response = $this->get('/api/groups');
+
+        $response->assertOk()
+        ->assertJsonFragment([
+            'group_id' => $this->group->id,
+            'user_id'  => $this->admin->id
+        ]);
     }
 
     /**
@@ -143,9 +174,14 @@ class GroupTest extends TestCase
 
         $response = $this->post('api/groups', $data);
 
+        // レスポンスのチェック
         $response->assertOk()
-        ->assertJsonFragment([
-            'info_message' => config('const.Group.REGISTER_INFO')
+                 ->assertJsonFragment([
+                    'info_message' => config('const.Group.REGISTER_INFO')
+                 ]);
+        // グループ作成と同時にgroup_historiesテーブルにも作成者のデータが登録されているか確認
+        $this->assertDatabaseHas('group_histories', [
+            'user_id' => $this->admin->id,
         ]);
     }
 

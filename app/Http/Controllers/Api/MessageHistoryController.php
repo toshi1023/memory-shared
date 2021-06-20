@@ -73,7 +73,7 @@ class MessageHistoryController extends Controller
 
             DB::commit();
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 

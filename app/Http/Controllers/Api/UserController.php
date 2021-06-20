@@ -120,7 +120,6 @@ class UserController extends Controller
             if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
     
             $data = $this->db->searchQuery($conditions, $order);
-            dd($data);
             
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {

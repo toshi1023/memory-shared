@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Group extends Model
 {
@@ -31,7 +32,7 @@ class Group extends Model
     public function users()
     {
         return $this->belongsToMany('App\Models\User', 'group_histories', 'group_id')
-                    ->where('users.id', '=', 1)
+                    ->where('users.id', '=', Auth::user()->id)
                     ->withPivot('status', 'created_at', 'updated_at');
     }
 }

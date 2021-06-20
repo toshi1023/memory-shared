@@ -8,8 +8,10 @@ use Tests\TestCase;
 use Laravel\Sanctum\Sanctum;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\MessageHistory;
+use Exception;
 
 class MessageHistoryTest extends TestCase
 {
@@ -159,5 +161,13 @@ class MessageHistoryTest extends TestCase
             'user_id'           => $this->user->id,
             'update_user_id'    => $this->admin->id
         ]);
+
+        // メッセージ保存と同時にmessage_relationsテーブルにもデータが登録されているか確認
+        $this->assertDatabaseHas('message_relations', [
+            'user_id1' => $this->admin->id,
+            'user_id2' => $this->user->id
+        ]);
+        $exists = DB::table('message_relations')->where('user_id1', '=', $this->admin->id)->where('user_id2', '=', $this->user->id)->exists();
+        if(!$exists) throw new Exception();
     }
 }
