@@ -154,7 +154,7 @@ class UserTest extends TestCase
         $this->getActingAs($this->admin);
 
         // 正常なリクエスト
-        $response = $this->get('api/users/'.$this->user->name);
+        $response = $this->get('api/users/'.$this->user->id);
 
         $response->assertOk()
         ->assertJsonFragment([
@@ -162,7 +162,7 @@ class UserTest extends TestCase
         ]);
 
         // MEMBERステータス以外をリクエスト
-        $response = $this->get('api/users/'.$this->admin->name);
+        $response = $this->get('api/users/'.$this->admin->id);
 
         $response->assertStatus(404)
         ->assertJsonFragment([
@@ -237,7 +237,7 @@ class UserTest extends TestCase
         ]);
 
         // 詳細ページ用のデータ取得を確認
-        $response = $this->get('api/users/'.$this->user->name);
+        $response = $this->get('api/users/'.$this->user->id);
 
         $response->assertOk()
         ->assertJsonFragment([
@@ -268,7 +268,7 @@ class UserTest extends TestCase
         ]);
 
         // 一覧ページ用の正常な検索動作を確認
-        $response = $this->get('api/users/'.$this->admin->name.'/families');
+        $response = $this->get('api/users/'.$this->admin->id.'/families');
 
         $response->assertOk()
         ->assertJsonFragment([
@@ -307,7 +307,7 @@ class UserTest extends TestCase
         ]);
 
         // 一覧ページ用の正常な検索動作を確認
-        $response = $this->get('api/users/'.$this->admin->name.'/groups');
+        $response = $this->get('api/users/'.$this->admin->id.'/groups');
 
         $response->assertOk()
         ->assertJsonFragment([
@@ -324,7 +324,7 @@ class UserTest extends TestCase
         // ユーザを認証済みに書き換え
         $this->getActingAs($this->admin);
 
-        $response = $this->delete('api/users/'.$this->admin->name);
+        $response = $this->delete('api/users/'.$this->admin->id);
 
         $response->assertOk()
         ->assertJsonFragment([

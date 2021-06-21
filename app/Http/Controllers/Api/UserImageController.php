@@ -38,7 +38,7 @@ class UserImageController extends Controller
     {
         DB::beginTransaction();
         try {
-            // ブラックリスト、ホワイトリスト作成
+            // ブラックリスト、ホワイトリスト作成(パラメーター例: black_list[] = 1, black_list[] = 2)
             $blacklist = $request->input('black_list') ? Common::setJsonType($request->input('black_list')) : null;
             $whitelist = $request->input('white_list') ? Common::setJsonType($request->input('white_list')) : null;
             
@@ -76,6 +76,9 @@ class UserImageController extends Controller
             DB::rollback();
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 
+            // ロールバックした場合は仮保存したデータも削除
+            $this->db->baseForceDelete($userImage->id);
+
             // 作成失敗時はエラーメッセージを返す
             return response()->json([
               'error_message' => config('const.UserImage.REGISTER_ERR'),
@@ -87,19 +90,13 @@ class UserImageController extends Controller
     /**
      * 画像データ削除(論理削除)
      */
-    public function destroy(Request $request, $image)
+    public function destroy($group, $album, $image)
     {
         try {
             DB::beginTransaction();
-            // 検索条件の設定
-            $conditions = [
-                'image_file'      => $image
-            ];
-            
-            $data = $this->db->baseSearchFirst($conditions);
 
             // データ削除
-            $this->db->baseDelete($data->id);
+            $this->db->baseDelete($image);
             
             DB::commit();
             return response()->json(['info_message' => config('const.UserImage.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);

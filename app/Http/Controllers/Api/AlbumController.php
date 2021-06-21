@@ -27,12 +27,9 @@ class AlbumController extends Controller
     public function index(Request $request, $group)
     {
         try {
-            // グループIDを取得
-            $group = $this->db->getGroup(['name' => $group]);
-
             // 検索条件
             $conditions = [];
-            $conditions['group_id'] = $group->id;
+            $conditions['group_id'] = $group;
             if(
                 $request->input('created_at@>equal') || 
                 $request->input('created_at@<equal') || 
@@ -74,13 +71,9 @@ class AlbumController extends Controller
         try {
             $data = [];
 
-            // グループIDを取得
-            $group = $this->db->getGroup(['name' => $group]);
-
             // 検索条件
             $conditions = [];
-            $conditions['group_id'] = $group->id;
-            $conditions['name'] = $album;
+            $conditions['id'] = $album;
 
             // アルバム情報取得
             $data['album'] = $this->db->baseSearchFirst($conditions);
@@ -175,19 +168,8 @@ class AlbumController extends Controller
         try {
             DB::beginTransaction();
 
-            // グループIDを取得
-            $group = $this->db->getGroup(['name' => $group]);
-
-            // 検索条件の設定
-            $conditions = [
-                'group_id'  => $group->id,
-                'name'      => $album
-            ];
-            
-            $data = $this->db->baseSearchFirst($conditions);
-
             // データ削除
-            $this->db->baseDelete($data->id);
+            $this->db->baseDelete($album);
             
             DB::commit();
             return response()->json(['info_message' => config('const.Album.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);

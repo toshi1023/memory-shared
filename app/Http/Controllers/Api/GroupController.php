@@ -29,8 +29,6 @@ class GroupController extends Controller
     public function index(Request $request)
     {
         try {
-            // $this->db->testfunc();
-            // exit;
             // 検索条件
             $conditions = [];
             $conditions['private_flg'] = config('const.Group.PUBLIC');
@@ -61,12 +59,7 @@ class GroupController extends Controller
     public function show(Request $request, $group)
     {
         try {
-            // 検索条件の設定
-            $conditions = [
-                'name' => $group
-            ];
-            
-            $data = $this->db->baseSearchFirst($conditions);
+            $data = $this->db->baseSearchFirst(['id' => $group]);
 
             // グループが存在しない場合
             if(empty($data)) {
@@ -192,15 +185,8 @@ class GroupController extends Controller
         try {
             DB::beginTransaction();
 
-            // 検索条件の設定
-            $conditions = [
-                'name'      => $group
-            ];
-            
-            $data = $this->db->baseSearchFirst($conditions);
-
             // データ削除
-            $this->db->baseDelete($data->id);
+            $this->db->delete($group);
             
             DB::commit();
             return response()->json(['info_message' => config('const.Group.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);

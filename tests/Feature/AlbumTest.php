@@ -87,14 +87,14 @@ class AlbumTest extends TestCase
     public function api_albumsにGETメソッドでアクセス()
     {
         // 認証前
-        $response = $this->get('/api/groups/'.$this->group->name.'/albums');
+        $response = $this->get('/api/groups/'.$this->group->id.'/albums');
 
         $response->assertStatus(302);
 
         // 認証後
         $this->getActingAs($this->admin);
 
-        $response = $this->get('/api/groups/'.$this->group->name.'/albums');
+        $response = $this->get('/api/groups/'.$this->group->id.'/albums');
 
         $response->assertOk()
         ->assertJsonFragment([
@@ -125,14 +125,14 @@ class AlbumTest extends TestCase
         $this->getActingAs($this->admin);
 
         // created_atの正常な検索動作を確認
-        $response = $this->get('/api/groups/'.$this->group->name.'/albums?created_at@>equal='.$today);
+        $response = $this->get('/api/groups/'.$this->group->id.'/albums?created_at@>equal='.$today);
 
         $response->assertOk()
         ->assertJsonFragment([
             'name' => $this->album->name,
         ]);
 
-        $response = $this->get('/api/groups/'.$this->group->name.'/albums?created_at@<equal='.$today);
+        $response = $this->get('/api/groups/'.$this->group->id.'/albums?created_at@<equal='.$today);
 
         $response->assertOk()
         ->assertJsonFragment([
@@ -157,7 +157,7 @@ class AlbumTest extends TestCase
             'update_user_id' => $this->user->id
         ];
 
-        $response = $this->post('/api/groups/'.$this->group->name.'/albums', $data);
+        $response = $this->post('/api/groups/'.$this->group->id.'/albums', $data);
 
         $response->assertStatus(400)
         ->assertJsonFragment([
@@ -173,7 +173,7 @@ class AlbumTest extends TestCase
             'update_user_id' => $this->admin->id
         ];
 
-        $response = $this->post('/api/groups/'.$this->group->name.'/albums', $data);
+        $response = $this->post('/api/groups/'.$this->group->id.'/albums', $data);
 
         $response->assertOk()
         ->assertJsonFragment([
@@ -199,7 +199,7 @@ class AlbumTest extends TestCase
             'update_user_id' => $this->user->id
         ];
 
-        $response = $this->put('/api/groups/'.$this->group->name.'/albums/'.$this->album->name, $data);
+        $response = $this->put('/api/groups/'.$this->group->id.'/albums/'.$this->album->id, $data);
 
         $response->assertStatus(400)
         ->assertJsonFragment([
@@ -215,7 +215,7 @@ class AlbumTest extends TestCase
             'update_user_id' => $this->admin->id
         ];
 
-        $response = $this->put('/api/groups/'.$this->group->name.'/albums/'.$this->album->name, $data);
+        $response = $this->put('/api/groups/'.$this->group->id.'/albums/'.$this->album->id, $data);
 
         $response->assertOk()
         ->assertJsonFragment([
@@ -231,7 +231,7 @@ class AlbumTest extends TestCase
         // ユーザを認証済みに書き換え
         $this->getActingAs($this->admin);
 
-        $response = $this->delete('/api/groups/'.$this->group->name.'/albums/'.$this->album->name);
+        $response = $this->delete('/api/groups/'.$this->group->id.'/albums/'.$this->album->id);
 
         $response->assertOk()
         ->assertJsonFragment([

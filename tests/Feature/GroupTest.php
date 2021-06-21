@@ -124,7 +124,7 @@ class GroupTest extends TestCase
         // ユーザを認証済みに書き換え
         $this->getActingAs($this->admin);
 
-        $response = $this->get('api/groups/'.$this->group->name);
+        $response = $this->get('api/groups/'.$this->group->id);
 
         $response->assertOk()
         ->assertJsonFragment([
@@ -203,7 +203,7 @@ class GroupTest extends TestCase
             'update_user_id'    => $this->user->id,
         ];
 
-        $response = $this->put('api/groups/'.$this->group->name, $data);
+        $response = $this->put('api/groups/'.$this->group->id, $data);
 
         $response->assertStatus(400)
         ->assertJsonFragment([
@@ -221,7 +221,7 @@ class GroupTest extends TestCase
             'update_user_id'    => $this->admin->id,
         ];
 
-        $response = $this->put('api/groups/'.$this->group->name, $data);
+        $response = $this->put('api/groups/'.$this->group->id, $data);
 
         $response->assertOk()
         ->assertJsonFragment([
@@ -237,7 +237,7 @@ class GroupTest extends TestCase
         // ユーザを認証済みに書き換え
         $this->getActingAs($this->admin);
 
-        $response = $this->delete('api/groups/'.$this->group->name);
+        $response = $this->delete('api/groups/'.$this->group->id);
 
         $response->assertOk()
         ->assertJsonFragment([

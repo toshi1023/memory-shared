@@ -31,13 +31,4 @@ class UserImageRepository extends BaseRepository implements UserImageRepositoryI
     {
         return $this->baseSave($data, $model);
     }
-
-    /**
-     * 削除用画像データの取得
-     * 引数1: グループ名, 引数2: アルバム名, 引数3: 画像名
-     */
-    public function getDeleteImage($data, $model=null)
-    {
-        return $this->baseSave($data, $model);
-    }
 }

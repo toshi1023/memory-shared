@@ -27,12 +27,6 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                     ->with(['users'])
                     ->get();
     }
-
-    public function testfunc()
-    {
-        $gh = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
-        return $gh->testfunc();
-    }
     
     /**
      * データ保存
@@ -42,4 +36,19 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
         return $this->baseSave($data, $model);
     }
 
+    /**
+     * データ削除
+     */
+    public function delete($id)
+    {
+        // groupsテーブルのデータ削除
+        $this->baseDelete($id);
+
+        // group_historiesテーブルのデータを削除
+        $groupHistoryRepository = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
+
+        $groupHistoryRepository->delete($id);
+
+        return;
+    }
 }

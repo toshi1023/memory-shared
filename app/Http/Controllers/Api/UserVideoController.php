@@ -88,19 +88,13 @@ class UserVideoController extends Controller
     /**
      * 動画データ削除(論理削除)
      */
-    public function destroy(Request $request, $image)
+    public function destroy($group, $album, $video)
     {
         try {
             DB::beginTransaction();
-            // 検索条件の設定
-            $conditions = [
-                'image_file'      => $image
-            ];
-            
-            $data = $this->db->baseSearchFirst($conditions);
 
             // データ削除
-            $this->db->baseDelete($data->id);
+            $this->db->baseDelete($video);
             
             DB::commit();
             return response()->json(['info_message' => config('const.UserVideo.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);

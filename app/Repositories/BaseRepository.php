@@ -197,13 +197,23 @@ abstract class  BaseRepository
     }
 
     /**
-     * 指定したデータを削除
+     * 指定したデータを削除(論理削除)
      * 引数: ID
      */
     public function baseDelete($id)
     {
         $model = $this->baseSearchFirst(['id' => $id]);
         return $model->delete();
+    }
+
+    /**
+     * 指定したデータを削除(物理削除)
+     * 引数: ID
+     */
+    public function baseForceDelete($id)
+    {
+        $model = $this->baseSearchFirst(['id' => $id]);
+        return $model->forceDelete();
     }
 
      /**

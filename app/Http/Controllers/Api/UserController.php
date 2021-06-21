@@ -196,7 +196,7 @@ class UserController extends Controller
         try {
             // 検索条件の設定
             $conditions = [
-                'name'      => $user,
+                'id'        => $user,
                 'status'    => config('const.User.MEMBER')
             ];
             
@@ -361,15 +361,8 @@ class UserController extends Controller
         try {
             DB::beginTransaction();
 
-            // 検索条件の設定
-            $conditions = [
-                'name'      => $user
-            ];
-            
-            $data = $this->db->searchFirst($conditions);
-
             // データ削除
-            $this->db->baseDelete($data->id);
+            $this->db->baseDelete($user);
             
             DB::commit();
             return response()->json(['info_message' => config('const.User.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
@@ -391,13 +384,10 @@ class UserController extends Controller
     public function families(Request $request, $user)
     {
         try {
-            // テスト用
-            $user = $this->db->searchFirst(['name' => $user]);
-            
             // 検索条件
             $mygroup_conditions = [
                 // 'user_id' => Auth::user()->id,  // 本番用
-                'user_id' => $user->id,            // テスト用
+                'user_id' => $user,                // テスト用
                 'status'  => config('const.GroupHistory.APPROVAL')
             ];
 
@@ -431,13 +421,10 @@ class UserController extends Controller
     public function participating(Request $request, $user)
     {
         try {
-            // テスト用
-            $user = $this->db->searchFirst(['name' => $user]);
-
             // 検索条件
             $mygroup_conditions = [
                 // 'user_id' => Auth::user()->id,  // 本番用
-                'user_id' => $user->id,            // テスト用
+                'user_id' => $user,                // テスト用
                 'status'  => config('const.GroupHistory.APPROVAL')
             ];
 

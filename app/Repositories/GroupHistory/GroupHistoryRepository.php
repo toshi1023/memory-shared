@@ -24,40 +24,6 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
         return $this->baseSearchQuery($conditions, $order, $softDelete)->get();
     }
 
-    public function testfunc() {
-            // 保存したグループに所属するユーザIDをすべて取得
-            $family = $this->baseSearchQuery([
-                               'group_id'       => 1,
-                               'status'         => config('const.GroupHistory.APPROVAL'),
-                               '@notuser_id'    => 1
-                            ])
-                           ->select('user_id')->get();
-            
-            // 申請ユーザが属するグループのIDを取得
-            $group_id = $this->baseSearchQuery([
-                                'user_id'       => 1, 
-                                'status'        => config('const.GroupHistory.APPROVAL'),
-                                '@notgroup_id'  => 1
-                             ])
-                             ->select('group_id')->get();
-            
-            // familiesテーブルの新規保存処理
-            foreach($family as $value) {
-                // 対象ユーザと同じグループに属しているか確認
-                $exists = $this->baseSearchQuery([
-                                   'user_id'     => $value->user_id,
-                                   'status'      => config('const.GroupHistory.APPROVAL'),
-                                   '@ingroup_id' => $group_id->toArray()
-                               ])->exists();
-                
-                // 属していない場合、新規でfamiliesテーブルに保存
-                if(!$exists) {
-                    dump($value);
-                }
-            }
-            return;
-    }
-
     /**
      * データ保存
      */
@@ -130,5 +96,21 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
                       ->get();
 
         return $query;
+    }
+
+    /**
+     * データ削除
+     * 引数: グループID
+     */
+    public function delete($group_id)
+    {
+        // group_historiesテーブルのデータを削除
+        $data = $this->baseSearchQuery(['group_id' => $group_id])->select('id')->get();
+
+        foreach($data as $value) {
+            $this->baseDelete($value);
+        }
+
+        return;
     }
 }
