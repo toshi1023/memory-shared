@@ -67,7 +67,7 @@ class Common {
     /**
      * json形式保存用の配列生成
      * 引数: 値
-     *  ※black_list['user_list'] でリストを取得
+     *  ※black_list[{ユーザID}] でリストを取得
      */
     public static function setJsonType(array $data)
     {

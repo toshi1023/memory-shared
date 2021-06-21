@@ -77,7 +77,7 @@ class AlbumController extends Controller
 
             // アルバム情報取得
             $data['album'] = $this->db->baseSearchFirst($conditions);
-            // 画像情報取得
+            // 画像情報取得(black_list等の取得例: $data['image'][0]['black_list'][3])
             $data['image'] = $this->db->getImages(['album_id' => $data['album']->id]);
             // 動画情報取得
             $data['video'] = $this->db->getVideos(['album_id' => $data['album']->id]);
