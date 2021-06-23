@@ -185,6 +185,11 @@ class GroupController extends Controller
         try {
             DB::beginTransaction();
 
+            // host_user_idとログインユーザのIDが一致しない場合はエラーを返す
+            if($this->db->baseSearchFirst(['id' => $group])->host_user_id !== Auth::user()->id) {
+                throw new Exception(config('const.Group.NOT_HOST_ERR'));
+            }
+
             // データ削除
             $this->db->delete($group);
             

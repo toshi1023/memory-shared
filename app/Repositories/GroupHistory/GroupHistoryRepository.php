@@ -4,7 +4,6 @@ namespace App\Repositories\GroupHistory;
 
 use App\Models\GroupHistory;
 use App\Repositories\BaseRepository;
-use App\Repositories\Family\FamilyRepositoryInterface;
 
 class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepositoryInterface
 {
@@ -29,46 +28,7 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
      */
     public function save($data, $model=null)
     {
-        // group_historiesテーブルにデータを保存
-        $data = $this->baseSave($data, $model);
-
-        // 申請状況のデータが承認済みの場合、familiesテーブルへの保存処理を実行
-        if($data->status === config('const.GroupHistory.APPROVAL')) {
-            $familyRepository = $this->baseGetRepository(FamilyRepositoryInterface::class);
-
-            // 保存したグループに所属するユーザIDをすべて取得
-            $family = $this->baseSearchQuery([
-                            'group_id'       => $data->group_id,
-                            'status'         => config('const.GroupHistory.APPROVAL'),
-                            '@notuser_id'    => $data->user_id
-                      ])->select('user_id')->get();
-
-            // 申請ユーザが属するグループのIDを取得
-            $group_id = $this->baseSearchQuery([
-                            'user_id'       => $data->user_id, 
-                            'status'        => config('const.GroupHistory.APPROVAL'),
-                            '@notgroup_id'  => $data->group_id
-                        ])->select('group_id')->get();
-
-            // familiesテーブルの新規保存処理
-            foreach($family as $value) {
-                // 対象ユーザと同じグループに属しているか確認
-                $exists = $this->baseSearchQuery([
-                                    'user_id'     => $value->user_id,
-                                    'status'      => config('const.GroupHistory.APPROVAL'),
-                                    '@ingroup_id' => $group_id->toArray()
-                                ])->exists();
-            
-                // 属していない場合、新規でfamiliesテーブルに保存
-                if(!$exists) {
-                    $exists = $familyRepository->confirmFamily($data->user_id, $value->user_id);
-                    if(!$exists) {
-                        $familyRepository->save(['user_id1' => $data->user_id, 'user_id2' => $value->user_id]);
-                    }
-                }
-            }
-        }
-        return;
+        return $this->baseSave($data, $model);
     }
 
     /**

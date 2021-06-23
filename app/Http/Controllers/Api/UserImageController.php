@@ -76,7 +76,7 @@ class UserImageController extends Controller
             DB::rollback();
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 
-            // ロールバックした場合は仮保存したデータも削除
+            // ロールバックした場合は仮保存したデータも物理削除
             $this->db->baseForceDelete($userImage->id);
 
             // 作成失敗時はエラーメッセージを返す
