@@ -4,6 +4,7 @@ namespace App\Repositories\Family;
 
 use App\Models\Family;
 use App\Repositories\BaseRepository;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 
 class FamilyRepository extends BaseRepository implements FamilyRepositoryInterface
@@ -40,6 +41,7 @@ class FamilyRepository extends BaseRepository implements FamilyRepositoryInterfa
 
         return $exists;
     }
+
     /**
      * データ保存
      */
@@ -49,5 +51,26 @@ class FamilyRepository extends BaseRepository implements FamilyRepositoryInterfa
             'user_id1' => $data['user_id1'],
             'user_id2' => $data['user_id2']
         ]);
+    }
+
+    /**
+     * データ削除
+     */
+    public function delete($user_id1, $user_id2)
+    {
+        $model = $this->baseSearchFirst(['user_id1' => $user_id1, 'user_id2' => $user_id2]);
+
+        // データが見つからない場合
+        if(!$model) {
+            $model = $this->baseSearchFirst(['user_id1' => $user_id2, 'user_id2' => $user_id1]);
+
+            // データが一切見つからない場合エラーを返す
+            if(!$model) {
+                throw new Exception('削除対象のデータが存在しません');
+                return;
+            }
+        }
+        // データを完全削除
+        return $model->forceDelete();
     }
 }
