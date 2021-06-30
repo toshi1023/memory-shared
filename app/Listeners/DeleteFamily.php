@@ -1,13 +1,10 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Listeners;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use App\Events\GroupDeleted;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use App\Repositories\Family\FamilyRepositoryInterface;
 use App\Repositories\GroupHistory\GroupHistoryRepositoryInterface;
 use Illuminate\Support\Facades\Log;
@@ -15,26 +12,23 @@ use Exception;
 
 class DeleteFamily implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    protected $group_id;
-
     /**
-     * Create a new job instance.
+     * Create the event listener.
      *
      * @return void
      */
-    public function __construct($group_id)
+    public function __construct()
     {
-        $this->group_id = $group_id;
+        //
     }
 
     /**
      * familiesテーブルからファミリーを削除
      *
+     * @param  GroupDeleted  $event
      * @return void
      */
-    public function handle()
+    public function handle(GroupDeleted $event)
     {
         try {
             $familyRepository = app()->make(FamilyRepositoryInterface::class);
@@ -42,7 +36,7 @@ class DeleteFamily implements ShouldQueue
 
             // 削除したグループに所属するユーザIDをすべて取得
             $users = $ghRepository->baseSearchQuery([
-                            'group_id'       => $this->group_id,
+                            'group_id'       => $event->group_id,
                             'status'         => config('const.GroupHistory.APPROVAL')
                         ])->select('user_id')->get();
 
@@ -50,7 +44,7 @@ class DeleteFamily implements ShouldQueue
             foreach($users as $user_id) {
                 // 削除したグループに所属する対象ユーザ以外のユーザIDをすべて取得
                 $family = $ghRepository->baseSearchQuery([
-                    'group_id'       => $this->group_id,
+                    'group_id'       => $event->group_id,
                     'status'         => config('const.GroupHistory.APPROVAL'),
                     '@notuser_id'    => $user_id
                 ])->select('user_id')->get();
@@ -59,7 +53,7 @@ class DeleteFamily implements ShouldQueue
                 $groups = $ghRepository->baseSearchQuery([
                     'user_id'       => $user_id, 
                     'status'        => config('const.GroupHistory.APPROVAL'),
-                    '@notgroup_id'  => $this->group_id
+                    '@notgroup_id'  => $event->group_id
                 ])->select('group_id')->get();
 
                 // 対象ユーザと同じグループに属しているか確認

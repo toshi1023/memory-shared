@@ -66,7 +66,7 @@ class FamilyRepository extends BaseRepository implements FamilyRepositoryInterfa
 
             // データが一切見つからない場合エラーを返す
             if(!$model) {
-                throw new Exception('削除対象のデータが存在しません');
+                throw new Exception('削除対象のデータである'.$user_id1.'と'.$user_id2.'の組み合わせが存在しません');
                 return;
             }
         }

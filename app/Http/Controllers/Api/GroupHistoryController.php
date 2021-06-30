@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\GroupApproved;
 use App\Http\Controllers\Controller;
 use App\Repositories\GroupHistory\GroupHistoryRepositoryInterface;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-use App\Jobs\CreateFamily;
 
 class GroupHistoryController extends Controller
 {
@@ -34,7 +34,7 @@ class GroupHistoryController extends Controller
 
             // 申請状況のデータが承認済みの場合、familiesテーブルへの保存処理を実行
             if($data['status'] === config('const.GroupHistory.APPROVAL')) {
-                $this->dispatch(new CreateFamily($data['group_id'], $data['user_id']));
+                event(new GroupApproved($data['group_id'], $data['user_id']));
             }
 
             DB::commit();

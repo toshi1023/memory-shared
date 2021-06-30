@@ -18,6 +18,14 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        // Group承認時にfamiliyデータを生成
+        'App\Events\GroupApproved' => [
+            'App\Listeners\CreateFamily',
+        ],
+        // Group削除時にfamiliyデータを削除
+        'App\Events\GroupDeleted' => [
+            'App\Listeners\DeleteFamily',
+        ]
     ];
 
     /**
