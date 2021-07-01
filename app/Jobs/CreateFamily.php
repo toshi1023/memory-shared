@@ -55,7 +55,7 @@ class CreateFamily implements ShouldQueue
                             'status'        => config('const.GroupHistory.APPROVAL'),
                             '@notgroup_id'  => $this->group_id
                         ])->select('group_id')->get();
-    
+            
             // familiesテーブルの新規保存処理
             foreach($family as $value) {
                 // 対象ユーザと同じグループに属しているか確認

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\GroupDeleted;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\Group\GroupRepositoryInterface;
 use App\Http\Requests\GroupRegisterRequest;
+use App\Jobs\DeleteFamily;
 use App\Lib\Common;
 use App\Models\GroupHistory;
 use Exception;
@@ -195,7 +195,7 @@ class GroupController extends Controller
             $this->db->delete($group);
 
             // familiesテーブルの削除処理を実行
-            event(new GroupDeleted($group));
+            $this->dispatch(new DeleteFamily($group));
             
             DB::commit();
             return response()->json(['info_message' => config('const.Group.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
