@@ -24,6 +24,26 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
     }
 
     /**
+     * グループID
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
+     */
+    public function searchGroupId($conditions=[], $order=[], bool $softDelete=false)
+    {
+        return $this->baseSearchQuery($conditions, $order, $softDelete)
+                    ->select('group_id')
+                    ->get();
+    }
+
+    /**
+     * データの存在確認
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
+     */
+    public function searchExists($conditions=[], $order=[], bool $softDelete=false)
+    {
+        return $this->baseSearchQuery($conditions, $order, $softDelete)->exists();
+    }
+
+    /**
      * データ保存
      */
     public function save($data, $model=null)

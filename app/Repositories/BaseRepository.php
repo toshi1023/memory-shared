@@ -26,10 +26,10 @@ abstract class  BaseRepository
      * 特定のリポジトリをインスタンス化
      * 引数:インターフェースクラス (例) UserRepositoryInterface::class
      */
-    protected function baseGetRepository($repository)
+    protected function baseGetRepository($repositoryInterface)
     {
         // 指定したテーブルをインスタンス化して返す
-        return app()->make($repository);
+        return app()->make($repositoryInterface);
     }
 
     /**

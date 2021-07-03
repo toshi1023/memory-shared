@@ -38,7 +38,7 @@ class GroupHistoryController extends Controller
 
             // 申請状況のデータが承認済みの場合、familiesテーブルへの保存処理を実行
             if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
-                $this->dispatch(new CreateFamily($group, Auth::user()->id));
+                CreateFamily::dispatch($group, Auth::user()->id);
             }
 
             DB::commit();
@@ -101,7 +101,7 @@ class GroupHistoryController extends Controller
 
             // 申請状況のデータが承認済みの場合、familiesテーブルへの保存処理を実行
             if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
-                $this->dispatch(new CreateFamily($group, 1));
+                CreateFamily::dispatch($group, 1);
             }
 
             DB::commit();

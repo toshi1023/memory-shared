@@ -5,6 +5,8 @@ namespace App\Repositories\GroupHistory;
 interface GroupHistoryRepositoryInterface
 {
     public function searchQuery($conditions=[], $order=[], bool $softDelete=false);
+    public function searchGroupId($conditions=[], $order=[], bool $softDelete=false);
+    public function searchExists($conditions=[], $order=[], bool $softDelete=false);
     public function baseSearchFirst($conditions=[], $order=[], bool $softDelete=false);
     public function baseSearchQueryLimit($conditions=[], $order=[], int $limit=10);
     public function baseSearchQueryPaginate($conditions=[], $order=[], int $paginate=10);
