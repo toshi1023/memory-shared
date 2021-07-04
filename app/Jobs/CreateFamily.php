@@ -46,7 +46,7 @@ class CreateFamily implements ShouldQueue
             $group_id = [];
             
             // 保存したグループに所属するユーザIDをすべて取得
-            $family = $ghRepository->searchQuery([
+            $families = $ghRepository->searchUserId([
                             'group_id'       => $this->group_id,
                             'status'         => config('const.GroupHistory.APPROVAL'),
                             '@notuser_id'    => $this->user_id
@@ -65,20 +65,20 @@ class CreateFamily implements ShouldQueue
             }
             
             // familiesテーブルの新規保存処理
-            foreach($family as $user) {
+            foreach($families as $family) {
                 // 対象ユーザと同じグループに属しているか確認
                 $exists = $ghRepository->searchExists([
-                                    'user_id'     => $user->user_id,
+                                    'user_id'     => $family->user_id,
                                     'status'      => config('const.GroupHistory.APPROVAL'),
                                     '@ingroup_id' => $group_id
                                 ]);
                 
                 // 属していない場合、新規でfamiliesテーブルに保存
                 if(!$exists) {
-                    $exists = $familyRepository->confirmFamily($this->user_id, $user->user_id);
+                    $exists = $familyRepository->confirmFamily($this->user_id, $family->user_id);
                     
                     if(!$exists) {
-                        $familyRepository->save(['user_id1' => $this->user_id, 'user_id2' => $user->user_id]);
+                        $familyRepository->save(['user_id1' => $this->user_id, 'user_id2' => $family->user_id]);
                     }
                 }
             }

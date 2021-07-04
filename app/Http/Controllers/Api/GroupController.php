@@ -187,15 +187,15 @@ class GroupController extends Controller
             DB::beginTransaction();
 
             // host_user_idとログインユーザのIDが一致しない場合はエラーを返す
-            if($this->db->baseSearchFirst(['id' => $group])->host_user_id !== Auth::user()->id) {
-                throw new Exception(config('const.Group.NOT_HOST_ERR'));
-            }
-
+            // if($this->db->baseSearchFirst(['id' => $group])->host_user_id !== Auth::user()->id) {
+            //     throw new Exception(config('const.Group.NOT_HOST_ERR'));
+            // }
+            
             // データ削除
             $this->db->delete($group);
 
             // familiesテーブルの削除処理を実行
-            $this->dispatch(new DeleteFamily($group));
+            DeleteFamily::dispatch($group);
             
             DB::commit();
             return response()->json(['info_message' => config('const.Group.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);

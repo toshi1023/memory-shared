@@ -70,7 +70,8 @@ class FamilyRepository extends BaseRepository implements FamilyRepositoryInterfa
                 return;
             }
         }
+        
         // データを完全削除
-        return $model->forceDelete();
+        return $model->delete();
     }
 }

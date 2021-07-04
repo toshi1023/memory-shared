@@ -39,48 +39,59 @@ class DeleteFamily implements ShouldQueue
         try {
             $familyRepository = app()->make(FamilyRepositoryInterface::class);
             $ghRepository = app()->make(GroupHistoryRepositoryInterface::class);
-
+            
             // 削除したグループに所属するユーザIDをすべて取得
-            $users = $ghRepository->baseSearchQuery([
+            $users = $ghRepository->searchUserId([
                             'group_id'       => $this->group_id,
                             'status'         => config('const.GroupHistory.APPROVAL')
-                        ])->select('user_id')->get();
-
+                        ], [], true);
+                                     
             // familiesテーブルの削除処理
-            foreach($users as $user_id) {
+            foreach($users as $user) {
+                // 申請ユーザが所属するグループのIDを後に格納
+                $group_id = [];
+
                 // 削除したグループに所属する対象ユーザ以外のユーザIDをすべて取得
-                $family = $ghRepository->baseSearchQuery([
+                $families = $ghRepository->searchUserId([
                     'group_id'       => $this->group_id,
                     'status'         => config('const.GroupHistory.APPROVAL'),
-                    '@notuser_id'    => $user_id
-                ])->select('user_id')->get();
+                    '@notuser_id'    => $user->user_id
+                ], [], true);
 
                 // ユーザが属するグループのIDを取得
-                $groups = $ghRepository->baseSearchQuery([
-                    'user_id'       => $user_id, 
+                $groups = $ghRepository->searchGroupId([
+                    'user_id'       => $user->user_id, 
                     'status'        => config('const.GroupHistory.APPROVAL'),
                     '@notgroup_id'  => $this->group_id
-                ])->select('group_id')->get();
+                ]);
+
+                // 所属するグループIDを配列に追加
+                foreach($groups as $value) {
+                    $group_id[] = $value->group_id;
+                }
 
                 // 対象ユーザと同じグループに属しているか確認
-                foreach($family as $family_id) {
-                    $exists = $ghRepository->baseSearchQuery([
-                                    'user_id'     => $family_id,
+                foreach($families as $family) {
+                    $exists = $ghRepository->searchExists([
+                                    'user_id'     => $family->user_id,
                                     'status'      => config('const.GroupHistory.APPROVAL'),
-                                    '@ingroup_id' => $groups->toArray()
-                                ])->exists();
-
+                                    '@ingroup_id' => $group_id
+                                ]);
+                    
                     // 属していない場合、familiesテーブルからデータを削除
                     if(!$exists) {
-                        $exists = $familyRepository->confirmFamily($user_id, $family_id);
+                        $exists = $familyRepository->confirmFamily($user->user_id, $family->user_id);
+                        
                         if($exists) {
-                            $familyRepository->delete(['user_id1' => $user_id, 'user_id2' => $family_id]);
+                            $familyRepository->delete($user->user_id, $family->user_id);
                         }
                     }
                 }
             }
         } catch (Exception $e) {
+            // Logとコンソールにエラーメッセージを表示
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+            logger()->error($e->getMessage());
         }
     }
 }

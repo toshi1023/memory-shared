@@ -24,7 +24,18 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
     }
 
     /**
-     * グループID
+     * ユーザIDを検索
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
+     */
+    public function searchUserId($conditions=[], $order=[], bool $softDelete=false)
+    {
+        return $this->baseSearchQuery($conditions, $order, $softDelete)
+                    ->select('user_id')
+                    ->get();
+    }
+
+    /**
+     * グループIDを検索
      * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
      */
     public function searchGroupId($conditions=[], $order=[], bool $softDelete=false)
@@ -88,7 +99,7 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
         $data = $this->baseSearchQuery(['group_id' => $group_id])->select('id')->get();
 
         foreach($data as $value) {
-            $this->baseDelete($value);
+            $this->baseDelete($value->id);
         }
 
         return;

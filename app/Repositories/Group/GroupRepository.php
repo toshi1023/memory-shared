@@ -46,7 +46,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
 
         // group_historiesテーブルのデータを削除
         $groupHistoryRepository = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
-
+        
         $groupHistoryRepository->delete($id);
 
         return;
