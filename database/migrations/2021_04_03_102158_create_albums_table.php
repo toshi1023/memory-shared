@@ -17,6 +17,7 @@ class CreateAlbumsTable extends Migration
             $table->increments('id')->comment('ID');
             $table->string('name')->comment('アルバム名');
             $table->integer('group_id')->unsigned()->comment('グループID');
+            $table->string('image_file')->nullable()->comment('画像名');
             $table->integer('host_user_id')->unsigned()->nullable()->comment('ホストID(アルバム作成者)');
             $table->text('memo')->nullable()->comment('備考');
             $table->integer('update_user_id')->unsigned()->nullable()->comment('更新ユーザ');

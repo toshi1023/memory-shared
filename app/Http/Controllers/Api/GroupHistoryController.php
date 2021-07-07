@@ -106,6 +106,12 @@ class GroupHistoryController extends Controller
 
             DB::commit();
 
+            // 招待した場合
+            if($request->input('invite_flg')) {
+                return response()->json([
+                    'info_message' => config('const.GroupHistory.INVITE_INFO'),
+                ], 200, [], JSON_UNESCAPED_UNICODE);
+            }
             // 承認の場合
             if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
                 return response()->json([
