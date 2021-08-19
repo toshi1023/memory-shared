@@ -16,7 +16,6 @@ class CreateUserVideosTable extends Migration
         Schema::create('user_videos', function (Blueprint $table) {
             $table->bigIncrements('id')->comment('ID');
             $table->string('image_file')->comment('動画名');                        // サーバーサイドの動画名
-            $table->string('title')->default('NoTitle')->comment('動画タイトル');   // フロントエンドの動画名
             $table->integer('user_id')->unsigned()->comment('ユーザID');
             $table->integer('album_id')->unsigned()->comment('アルバムID');
             $table->json('black_list')->nullable()->comment('ブラックリスト');

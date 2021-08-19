@@ -14,7 +14,8 @@ class CreateNewsTable extends Migration
     public function up()
     {
         Schema::create('news', function (Blueprint $table) {
-            $table->increments('id')->comment('ID');
+            $table->integer('user_id')->unsigned()->default(0)->comment('ユーザID');            // 全体向けのニュースは"0"を設定
+            $table->integer('news_id')->comment('ニュースID');
             $table->string('title')->comment('タイトル');
             $table->text('content')->comment('内容');
             $table->integer('update_user_id')->unsigned()->comment('更新ユーザ');
@@ -22,9 +23,11 @@ class CreateNewsTable extends Migration
             $table->timestamps();
 
             // 外部キー制約
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('update_user_id')->references('id')->on('users')->onDelete('cascade');
 
-            $table->softDeletes();
+            // プライマリキー設定
+            $table->unique(['user_id', 'news_id']);
         });
     }
 

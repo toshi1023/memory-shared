@@ -8,8 +8,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class News extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
-    protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
+    // プライマリキー設定
+    protected $primaryKey = ['user_id1', 'user_id2'];
+    // increment無効化
+    public $incrementing = false;
 }
