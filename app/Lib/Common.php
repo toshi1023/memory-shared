@@ -87,7 +87,7 @@ class Common {
      * @param $id
      * @return string
      */
-    public function issueOnetimePassword(bool $custom=true) {
+    public static function issueOnetimePassword(bool $custom=true) {
 
         // パスワード発行に利用する文字列と数字の配列を用意
         $str_list = range('A', 'Z');

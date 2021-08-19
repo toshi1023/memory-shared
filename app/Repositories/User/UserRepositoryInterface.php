@@ -11,6 +11,7 @@ interface UserRepositoryInterface
     public function baseDelete($id);
     public function baseForceDelete($id);
     public function save($data, $model=null);
+    public function saveOnePass($onetime_password, $user_id);
     public function getGroups($conditions);
     public function getFamilies($conditions, $order=[], bool $softDelete=false);
     public function getParticipating($conditions, $order=[], bool $softDelete=false);

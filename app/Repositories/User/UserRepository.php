@@ -72,6 +72,19 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
+     * ワンタイムパスワードを保存
+     * 引数：ワンタイムパスワード
+     */
+    public function saveOnePass($onetime_password, $user_id)
+    {
+        $data = [];
+        $data['id'] = $user_id;
+        $data['onetime_password'] = $onetime_password;
+        
+        return $this->baseSave($data, null);
+    }
+
+    /**
      * 参加中のグループ履歴を取得
      * 引数: 検索条件
      */
