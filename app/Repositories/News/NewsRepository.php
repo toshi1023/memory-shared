@@ -31,4 +31,13 @@ class NewsRepository extends BaseRepository implements NewsRepositoryInterface
         return $this->baseSave($data, $model);
     }
 
+    /**
+     * データ削除
+     */
+    public function delete($user_id, $news_id)
+    {
+        $model = $this->baseSearchFirst(['user_id' => $user_id, 'news_id' => $news_id]);
+        
+        return $model->delete();
+    }
 }

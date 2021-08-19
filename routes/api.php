@@ -30,6 +30,7 @@ Route::post('/logout', 'Api\AuthController@logout')->name('logout');
 // Route::resource('/messages',       'Api\MessageHistoryController')->only('index', 'store');
 // Route::post('/groups/{group}/history',       'Api\GroupHistoryController@store');
 // Route::put('/groups/{group}/history',       'Api\GroupHistoryController@update');
+// Route::resource('/news',       'Api\NewsController');
 
  /************************************************
  *  アプリ側ルーティング(ログイン)

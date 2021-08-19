@@ -15,7 +15,8 @@ class CreateGroupsTable extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->increments('id')->comment('ID');
-            $table->string('name')->unique()->comment('グループ名');
+            // $table->string('name')->unique()->comment('グループ名');
+            $table->string('name')->comment('グループ名');              // 本番では削除
             $table->text('description')->nullable()->comment('紹介文');
             $table->boolean('private_flg')->default(0)->comment('公開フラグ');
             $table->string('image_file')->nullable()->comment('画像名');

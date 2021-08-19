@@ -48,11 +48,15 @@ class NewsTest extends TestCase
 
         // ニュースの作成
         $this->news1 = News::create([
+            'user_id'           => 0,
+            'news_id'           => 1,
             'title'             => '本日よりオープン！',
             'content'           => 'プライベートな画像・動画共有サイトをオープンしました！',
             'update_user_id'    => $this->admin->id
         ]);
         $this->news2 = News::create([
+            'user_id'           => $this->admin->id,
+            'news_id'           => 1,
             'title'             => '不具合を対応しました。',
             'content'           => 'ログインが出来ない不具合を対応しました。ご迷惑をおかけしたこと、大変深くお詫び申し上げます。',
             'update_user_id'    => $this->admin->id
@@ -78,8 +82,20 @@ class NewsTest extends TestCase
 
         $response->assertStatus(302);
 
-        // 認証後
+        // 認証後(admin)
         $this->getActingAs($this->admin);
+
+        $response = $this->get('/api/news');
+
+        $response->assertOk()
+        ->assertJsonFragment([
+            'title'             => $this->news1->title,
+            'content'           => $this->news1->content,
+            'update_user_id'    => $this->admin->id
+        ]);
+
+        // 認証後(user)
+        $this->getActingAs($this->user);
 
         $response = $this->get('/api/news');
 
@@ -106,6 +122,16 @@ class NewsTest extends TestCase
         ->assertJsonFragment([
             'title'             => $this->news1->title,
             'content'           => $this->news1->content,
+            'update_user_id'    => $this->admin->id
+        ]);
+        
+        $response = $this->get('api/news/'.$this->news2->id.'?user_id='.$this->admin->id);
+
+        // 検索対象であるニュースを取得していることを確認
+        $response->assertOk()
+        ->assertJsonFragment([
+            'title'             => $this->news2->title,
+            'content'           => $this->news2->content,
             'update_user_id'    => $this->admin->id
         ]);
 
@@ -158,4 +184,31 @@ class NewsTest extends TestCase
             'info_message' => config('const.News.REGISTER_INFO')
         ]);
     }
+
+    /**
+     * @test
+     */
+    // public function ニュース削除の動作を確認()
+    // {
+    //     // ユーザを認証済みに書き換え(user)
+    //     $this->getActingAs($this->user);
+
+    //     // ニュースを削除(管理者権限のない認証済みユーザの場合)
+    //     $response = $this->delete('api/news/'.$this->news2->news_id.'?user_id='.$this->admin->id);
+
+    //     $response->assertStatus(500)
+    //     ->assertJsonFragment([
+    //         'error_message' => config('const.News.DELETE_ERR')
+    //     ]);
+    //     // var_dump($this->news2);
+    //     // ユーザを認証済みに書き換え(admin)
+    //     $this->getActingAs($this->admin);
+
+    //     $response = $this->delete('api/news/'.$this->news2->news_id.'?user_id='.$this->admin->id);
+
+    //     $response->assertOk()
+    //     ->assertJsonFragment([
+    //         'info_message' => config('const.News.DELETE_INFO'),
+    //     ]);
+    // }
 }
