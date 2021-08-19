@@ -5,7 +5,7 @@ namespace App\Rules;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
-class NewsRegisterRule implements Rule
+class ConfirmOnetimePasswordRule implements Rule
 {
     /**
      * Create a new rule instance.
@@ -18,7 +18,7 @@ class NewsRegisterRule implements Rule
     }
 
     /**
-     * ログインユーザに管理者権限があるかどうかを確認
+     * 管理者権限が必要な処理をする際に、ワンタイムパスワードが一致するか確認
      *
      * @param  string  $attribute
      * @param  mixed  $value
@@ -26,7 +26,7 @@ class NewsRegisterRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        if(Auth::user()->id && Auth::user()->status === config('const.User.ADMIN')) {
+        if(Auth::user()->onetime_password === $value) {
             return true;
         }
         return false;
@@ -39,6 +39,6 @@ class NewsRegisterRule implements Rule
      */
     public function message()
     {
-        return 'ニュースを作成するには管理者権限が必要です';
+        return 'ワンタイムパスワードが一致しません';
     }
 }

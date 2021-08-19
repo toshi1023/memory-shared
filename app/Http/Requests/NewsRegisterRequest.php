@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Rules\NewsRegisterRule;
+use App\Rules\ConfirmOnetimePasswordRule;
 
 class NewsRegisterRequest extends FormRequest
 {
@@ -29,7 +30,8 @@ class NewsRegisterRequest extends FormRequest
         return [
             'title'             => ['required', 'max:50'],
             'content'           => ['required'],
-            'update_user_id'    => [new NewsRegisterRule]
+            'update_user_id'    => [new NewsRegisterRule],
+            'onetime_password'  => ['required', new ConfirmOnetimePasswordRule],
         ];
     }
 
