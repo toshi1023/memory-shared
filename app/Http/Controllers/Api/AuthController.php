@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Lib\Common;
+use App\Jobs\SendEmail;
 
 class AuthController extends Controller
 {
@@ -37,8 +38,10 @@ class AuthController extends Controller
                     // ワンタイムパスワードを保存
                     $repository = app()->make(UserRepositoryInterface::class);
                     $repository->saveOnePass($onePass, Auth::user()->id);
+                    // ワンタイムパスワードの通知メールを送信
+                    SendEmail::dispatch(['id' => Auth::user()->id, 'email' => Auth::user()->email]);
                 }
-
+                
                 return response()->json(["user" => Auth::user(), "info_message" => config('const.SystemMessage.LOGIN_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
             }
 
