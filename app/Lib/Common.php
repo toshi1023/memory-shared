@@ -56,7 +56,6 @@ class Common {
         $values = [];
         foreach($conditions as $index => $property) {
             foreach($property as $key => $value) {
-                // group_idの値をセット
                 $values[] = $value;
             }
         }
@@ -67,7 +66,8 @@ class Common {
     /**
      * json形式保存用の配列生成
      * 引数: 値
-     *  ※black_list[{ユーザID}] でリストを取得
+     *  ※param : black_list[0 => {ユーザID}, 1 => {ユーザID}]
+     *  ※return : black_list[{ユーザID} => {ユーザID}, {ユーザID} => {ユーザID}] 
      */
     public static function setJsonType(array $data)
     {

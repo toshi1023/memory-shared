@@ -5,6 +5,7 @@ namespace App\Repositories\MessageHistory;
 use App\Models\MessageHistory;
 use App\Repositories\BaseRepository;
 use App\Repositories\MessageRelation\MessageRelationRepositoryInterface;
+use App\Repositories\MreadManagement\MreadManagementRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 
@@ -84,8 +85,27 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
         if(!$exists1 && !$exists2) {
             $messageRelationRepository->save($mr_data);
         }
-        
+
         // message_historiesテーブルにメッセージデータを保存
         return $this->baseSave($data, $model);
+    }
+
+    /**
+     * 未読管理テーブルにデータ保存
+     * 引数：メッセージ履歴データ
+     */
+    public function saveMread($data)
+    {
+        $mrmRepository = $this->baseGetRepository(MreadManagementRepositoryInterface::class);
+
+        // データ生成
+        $mrm_data = [
+            'message_id' => $data['id'],
+            'own_id'     => $data['own_id'],
+            'user_id'    => $data['user_id']
+        ];
+
+        // mread_managementsテーブルに保存
+        return $mrmRepository->save($mrm_data);
     }
 }

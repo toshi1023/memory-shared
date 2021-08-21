@@ -65,8 +65,12 @@ class MessageHistoryController extends Controller
     {   
         try {
             DB::beginTransaction();
+
             // メッセージの保存
             $data = $this->db->save($request->all());
+
+            // 未読管理テーブルに保存
+            $this->db->saveMread($data);
     
             // Pusherにデータを送信(リアルタイム通信を実行)
             event(new MessageCreated($data));

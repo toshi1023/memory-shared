@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repositories\MessageHistory;
+namespace App\Repositories\NreadManagement;
 
-interface MessageHistoryRepositoryInterface
+interface NreadManagementRepositoryInterface
 {
     public function searchQuery($conditions=[], $order=[], bool $softDelete=false);
     public function baseSearchFirst($conditions=[], $order=[], bool $softDelete=false);
@@ -10,8 +10,5 @@ interface MessageHistoryRepositoryInterface
     public function baseSearchQueryPaginate($conditions=[], $order=[], int $paginate=10);
     public function baseDelete($id);
     public function baseForceDelete($id);
-    public function getMessages($conditions=[], bool $softDelete=false, $paginate=10);
-    public function getUser($conditions=[], bool $softDelete=false);
-    public function save($data, $model=null);
-    public function saveMread($data);
+    public function save($data);
 }
