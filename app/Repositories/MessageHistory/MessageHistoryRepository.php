@@ -62,28 +62,26 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
         // messagesテーブルの値をUnion結合して取得
         $subQuery = $this->baseSearchQuery(['own_id' => $user_id])
                          ->whereNull('message_histories.deleted_at')
-                         ->select('*', 'own_id as myid');
+                         ->select('*', 'user_id as otherid');
 
         $subQuery = $this->baseSearchQuery(['user_id' => $user_id])
                          ->whereNull('message_histories.deleted_at')
-                         ->select('*', 'user_id as myid')
+                         ->select('*', 'own_id as otherid')
                          ->union($subQuery)
                          ->orderBy('updated_at', 'desc');
         
-        // usersテーブルの値も結合して取得
-        $query = $this->model->selectRaw('distinct(messangers.myid)')
+        // 各ユーザごとにメッセージの重複を排除して、最新のトークデータを取得
+        $query = $this->model->selectRaw('distinct(messangers.otherid)')
                              ->addSelect(DB::raw('max(messangers.id) AS messangers_id'))
-                             ->addSelect('users.name', 'users.image_file')
                              ->fromSub($subQuery, 'messangers')
-                             ->leftJoin('users', 'users.id', '=', 'messangers.myid')
                              ->whereNull('messangers.deleted_at')
-                             ->whereNull('users.deleted_at')
-                             ->groupByRaw('messangers.myid');
+                             ->groupByRaw('messangers.otherid');
                              
-        // messagesテーブルの内容と結合してログインユーザのメッセージ一覧情報を取得
+        // messagesテーブルとusersテーブルの内容を結合してログインユーザのメッセージ一覧情報を取得
         $query = $this->model->select('*')
                              ->rightJoinSub($query, 'messangers', 'message_histories.id', '=', 'messangers.messangers_id')
                              ->whereNull('message_histories.deleted_at')
+                             ->with(['other:id,name,image_file'])
                              ->get();
                              
         return $query;
@@ -152,11 +150,12 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
     /**
      * データ削除(論理削除)
      */
-    public function delete($id)
+    public function delete($id, $user_id)
     {
         $model = MessageHistory::find($id);
 
         $model->deleted_at = new Carbon('now', 'Asia/Tokyo');
+        $model->update_user_id = $user_id;
         
         return $model->save();
     }

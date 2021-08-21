@@ -28,7 +28,7 @@ Route::get('/users/{user}/messages', 'Api\UserController@messages')->name('users
 // Route::resource('/groups/{group}/albums',       'Api\AlbumController');
 // Route::post('/albums/validate',  'Api\AlbumController@albumValidate');
 // Route::resource('/groups/{group}/albums/{album}/images',       'Api\UserImageController')->only('store', 'destroy');
-// Route::resource('/messages',       'Api\MessageHistoryController')->only('index', 'store');
+// Route::resource('/messages',       'Api\MessageHistoryController')->only('index', 'store', 'destroy');
 // Route::post('/groups/{group}/history',       'Api\GroupHistoryController@store');
 // Route::put('/groups/{group}/history',       'Api\GroupHistoryController@update');
 // Route::resource('/news',       'Api\NewsController');

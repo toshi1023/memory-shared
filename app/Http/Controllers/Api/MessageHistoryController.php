@@ -35,7 +35,8 @@ class MessageHistoryController extends Controller
             }
             // 検索条件
             $conditions = [];
-            $conditions['own_id']  = Auth::user()->id;
+            // $conditions['own_id']  = Auth::user()->id;
+            $conditions['own_id']  = 1;
             $conditions['user_id'] = $request->input('user_id');
             
             // ソート条件
@@ -99,11 +100,11 @@ class MessageHistoryController extends Controller
 
             // ログインユーザのIDが削除対象メッセージのown_idと一致しない場合はエラーを返す
             if($this->db->baseSearchFirst(['id' => $message])->own_id !== Auth::user()->id) {
-                throw new Exception(config('const.Message.NOT_OWN_ID'));
+                throw new Exception(config('const.Message.NOT_OWN_ID').'[ユーザID: '.Auth::user()->id.', トークID: '.$message.']');
             }
             
             // データ削除
-            $this->db->delete($message);
+            $this->db->delete($message, Auth::user()->id);
             
             DB::commit();
             return response()->json(['info_message' => config('const.Message.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);

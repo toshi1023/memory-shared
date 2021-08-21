@@ -15,5 +15,5 @@ interface MessageHistoryRepositoryInterface
     public function getUser($conditions=[], bool $softDelete=false);
     public function save($data, $model=null);
     public function saveMread($data);
-    public function delete($id);
+    public function delete($id, $user_id);
 }

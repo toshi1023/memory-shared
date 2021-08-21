@@ -29,6 +29,14 @@ class MessageHistory extends Model
     }
 
     /**
+     * usersテーブルと1対多のリレーション構築(トーク一覧表示時の設定)
+     */
+    public function other()
+    {
+        return $this->belongsTo('App\Models\User', 'otherid', 'id');
+    }
+
+    /**
      * mread_managementsテーブルと1対多のリレーション構築(多側の設定)
      */
     public function mreadManagements()
