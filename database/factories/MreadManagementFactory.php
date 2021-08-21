@@ -22,7 +22,7 @@ class MreadManagementFactory extends Factory
     public function definition()
     {
         return [
-            'message_id'  => $this->faker->numberBetween(1, 20),
+            'message_id'  => $this->faker->numberBetween(1, 30),
             'own_id'      => $this->faker->numberBetween(1, 20),
             'user_id'     => $this->faker->numberBetween(1, 20),
         ];

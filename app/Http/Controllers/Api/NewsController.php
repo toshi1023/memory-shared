@@ -30,12 +30,13 @@ class NewsController extends Controller
         try {
             // 検索条件
             $conditions = [];
-            $conditions['@inuser_id'] = [0, Auth::user()->id];
+            $conditions['@innews.user_id'] = [0, Auth::user()->id];
+            // $conditions['@innews.user_id'] = [0, $request->user_id];
             if($request->input('title@like')) $conditions = Common::setConditions($request);
             
             // ソート条件
             $order = [];
-            $order['created_at'] = 'desc';
+            $order['news.created_at'] = 'desc';
     
             $data = $this->db->searchQuery($conditions, $order);
             

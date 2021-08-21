@@ -14,4 +14,12 @@ class MreadManagement extends Model
     protected $primaryKey = ['message_id', 'user_id'];
     // increment無効化
     public $incrementing = false;
+
+    /**
+     * message_historiesテーブルと1対多のリレーション構築(1側の設定)
+     */
+    public function messageHistory()
+    {
+        return $this->belongsTo('App\Models\MessageHistory', 'id', 'message_id');
+    }
 }

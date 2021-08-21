@@ -28,4 +28,12 @@ class MessageHistory extends Model
     {
         return $this->belongsTo('App\Models\User', 'own_id', 'id');
     }
+
+    /**
+     * mread_managementsテーブルと1対多のリレーション構築(多側の設定)
+     */
+    public function mreadManagements()
+    {
+        return $this->hasMany('App\Models\MreadManagement', 'message_id');
+    }
 }

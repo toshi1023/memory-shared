@@ -42,7 +42,10 @@ class AuthController extends Controller
                     SendEmail::dispatch(['id' => Auth::user()->id, 'email' => Auth::user()->email]);
                 }
                 
-                return response()->json(["user" => Auth::user(), "info_message" => config('const.SystemMessage.LOGIN_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([
+                    "user" => Auth::user()->id, 
+                    "info_message" => config('const.SystemMessage.LOGIN_INFO')
+                ], 200, [], JSON_UNESCAPED_UNICODE);
             }
 
             // 認証に失敗した場合

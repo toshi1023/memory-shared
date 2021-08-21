@@ -14,14 +14,12 @@ class CreateMreadManagementsTable extends Migration
     public function up()
     {
         Schema::create('mread_managements', function (Blueprint $table) {
+            // $table->bigInteger('message_id')->unique()->unsigned()->comment('トーク履歴ID');
             $table->bigInteger('message_id')->unsigned()->comment('トーク履歴ID');
             $table->integer('own_id')->unsigned()->comment('送信者ID');
             $table->integer('user_id')->unsigned()->comment('未読ユーザID');
 
             $table->timestamps();
-
-            // プライマリキー設定
-            $table->unique(['message_id', 'own_id', 'user_id']);
         });
     }
 
