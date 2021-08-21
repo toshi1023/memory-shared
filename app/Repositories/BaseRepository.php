@@ -223,4 +223,16 @@ abstract class  BaseRepository
     private function baseGetUserId() {
         return Auth::user()->id;
     }
+    
+    /**
+     * 管理者認証
+     * 引数：ワンタイムパスワード
+     * @return bool
+     */
+    public function baseAdminCertification($onetime_password) {
+        if(Auth::user()->onetime_password === $onetime_password) {
+            return true;
+        }
+        return false;
+    }
 }
