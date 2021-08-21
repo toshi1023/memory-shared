@@ -22,11 +22,11 @@ class CreateMessageHistoriesTable extends Migration
 
             $table->timestamps();
 
+            $table->timestamp('deleted_at')->nullable();
+
             // 外部キー制約
             $table->foreign('own_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
-            $table->softDeletes();
         });
     }
 

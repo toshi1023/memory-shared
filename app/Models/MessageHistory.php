@@ -8,9 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MessageHistory extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
-    protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
 
     /**

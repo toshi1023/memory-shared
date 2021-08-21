@@ -452,4 +452,25 @@ class UserController extends Controller
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }
     }
+
+    /**
+     * 【navメニュー】
+     * トークリストの一覧
+     */
+    public function messages(Request $request, $user)
+    {
+        try {
+            // $data = $this->db->getMessageList(Auth::user()->id);
+            $data = $this->db->getMessageList($user);
+            
+            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            return response()->json([
+              'error_message' => config('const.User.GET_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
 }

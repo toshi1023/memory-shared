@@ -15,4 +15,5 @@ interface UserRepositoryInterface
     public function getGroups($conditions);
     public function getFamilies($conditions, $order=[], bool $softDelete=false);
     public function getParticipating($conditions, $order=[], bool $softDelete=false);
+    public function getMessageList($user_id);
 }

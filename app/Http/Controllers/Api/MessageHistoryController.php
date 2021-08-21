@@ -88,4 +88,33 @@ class MessageHistoryController extends Controller
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }
     }
+
+    /**
+     * メッセージの削除用アクション
+     */
+    public function destroy(Request $request, $message)
+    {
+        try {
+            DB::beginTransaction();
+
+            // ログインユーザのIDが削除対象メッセージのown_idと一致しない場合はエラーを返す
+            if($this->db->baseSearchFirst(['id' => $message])->own_id !== Auth::user()->id) {
+                throw new Exception(config('const.Message.NOT_OWN_ID'));
+            }
+            
+            // データ削除
+            $this->db->delete($message);
+            
+            DB::commit();
+            return response()->json(['info_message' => config('const.Message.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            DB::rollback();
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            return response()->json([
+              'error_message' => config('const.Message.DELETE_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
 }

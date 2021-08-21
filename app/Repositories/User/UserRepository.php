@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Repositories\BaseRepository;
 use App\Repositories\GroupHistory\GroupHistoryRepositoryInterface;
 use App\Repositories\Group\GroupRepositoryInterface;
+use App\Repositories\MessageHistory\MessageHistoryRepositoryInterface;
 use App\Lib\Common;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
@@ -131,5 +132,17 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $groupRepository = $this->baseGetRepository(GroupRepositoryInterface::class);
 
         return $groupRepository->searchQuery($groups_conditions, $order, $softDelete);
+    }
+
+    /**
+     * トーク一覧の取得
+     * 引数: ユーザID
+     */
+    public function getMessageList($user_id)
+    {
+        // トーク一覧を取得
+        $messageRepository = $this->baseGetRepository(MessageHistoryRepositoryInterface::class);
+
+        return $messageRepository->getMessageList($user_id);
     }
 }

@@ -11,7 +11,9 @@ interface MessageHistoryRepositoryInterface
     public function baseDelete($id);
     public function baseForceDelete($id);
     public function getMessages($conditions=[], bool $softDelete=false, $paginate=10);
+    public function getMessageList($user_id);
     public function getUser($conditions=[], bool $softDelete=false);
     public function save($data, $model=null);
     public function saveMread($data);
+    public function delete($id);
 }

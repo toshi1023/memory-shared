@@ -8,6 +8,8 @@ use App\Repositories\MessageRelation\MessageRelationRepositoryInterface;
 use App\Repositories\MreadManagement\MreadManagementRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class MessageHistoryRepository extends BaseRepository implements MessageHistoryRepositoryInterface
 {
@@ -24,16 +26,17 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
      */
     public function searchQuery($conditions=[], $order=[], bool $softDelete=false)
     {
-        return $this->baseSearchQuery($conditions, $order, $softDelete)->get();
+        return $this->baseSearchQuery($conditions, $order, $softDelete)->whereNull('deleted_at')->get();
     }
 
     /**
-     * メッセージ履歴の取得
+     * トーク履歴の取得
+     * 引数1: 検索条件, 引数2: 削除済みデータの取得フラグ, 引数3: ページネーション件数
      */
     public function getMessages($conditions=[], bool $softDelete=false, $paginate=10)
     {
         // own_idがログインユーザのデータを取得
-        $anotherQuery = $this->baseSearchQuery($conditions, [], $softDelete);
+        $anotherQuery = $this->baseSearchQuery($conditions, [], $softDelete)->whereNull('deleted_at');
         
         // 検索条件の設定(user_idがログインユーザ)
         $anotherConditions = [
@@ -43,9 +46,46 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
         // user_idがログインユーザのデータを取得
         $query = $this->baseSearchQuery($anotherConditions, [], $softDelete)
                       ->union($anotherQuery)
+                      ->whereNull('deleted_at')
                       ->orderBy('id', 'asc')
                       ->paginate($paginate);
 
+        return $query;
+    }
+
+    /**
+     * ログインユーザのトーク一覧を取得
+     * 引数： ユーザID
+     */
+    public function getMessageList($user_id)
+    {
+        // messagesテーブルの値をUnion結合して取得
+        $subQuery = $this->baseSearchQuery(['own_id' => $user_id])
+                         ->whereNull('message_histories.deleted_at')
+                         ->select('*', 'own_id as myid');
+
+        $subQuery = $this->baseSearchQuery(['user_id' => $user_id])
+                         ->whereNull('message_histories.deleted_at')
+                         ->select('*', 'user_id as myid')
+                         ->union($subQuery)
+                         ->orderBy('updated_at', 'desc');
+        
+        // usersテーブルの値も結合して取得
+        $query = $this->model->selectRaw('distinct(messangers.myid)')
+                             ->addSelect(DB::raw('max(messangers.id) AS messangers_id'))
+                             ->addSelect('users.name', 'users.image_file')
+                             ->fromSub($subQuery, 'messangers')
+                             ->leftJoin('users', 'users.id', '=', 'messangers.myid')
+                             ->whereNull('messangers.deleted_at')
+                             ->whereNull('users.deleted_at')
+                             ->groupByRaw('messangers.myid');
+                             
+        // messagesテーブルの内容と結合してログインユーザのメッセージ一覧情報を取得
+        $query = $this->model->select('*')
+                             ->rightJoinSub($query, 'messangers', 'message_histories.id', '=', 'messangers.messangers_id')
+                             ->whereNull('message_histories.deleted_at')
+                             ->get();
+                             
         return $query;
     }
 
@@ -107,5 +147,17 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
 
         // mread_managementsテーブルに保存
         return $mrmRepository->save($mrm_data);
+    }
+
+    /**
+     * データ削除(論理削除)
+     */
+    public function delete($id)
+    {
+        $model = MessageHistory::find($id);
+
+        $model->deleted_at = new Carbon('now', 'Asia/Tokyo');
+        
+        return $model->save();
     }
 }
