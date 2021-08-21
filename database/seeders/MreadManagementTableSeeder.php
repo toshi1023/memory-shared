@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class MessageHistoriesTableSeeder extends Seeder
+class MreadManagementTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,6 +13,6 @@ class MessageHistoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\MessageHistory::factory(20)->create();
+        \App\Models\MreadManagement::factory(10)->create();
     }
 }

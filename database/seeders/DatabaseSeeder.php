@@ -24,5 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(MessageRelationsTableSeeder::class);
         $this->call(MessageHistoriesTableSeeder::class);
         $this->call(PushHistoriesTableSeeder::class);
+        $this->call(MreadManagementTableSeeder::class);
+        $this->call(NreadManagementTableSeeder::class);
     }
 }

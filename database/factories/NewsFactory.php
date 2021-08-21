@@ -40,7 +40,7 @@ class NewsFactory extends Factory
             'user_id'           => $this->faker->numberBetween(0, 5),
             'news_id'           => $this->faker->numberBetween(1, 200),
             'title'             => $title[$this->faker->numberBetween(0, 2)],
-            'content'           =>$content[$this->faker->numberBetween(0, 5)],
+            'content'           => $content[$this->faker->numberBetween(0, 5)],
             'update_user_id'    => $this->faker->numberBetween(1, 10),
         ];
     }
