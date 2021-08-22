@@ -24,6 +24,10 @@ use App\Repositories\MessageRelation\MessageRelationRepositoryInterface;
 use App\Repositories\MessageRelation\MessageRelationRepository;
 use App\Repositories\News\NewsRepositoryInterface;
 use App\Repositories\News\NewsRepository;
+use App\Repositories\MreadManagement\MreadManagementRepositoryInterface;
+use App\Repositories\MreadManagement\MreadManagementRepository;
+use App\Repositories\NreadManagement\NreadManagementRepositoryInterface;
+use App\Repositories\NreadManagement\NreadManagementRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -44,6 +48,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(NewsRepositoryInterface::class, NewsRepository::class);
         $this->app->singleton(MessageHistoryRepositoryInterface::class, MessageHistoryRepository::class);
         $this->app->singleton(MessageRelationRepositoryInterface::class, MessageRelationRepository::class);
+        $this->app->singleton(NreadManagementRepositoryInterface::class, NreadManagementRepository::class);
+        $this->app->singleton(MreadManagementRepositoryInterface::class, MreadManagementRepository::class);
     }
 
     /**

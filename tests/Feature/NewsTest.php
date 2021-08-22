@@ -22,7 +22,8 @@ class NewsTest extends TestCase
 
     private const TITLE = 'うれしいニュースです！';
     private const CONTENT = 'グループ登録数が100を超えました！いつもご利用ありがとうございます。';
-    private const ERRMESSAGE = 'ニュースを作成するには管理者権限が必要です';
+    private const ERRMESSAGE1 = 'ニュースを作成するには管理者権限が必要です';
+    private const ERRMESSAGE2 = 'onetime password は必須です';
 
     /**
      * テストの前処理を実行
@@ -41,6 +42,7 @@ class NewsTest extends TestCase
                 'user_agent'        => '',
                 'remember_token'    => Str::random(10),
                 'update_user_id'    => 1,
+                'onetime_password'  => 'A123B456C789',
             ]);
 
         // 認証済みでないユーザの作成
@@ -166,16 +168,18 @@ class NewsTest extends TestCase
 
         // ニュースを作成(管理者権限のない認証済みユーザの場合)
         $response = $this->post('api/news', $data);
-
+        
         $response->assertStatus(400)
         ->assertJsonFragment([
             'errors' => [
-                'update_user_id' => [self::ERRMESSAGE]
+                'onetime_password' => [self::ERRMESSAGE2],
+                'update_user_id'   => [self::ERRMESSAGE1]
         ]]);
 
         // ニュースを作成(管理者権限のある認証済みユーザの場合)
         $this->getActingAs($this->admin);
-        $data['update_user_id'] = $this->admin->id;
+        $data['update_user_id']     = $this->admin->id;
+        $data['onetime_password']   = $this->admin->onetime_password;
         
         $response = $this->post('api/news', $data);
 

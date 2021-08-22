@@ -9,6 +9,7 @@ class MreadManagement extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['message_id', 'own_id', 'user_id', 'created_at', 'updated_at'];
     protected $table = 'mread_managements';
     // プライマリキー設定
     protected $primaryKey = ['message_id', 'user_id'];

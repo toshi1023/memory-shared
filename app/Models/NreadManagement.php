@@ -9,6 +9,7 @@ class NreadManagement extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['news_user_id', 'news_id', 'user_id', 'created_at', 'updated_at'];
     protected $table = 'nread_managements';
     // プライマリキー設定
     protected $primaryKey = ['news_user_id', 'news_id', 'user_id'];

@@ -80,7 +80,8 @@ class UserTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJson([
-                'user' => ['name' => $this->user->name],
+                // 'user' => ['name' => $this->user->name],
+                'user' => $this->user->id,
                 'info_message' => config('const.SystemMessage.LOGIN_INFO')
             ]);
 

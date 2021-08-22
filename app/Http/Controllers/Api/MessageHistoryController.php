@@ -35,8 +35,7 @@ class MessageHistoryController extends Controller
             }
             // 検索条件
             $conditions = [];
-            // $conditions['own_id']  = Auth::user()->id;
-            $conditions['own_id']  = 1;
+            $conditions['own_id']  = Auth::user()->id;
             $conditions['user_id'] = $request->input('user_id');
             
             // ソート条件

@@ -64,7 +64,7 @@ class MessageHistoryTest extends TestCase
             'update_user_id'    => $this->admin->id
         ]);
         // メッセージ履歴の作成(user -> admin)
-        $this->message1 = MessageHistory::create([
+        $this->message2 = MessageHistory::create([
             'content'           => $this->content[array_rand($this->content)],
             'own_id'            => $this->user->id,
             'user_id'           => $this->admin->id,
@@ -104,7 +104,7 @@ class MessageHistoryTest extends TestCase
 
         // 正常なリクエストを実行
         $response = $this->get('/api/messages?user_id='.$this->user->id);
-
+        
         $response->assertOk()
         ->assertJsonFragment([
             'own_id'       => $this->admin->id,
