@@ -4,6 +4,8 @@ namespace App\Repositories\GroupHistory;
 
 use App\Models\GroupHistory;
 use App\Repositories\BaseRepository;
+use App\Repositories\News\NewsRepositoryInterface;
+use App\Repositories\Group\GroupRepositoryInterface;
 
 class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepositoryInterface
 {
@@ -46,6 +48,18 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
     }
 
     /**
+     * グループ名を取得(単体)
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
+     */
+    public function searchGroupNameFirst($conditions=[], $order=[], bool $softDelete=false)
+    {
+        $groupRepository = $this->baseGetRepository(GroupRepositoryInterface::class);
+        return $groupRepository->baseSearchQuery($conditions, $order, $softDelete)
+                               ->select('name')
+                               ->first();
+    }
+
+    /**
      * データの存在確認
      * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
      */
@@ -60,6 +74,17 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
     public function save($data, $model=null)
     {
         return $this->baseSave($data, $model);
+    }
+
+    /**
+     * グループ申請通知のデータ保存
+     * 引数1：ユーザID, 引数2：グループ名, 引数3：申請ステータス
+     */
+    public function saveGroupInfo($user_id, $group_name, $status)
+    {
+        $newsRepository = $this->baseGetRepository(NewsRepositoryInterface::class);
+
+        return $newsRepository->saveGroupInfo($user_id, $group_name, $status);
     }
 
     /**

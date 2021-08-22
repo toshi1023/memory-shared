@@ -108,7 +108,7 @@ class NewsController extends Controller
             $data['user_id'] = 0;
 
             // news_idの最大値に1を加算
-            $data['news_id'] = $this->db->baseSearchFirst(['user_id' => 0], ['news_id' => 'desc'])->news_id + 1;
+            $data['news_id'] = $this->db->getNewsId(0);
     
             // データの保存処理
             $this->db->save($data);

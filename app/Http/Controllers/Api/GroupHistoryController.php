@@ -38,7 +38,15 @@ class GroupHistoryController extends Controller
 
             // 申請状況のデータが承認済みの場合、familiesテーブルへの保存処理を実行
             if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
+                // ニュースデータの作成と未読管理データの作成
+                $group_name = $this->db->searchGroupNameFirst(['id' => $group]);
+                $this->db->saveGroupInfo(Auth::user()->id, $group_name, config('const.GroupHistory.APPROVAL'));
+
                 CreateFamily::dispatch($group, Auth::user()->id);
+            } else {
+                // ニュースデータの作成と未読管理データの作成
+                $group_name = $this->db->searchGroupNameFirst(['id' => $group]);
+                $this->db->saveGroupInfo(Auth::user()->id, $group_name, config('const.GroupHistory.APPLY'));
             }
 
             DB::commit();
@@ -101,6 +109,10 @@ class GroupHistoryController extends Controller
 
             // 申請状況のデータが承認済みの場合、familiesテーブルへの保存処理を実行
             if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
+                // ニュースデータの作成と未読管理データの作成
+                $group_name = $this->db->searchGroupNameFirst(['id' => $group]);
+                $this->db->saveGroupInfo(Auth::user()->id, $group_name, config('const.GroupHistory.APPROVAL'));
+                
                 CreateFamily::dispatch($group, Auth::user()->id);
             }
 
