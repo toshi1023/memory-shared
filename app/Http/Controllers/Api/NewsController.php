@@ -111,7 +111,16 @@ class NewsController extends Controller
             $data['news_id'] = $this->db->getNewsId(0);
     
             // データの保存処理
-            $this->db->save($data);
+            $data = $this->db->save($data);
+
+            // 未読管理テーブルへの追加
+            $users = $this->db->getAllUser();
+            $ndata = [
+                'news_user_id'  => $data->user_id,
+                'news_id'       => $data->news_id
+            ];
+
+            $this->db->savePublicNread($ndata, $users);
 
             DB::commit();
             return response()->json([

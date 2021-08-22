@@ -5,6 +5,7 @@ namespace App\Repositories\News;
 use App\Models\News;
 use App\Repositories\BaseRepository;
 use App\Repositories\NreadManagement\NreadManagementRepositoryInterface;
+use App\Repositories\User\UserRepositoryInterface;
 
 class NewsRepository extends BaseRepository implements NewsRepositoryInterface
 {
@@ -93,6 +94,22 @@ class NewsRepository extends BaseRepository implements NewsRepositoryInterface
     }
 
     /**
+     * 全体向けニュース作成時の未読管理データ保存
+     * 引数1：保存データ, 引数2：ユーザデータ
+     */
+    public function savePublicNread($data, $users)
+    {
+        // 未読管理テーブルに保存
+        $nreadRepository = $this->baseGetRepository(NreadManagementRepositoryInterface::class);
+
+        foreach($users as $user) {
+            $data['user_id'] = $user->id;
+            $nreadRepository->save($data);
+        }
+        return;
+    }
+
+    /**
      * データ削除
      */
     public function delete($user_id, $news_id)
@@ -109,5 +126,14 @@ class NewsRepository extends BaseRepository implements NewsRepositoryInterface
     public function getNewsId(int $user_id = 0)
     {
         return $this->baseSearchFirst(['user_id' => $user_id], ['news_id' => 'desc'])->news_id + 1;
+    }
+
+    /**
+     * 全ユーザ情報の取得
+     */
+    public function getAllUser()
+    {
+        $userRepository = $this->baseGetRepository(UserRepositoryInterface::class);
+        return $userRepository->searchQuery();
     }
 }

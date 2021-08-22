@@ -29,7 +29,7 @@ Route::get('/users/{user}/messages', 'Api\UserController@messages')->name('users
 // Route::post('/albums/validate',  'Api\AlbumController@albumValidate');
 // Route::resource('/groups/{group}/albums/{album}/images',       'Api\UserImageController')->only('store', 'destroy');
 // Route::resource('/messages',       'Api\MessageHistoryController')->only('index', 'store', 'destroy');
-Route::post('/groups/{group}/history',       'Api\GroupHistoryController@store');
+// Route::post('/groups/{group}/history',       'Api\GroupHistoryController@store');
 // Route::put('/groups/{group}/history',       'Api\GroupHistoryController@update');
 // Route::resource('/news',       'Api\NewsController');
 
@@ -50,7 +50,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/groups/validate',  'Api\GroupController@groupValidate');
 
     /********** グループ履歴管理(group_histories) **********/
-    // Route::post('/groups/{group}/history',       'Api\GroupHistoryController@store');
+    Route::post('/groups/{group}/history',       'Api\GroupHistoryController@store');
     Route::put('/groups/{group}/history',       'Api\GroupHistoryController@update');
     
     /********** アルバム管理(albums) **********/
