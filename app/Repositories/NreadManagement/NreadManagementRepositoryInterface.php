@@ -10,5 +10,7 @@ interface NreadManagementRepositoryInterface
     public function baseSearchQueryPaginate($conditions=[], $order=[], int $paginate=10);
     public function baseDelete($id);
     public function baseForceDelete($id);
+    public function getNewsFirst($conditions=[], $order=[], bool $softDelete=false);
     public function save($data);
+    public function delete($conditions);
 }

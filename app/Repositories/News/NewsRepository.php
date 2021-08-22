@@ -29,6 +29,22 @@ class NewsRepository extends BaseRepository implements NewsRepositoryInterface
                     ->select('news.*', 'nread_managements.user_id as read_user_id')
                     ->get();
     }
+
+    /**
+     * 基本クエリ(単体)
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
+     */
+    public function searchFirst($conditions=[], $order=[], bool $softDelete=false)
+    {
+        return $this->baseSearchQuery($conditions, $order, $softDelete)
+                    ->leftJoin('nread_managements', function ($join) {
+                        // nread_managementsテーブルのデータも同時に取得
+                        $join->on('news.user_id', '=', 'nread_managements.news_user_id')
+                             ->on('news.news_id', '=', 'nread_managements.news_id');
+                    })
+                    ->select('news.*', 'nread_managements.user_id as read_user_id')
+                    ->first();
+    }
     
     /**
      * データ保存

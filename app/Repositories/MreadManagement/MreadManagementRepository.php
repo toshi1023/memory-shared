@@ -35,4 +35,21 @@ class MreadManagementRepository extends BaseRepository implements MreadManagemen
             'user_id'    => $data['user_id']
         ]);
     }
+
+    /**
+     * データ削除()
+     * 引数1：検索条件
+     * 引数2：削除対象データのメッセージID(型：配列)
+     */
+    public function delete($conditions, $message_id_list)
+    {
+        foreach($message_id_list as $id) {
+            // 検索条件のmessage_idを更新
+            $conditions['message_id'] = $id;
+
+            $model = $this->baseSearchFirst($conditions);
+            $model->delete();
+        }
+        return;
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Repositories\NreadManagement;
 use App\Models\NreadManagement;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\News\NewsRepositoryInterface;
 
 class NreadManagementRepository extends BaseRepository implements NreadManagementRepositoryInterface
 {
@@ -23,6 +24,17 @@ class NreadManagementRepository extends BaseRepository implements NreadManagemen
     {
         return $this->baseSearchQuery($conditions, $order, $softDelete)->get();
     }
+
+    /**
+     * 未読フラグ削除後のニュースデータを取得
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
+     */
+    public function getNewsFirst($conditions=[], $order=[], bool $softDelete=false)
+    {
+        $newsRepository = $this->baseGetRepository(NewsRepositoryInterface::class);
+
+        return $newsRepository->searchFirst($conditions, $order, $softDelete);
+    }
     
     /**
      * データ保存
@@ -34,5 +46,15 @@ class NreadManagementRepository extends BaseRepository implements NreadManagemen
             'news_id'      => $data['news_id'],
             'user_id'      => $data['user_id']
         ]);
+    }
+
+    /**
+     * データ削除
+     */
+    public function delete($conditions)
+    {
+        $model = $this->baseSearchFirst($conditions);
+        
+        return $model->delete();
     }
 }

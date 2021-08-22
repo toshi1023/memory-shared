@@ -69,7 +69,13 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::resource('/messages',       'Api\MessageHistoryController')->only('index', 'store', 'destroy');
     Route::post('/messages/validate',  'Api\MessageHistoryController@messageValidate');
 
+    /********** メッセージ用未読管理(mread_managements) **********/
+    Route::post('/messages/{user}/mread',       'Api\MreadManagementController@destroy');
+
     /********** ニュース管理(news) **********/
     Route::resource('/news',       'Api\NewsController');
     Route::post('/news/validate',  'Api\NewsController@newsValidate');
+
+    /********** ニュース用未読管理(nread_managements) **********/
+    Route::post('/news/{news}/nread',       'Api\NreadManagementController@destroy');
 });

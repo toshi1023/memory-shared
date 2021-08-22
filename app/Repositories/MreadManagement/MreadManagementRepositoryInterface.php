@@ -11,4 +11,5 @@ interface MreadManagementRepositoryInterface
     public function baseDelete($id);
     public function baseForceDelete($id);
     public function save($data);
+    public function delete($conditions, $message_id_list);
 }
