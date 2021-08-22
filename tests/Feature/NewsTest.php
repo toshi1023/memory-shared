@@ -24,6 +24,7 @@ class NewsTest extends TestCase
     private const CONTENT = 'グループ登録数が100を超えました！いつもご利用ありがとうございます。';
     private const ERRMESSAGE1 = 'ニュースを作成するには管理者権限が必要です';
     private const ERRMESSAGE2 = 'onetime password は必須です';
+    private const ERRMESSAGE3 = 'ワンタイムパスワードが一致しません';
 
     /**
      * テストの前処理を実行
@@ -177,6 +178,19 @@ class NewsTest extends TestCase
         ]]);
 
         // ニュースを作成(管理者権限のある認証済みユーザの場合)
+        // ワンタイムパスワードを間違えた場合
+        $this->getActingAs($this->admin);
+        $data['update_user_id']     = $this->admin->id;
+        $data['onetime_password']   = 'AAAABBBB';
+        
+        $response = $this->post('api/news', $data);
+
+        $response->assertStatus(400)
+        ->assertJsonFragment([
+            'errors' => [
+                'onetime_password' => [self::ERRMESSAGE3],
+        ]]);
+        // ワンタイムパスワードが正しい場合
         $this->getActingAs($this->admin);
         $data['update_user_id']     = $this->admin->id;
         $data['onetime_password']   = $this->admin->onetime_password;
