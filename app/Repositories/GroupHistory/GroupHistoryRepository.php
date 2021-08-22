@@ -48,14 +48,13 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
     }
 
     /**
-     * グループ名を取得(単体)
+     * グループ情報を取得(単体)
      * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
      */
-    public function searchGroupNameFirst($conditions=[], $order=[], bool $softDelete=false)
+    public function searchGroupFirst($conditions=[], $order=[], bool $softDelete=false)
     {
         $groupRepository = $this->baseGetRepository(GroupRepositoryInterface::class);
         return $groupRepository->baseSearchQuery($conditions, $order, $softDelete)
-                               ->select('name')
                                ->first();
     }
 

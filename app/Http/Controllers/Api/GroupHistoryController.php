@@ -31,7 +31,8 @@ class GroupHistoryController extends Controller
             // データの配列化
             $data = $request->all();
             $data['group_id'] = $group;
-            $data['user_id'] = Auth::user()->id;
+            // $data['user_id'] = Auth::user()->id;
+            $data['user_id'] = 1;
     
             // データの保存処理
             $this->db->save($data);
@@ -39,13 +40,14 @@ class GroupHistoryController extends Controller
             // 申請状況のデータが承認済みの場合、familiesテーブルへの保存処理を実行
             if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
                 // ニュースデータの作成と未読管理データの作成
-                $group_name = $this->db->searchGroupNameFirst(['id' => $group]);
+                $group_name = $this->db->searchGroupFirst(['id' => $group])->name;
                 $this->db->saveGroupInfo(Auth::user()->id, $group_name, config('const.GroupHistory.APPROVAL'));
 
-                CreateFamily::dispatch($group, Auth::user()->id);
+                // CreateFamily::dispatch($group, Auth::user()->id);
+                CreateFamily::dispatch($group, 1);
             } else {
                 // ニュースデータの作成と未読管理データの作成
-                $group_name = $this->db->searchGroupNameFirst(['id' => $group]);
+                $group_name = $this->db->searchGroupFirst(['id' => $group])->name;
                 $this->db->saveGroupInfo(Auth::user()->id, $group_name, config('const.GroupHistory.APPLY'));
             }
 
@@ -95,8 +97,8 @@ class GroupHistoryController extends Controller
             // 検索条件
             $conditions = [];
             $conditions['group_id'] = $group;
-            $conditions['user_id'] = 1;
-            // $conditions['user_id'] = Auth::user()->id;
+            // $conditions['user_id'] = 1;
+            $conditions['user_id'] = Auth::user()->id;
 
             // group_historiesのidを取得
             $id = $this->db->baseSearchFirst($conditions)->id;
@@ -110,9 +112,9 @@ class GroupHistoryController extends Controller
             // 申請状況のデータが承認済みの場合、familiesテーブルへの保存処理を実行
             if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
                 // ニュースデータの作成と未読管理データの作成
-                $group_name = $this->db->searchGroupNameFirst(['id' => $group]);
+                $group_name = $this->db->searchGroupFirst(['id' => $group]);
                 $this->db->saveGroupInfo(Auth::user()->id, $group_name, config('const.GroupHistory.APPROVAL'));
-                
+
                 CreateFamily::dispatch($group, Auth::user()->id);
             }
 

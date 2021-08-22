@@ -71,11 +71,11 @@ class NewsRepository extends BaseRepository implements NewsRepositoryInterface
         }
 
         $data = [
-            'user_id'       => $user_id,
-            'news_id'       => $this->getNewsId($user_id),
-            'title'         => $title,
-            'content'       => $content,
-            'updated_at'    => $user_id
+            'user_id'           => $user_id,
+            'news_id'           => $this->getNewsId($user_id),
+            'title'             => $title,
+            'content'           => $content,
+            'update_user_id'    => $user_id
         ];
         $data = $this->baseSave($data);
 
