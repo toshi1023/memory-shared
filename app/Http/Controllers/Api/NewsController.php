@@ -106,6 +106,7 @@ class NewsController extends Controller
             $data = $request->all();
 
             $data['user_id'] = 0;
+            $data['update_user_id'] = Auth::user()->id;
 
             // news_idの最大値に1を加算
             $data['news_id'] = $this->db->getNewsId(0);

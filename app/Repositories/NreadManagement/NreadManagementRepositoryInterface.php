@@ -12,5 +12,5 @@ interface NreadManagementRepositoryInterface
     public function baseForceDelete($id);
     public function getNewsFirst($conditions=[], $order=[], bool $softDelete=false);
     public function save($data);
-    public function delete($conditions);
+    public function delete($key);
 }

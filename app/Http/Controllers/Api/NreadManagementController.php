@@ -26,18 +26,25 @@ class NreadManagementController extends Controller
     {
         try {
             DB::beginTransaction();
-
-            // 検索条件
-            $conditions = [
-                'news_user_id' => Auth::user()->id, 
-                'news_id' => $news, 
-                'user_id' => Auth::user()->id
-            ];
             
             // データ削除
-            $this->db->delete($conditions);
+            $key = [
+                'news_user_id' => 0, 
+                'news_id' => $news, 
+                'user_id' => 1
+            ];
+            $this->db->delete($key);
 
             // 未読フラグ削除後のニュースデータを取得
+            // 検索条件
+            $conditions = [
+                'news.user_id' => Auth::user()->id, 
+                'news.news_id' => $news
+            ];
+            // $conditions = [
+            //     'news.user_id' => 0, 
+            //     'news.news_id' => $news
+            // ];
             $data = $this->db->getNewsFirst($conditions);
             
             DB::commit();

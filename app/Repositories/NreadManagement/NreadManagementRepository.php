@@ -4,7 +4,7 @@ namespace App\Repositories\NreadManagement;
 
 use App\Models\NreadManagement;
 use App\Repositories\BaseRepository;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Repositories\News\NewsRepositoryInterface;
 
 class NreadManagementRepository extends BaseRepository implements NreadManagementRepositoryInterface
@@ -51,10 +51,15 @@ class NreadManagementRepository extends BaseRepository implements NreadManagemen
     /**
      * データ削除
      */
-    public function delete($conditions)
+    public function delete($key)
     {
-        $model = $this->baseSearchFirst($conditions);
+        // $model = $this->baseSearchFirst($conditions);
         
-        return $model->delete();
+        // return $model->delete();
+
+        DB::delete(
+            'delete from nread_managements WHERE news_user_id = ? AND news_id = ? AND user_id = ?', 
+            [$key['news_user_id'], $key['news_id'], $key['user_id']]
+        );
     }
 }

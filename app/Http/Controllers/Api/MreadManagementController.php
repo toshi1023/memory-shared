@@ -32,11 +32,15 @@ class MreadManagementController extends Controller
                 'own_id'  => $user, 
                 'user_id' => Auth::user()->id
             ];
+            // $conditions = [
+            //     'own_id'  => $user, 
+            //     'user_id' => 1
+            // ];
 
-            $message_id_list = $this->db->searchQuery($conditions);
+            $messages = $this->db->searchQuery($conditions);
             
             // データ削除
-            $this->db->delete($conditions, $message_id_list);
+            $this->db->delete($conditions, $messages);
             
             DB::commit();
             return response()->json([], 200, [], JSON_UNESCAPED_UNICODE);

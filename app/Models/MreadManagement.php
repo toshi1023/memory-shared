@@ -11,8 +11,6 @@ class MreadManagement extends Model
 
     protected $fillable = ['message_id', 'own_id', 'user_id', 'created_at', 'updated_at'];
     protected $table = 'mread_managements';
-    // プライマリキー設定
-    protected $primaryKey = ['message_id', 'user_id'];
     // increment無効化
     public $incrementing = false;
 

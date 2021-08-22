@@ -4,7 +4,7 @@ namespace App\Repositories\MreadManagement;
 
 use App\Models\MreadManagement;
 use App\Repositories\BaseRepository;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MreadManagementRepository extends BaseRepository implements MreadManagementRepositoryInterface
 {
@@ -39,16 +39,18 @@ class MreadManagementRepository extends BaseRepository implements MreadManagemen
     /**
      * データ削除()
      * 引数1：検索条件
-     * 引数2：削除対象データのメッセージID(型：配列)
+     * 引数2：削除対象データのメッセージ
      */
-    public function delete($conditions, $message_id_list)
+    public function delete($key, $messages)
     {
-        foreach($message_id_list as $id) {
+        foreach($messages as $message) {
             // 検索条件のmessage_idを更新
-            $conditions['message_id'] = $id;
-
-            $model = $this->baseSearchFirst($conditions);
-            $model->delete();
+            $key['message_id'] = $message->message_id;
+            
+            DB::delete(
+                'delete from mread_managements WHERE message_id = ? AND own_id = ? AND user_id = ?', 
+                [$key['message_id'], $key['own_id'], $key['user_id']]
+            );
         }
         return;
     }

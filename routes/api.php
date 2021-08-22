@@ -32,6 +32,8 @@ Route::get('/users/{user}/messages', 'Api\UserController@messages')->name('users
 // Route::post('/groups/{group}/history',       'Api\GroupHistoryController@store');
 // Route::put('/groups/{group}/history',       'Api\GroupHistoryController@update');
 // Route::resource('/news',       'Api\NewsController');
+Route::post('users/{user}/messages/mread',       'Api\MreadManagementController@destroy');
+// Route::post('/news/{news}/nread',       'Api\NreadManagementController@destroy');
 
  /************************************************
  *  アプリ側ルーティング(ログイン)
@@ -70,7 +72,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/messages/validate',  'Api\MessageHistoryController@messageValidate');
 
     /********** メッセージ用未読管理(mread_managements) **********/
-    Route::post('/messages/{user}/mread',       'Api\MreadManagementController@destroy');
+    // Route::post('users/{user}/messages/mread',       'Api\MreadManagementController@destroy');
 
     /********** ニュース管理(news) **********/
     Route::resource('/news',       'Api\NewsController');
