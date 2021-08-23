@@ -87,10 +87,10 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
     }
 
     /**
-     * フレンドIDの取得
+     * ファミリーIDの取得
      * 引数: 検索条件(group_idを指定)
      */
-    public function getFriends($conditions)
+    public function getFamilies($conditions)
     {
         $query = $this->baseSearchQuery($conditions)
                       ->select('user_id')

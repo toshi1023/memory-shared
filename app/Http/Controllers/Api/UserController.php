@@ -386,8 +386,8 @@ class UserController extends Controller
         try {
             // 検索条件
             $mygroup_conditions = [
-                // 'user_id' => Auth::user()->id,  // 本番用
-                'user_id' => $user,                // テスト用
+                'user_id' => Auth::user()->id,  // 本番用
+                // 'user_id' => $user,                // テスト用
                 'status'  => config('const.GroupHistory.APPROVAL')
             ];
 
@@ -396,6 +396,7 @@ class UserController extends Controller
 
             // 検索条件
             $families_conditions['@ingroup_id'] = Common::setInCondition($groups->toArray());
+            $families_conditions['@notuser_id'] = Auth::user()->id;
             // ソート条件
             $order = [];
             if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
@@ -423,8 +424,8 @@ class UserController extends Controller
         try {
             // 検索条件
             $mygroup_conditions = [
-                // 'user_id' => Auth::user()->id,  // 本番用
-                'user_id' => $user,                // テスト用
+                'user_id' => Auth::user()->id,  // 本番用
+                // 'user_id' => $user,                // テスト用
                 'status'  => config('const.GroupHistory.APPROVAL')
             ];
 
@@ -432,15 +433,13 @@ class UserController extends Controller
             $groups = $this->db->getGroups($mygroup_conditions);
 
             // 検索条件
-            $group_conditions['@ingroup_id'] = Common::setInCondition($groups->toArray());
+            $group_conditions['@ingroups.id'] = Common::setInCondition($groups->toArray());
             // ソート条件
             $order = [];
             if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
-
+            
             // 参加中グループ情報取得
             $data = $this->db->getParticipating($group_conditions, $order);
-
-            // 参加中グループの人数を取得
             
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
@@ -460,8 +459,8 @@ class UserController extends Controller
     public function messages(Request $request, $user)
     {
         try {
-            // $data = $this->db->getMessageList(Auth::user()->id);
-            $data = $this->db->getMessageList($user);
+            $data = $this->db->getMessageList(Auth::user()->id);
+            // $data = $this->db->getMessageList($user);
             
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {

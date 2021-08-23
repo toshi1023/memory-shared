@@ -8,6 +8,7 @@ use App\Repositories\GroupHistory\GroupHistoryRepositoryInterface;
 use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\MessageHistory\MessageHistoryRepositoryInterface;
 use App\Lib\Common;
+use Illuminate\Support\Facades\Auth;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
@@ -102,10 +103,10 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function getFamilies($conditions, $order=[], bool $softDelete=false)
     {
-        // フレンドのIDを取得
+        // ファミリーのIDを取得
         $groupHistoryRepository = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
 
-        $users = $groupHistoryRepository->getFriends($conditions);
+        $users = $groupHistoryRepository->getFamilies($conditions);
 
         // 取得したフレンドIDを検索条件に設定
         $friends_conditions['@inid'] = Common::setInCondition($users->toArray());
@@ -121,17 +122,20 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function getParticipating($conditions, $order=[], bool $softDelete=false)
     {
-        // フレンドのIDを取得
-        $groupHistoryRepository = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
-
-        $groups = $groupHistoryRepository->getParticipating($conditions);
-
-        // 取得したグループIDを検索条件に設定
-        $groups_conditions['@inid'] = Common::setInCondition($groups->toArray());
         // グループの取得
         $groupRepository = $this->baseGetRepository(GroupRepositoryInterface::class);
-
-        return $groupRepository->searchQuery($groups_conditions, $order, $softDelete);
+        
+        return $groupRepository->baseSearchQuery($conditions, $order, $softDelete)
+                               ->with([
+                                   'users:id,name,image_file,gender',
+                                   'groupHistories' => function ($query) {
+                                    $query->select('*')
+                                          ->where('status', '=', config('const.GroupHistory.APPROVAL'))
+                                          ->where('user_id', '!=', Auth::user()->id)
+                                          ->whereNull('deleted_at');
+                                    }
+                               ])
+                               ->get();
     }
 
     /**

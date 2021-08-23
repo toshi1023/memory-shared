@@ -16,6 +16,6 @@ interface GroupHistoryRepositoryInterface
     public function baseForceDelete($id);
     public function save($data, $model=null);
     public function saveGroupInfo($user_id, $group_name, $status);
-    public function getFriends($conditions);
+    public function getFamilies($conditions);
     public function delete($group_id);
 }

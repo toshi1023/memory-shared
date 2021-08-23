@@ -33,6 +33,15 @@ class Group extends Model
     {
         return $this->belongsToMany('App\Models\User', 'group_histories', 'group_id')
                     ->where('users.id', '=', Auth::user()->id)
+                    // ->where('users.id', '=', 1)
                     ->withPivot('status', 'created_at', 'updated_at');
+    }
+
+    /**
+     * group_historiesテーブルと1対多のリレーション構築(1側の設定)
+     */
+    public function groupHistories()
+    {
+        return $this->hasMany('App\Models\GroupHistory', 'group_id', 'id');
     }
 }
