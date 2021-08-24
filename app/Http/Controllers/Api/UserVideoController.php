@@ -48,7 +48,6 @@ class UserVideoController extends Controller
                 // データの保存処理(仮保存)
                 $userVideo = UserVideo::create([
                     'user_id'       => $request->input('user_id'),
-                    'title'         => $request->input('title') ? $request->input('title') : config('const.UserVideo.TITLE'),
                     'album_id'      => $request->input('album_id'),
                     'image_file'    => config('const.UserVideo.BEFORE_SAVE_NAME'),
                     'black_list'    => $blacklist,

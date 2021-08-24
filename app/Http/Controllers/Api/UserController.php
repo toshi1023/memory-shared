@@ -287,7 +287,7 @@ class UserController extends Controller
     
             $data = $request->all();
             $data['image_file'] = $filename;
-    
+            
             // データの保存処理
             $this->db->save($data);
 

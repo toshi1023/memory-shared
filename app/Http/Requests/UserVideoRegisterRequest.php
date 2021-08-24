@@ -28,8 +28,7 @@ class UserVideoRegisterRequest extends FormRequest
     {
         return [
             // 動画のバリデーションチェック
-            'image_file'       => ['required', 'max:20480'],
-            'title'            => ['max:50'],
+            'image_file'       => ['required', 'max:204800'],  // max: 200MB
             'user_id'          => ['required', new UserImageUploadRule]
         ];
     }
@@ -40,7 +39,7 @@ class UserVideoRegisterRequest extends FormRequest
     public function messages()
     {
         return [
-            "image_file.max"                => "動画のサイズは20MBを超えることはできません",
+            "image_file.max"                => "動画のサイズは100MBを超えることはできません",
         ];
     }
 
