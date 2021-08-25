@@ -38,6 +38,7 @@ class GroupFactory extends Factory
             'name'              => $this->faker->colorName,
             'description'       => $description[$this->faker->numberBetween(0, 9)],
             'private_flg'       => $this->faker->numberBetween(0, 1),
+            'welcome_flg'       => $this->faker->numberBetween(0, 1),
             'host_user_id'      => $this->faker->numberBetween(1, 10),
             'update_user_id'    => $this->faker->numberBetween(1, 10),
         ];

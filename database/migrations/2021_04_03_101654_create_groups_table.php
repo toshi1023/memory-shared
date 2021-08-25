@@ -19,6 +19,7 @@ class CreateGroupsTable extends Migration
             $table->string('name')->comment('グループ名');              // 本番では削除
             $table->text('description')->nullable()->comment('紹介文');
             $table->boolean('private_flg')->default(0)->comment('公開フラグ');
+            $table->boolean('welcome_flg')->default(0)->comment('歓迎フラグ');
             $table->string('image_file')->nullable()->comment('画像名');
             $table->integer('host_user_id')->unsigned()->nullable()->comment('ホストID');
             $table->text('memo')->nullable()->comment('備考');
