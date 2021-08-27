@@ -60,7 +60,7 @@ class GroupController extends Controller
     public function show(Request $request, $group)
     {
         try {
-            $data = $this->db->baseSearchFirst(['id' => $group]);
+            $data = $this->db->searchFirst(['id' => $group]);
 
             // グループが存在しない場合
             if(empty($data)) {
