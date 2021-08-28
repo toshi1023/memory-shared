@@ -28,6 +28,10 @@ use App\Repositories\MreadManagement\MreadManagementRepositoryInterface;
 use App\Repositories\MreadManagement\MreadManagementRepository;
 use App\Repositories\NreadManagement\NreadManagementRepositoryInterface;
 use App\Repositories\NreadManagement\NreadManagementRepository;
+use App\Repositories\Post\PostRepositoryInterface;
+use App\Repositories\Post\PostRepository;
+use App\Repositories\PostComment\PostCommentRepositoryInterface;
+use App\Repositories\PostComment\PostCommentRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -50,6 +54,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(MessageRelationRepositoryInterface::class, MessageRelationRepository::class);
         $this->app->singleton(NreadManagementRepositoryInterface::class, NreadManagementRepository::class);
         $this->app->singleton(MreadManagementRepositoryInterface::class, MreadManagementRepository::class);
+        $this->app->singleton(PostRepositoryInterface::class, PostRepository::class);
+        $this->app->singleton(PostCommentRepositoryInterface::class, PostCommentRepository::class);
     }
 
     /**

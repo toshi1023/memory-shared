@@ -13,4 +13,12 @@ class Post extends Model
 
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
+
+    /**
+     * post_commentsテーブルと1対多のリレーション構築(1側の設定)
+     */
+    public function postComments()
+    {
+        return $this->hasMany('App\Models\PostComment', 'post_id', 'id');
+    }
 }
