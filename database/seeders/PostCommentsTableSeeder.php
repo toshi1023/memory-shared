@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class NewsTableSeeder extends Seeder
+class PostCommentsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,6 +13,6 @@ class NewsTableSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\News::factory(20)->create();
+        \App\Models\PostComment::factory(20)->create();
     }
 }

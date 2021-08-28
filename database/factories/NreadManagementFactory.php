@@ -22,8 +22,8 @@ class NreadManagementFactory extends Factory
     public function definition()
     {
         return [
-            'news_user_id'      => $this->faker->numberBetween(0, 10),
-            'news_id'           => $this->faker->numberBetween(1, 5),
+            'news_user_id'      => $this->faker->numberBetween(0, 20),
+            'news_id'           => $this->faker->numberBetween(1, 10),
             'user_id'           => $this->faker->numberBetween(1, 10),
         ];
     }
