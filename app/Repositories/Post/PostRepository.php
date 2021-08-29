@@ -4,8 +4,8 @@ namespace App\Repositories\Post;
 
 use App\Models\Post;
 use App\Repositories\BaseRepository;
-use App\Repositories\NreadManagement\NreadManagementRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\Group\GroupRepositoryInterface;
 
 class PostRepository extends BaseRepository implements PostRepositoryInterface
 {
@@ -47,77 +47,24 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
     }
 
     /**
-     * 掲示板投稿通知のデータ保存
-     * 引数1：ユーザID, 引数2：グループ名
+     * 投稿通知のデータ保存
+     * 引数1：ユーザID, 引数2：グループ名, 引数3：申請ステータス
      */
-    public function savePostInfo($user_id, $group_name, $status)
+    public function savePostInfo($user_id, $user_name, $group_name)
     {
-        $title = $group_name.'の掲示板が新規投稿されました';
-        $content = $group_name.'の掲示板に新たな投稿が追加されました。掲示板にて内容を確認することが出来ます';
-        
-        $data = [
-            'user_id'           => $user_id,
-            'news_id'           => $this->getNewsId($user_id),
-            'title'             => $title,
-            'content'           => $content,
-            'update_user_id'    => $user_id
-        ];
-        $data = $this->baseSave($data);
+        $newsRepository = $this->baseGetRepository(NewsRepositoryInterface::class);
 
-        // 未読管理テーブルに保存
-        $nreadRepository = $this->baseGetRepository(NreadManagementRepositoryInterface::class);
-
-        $nreadData = [
-            'news_user_id'  => $data->user_id,
-            'news_id'       => $data->news_id,
-            'user_id'       => $data->user_id
-        ];
-        $nreadRepository->save($nreadData);
-
-        return;
+        return $newsRepository->savePostInfo($user_id, $user_name, $group_name);
     }
 
     /**
-     * 全体向けニュース作成時の未読管理データ保存
-     * 引数1：保存データ, 引数2：ユーザデータ
+     * グループ情報の取得
+     * 引数：グループID
      */
-    public function savePublicNread($data, $users)
+    public function getGroupInfo($group_id)
     {
-        // 未読管理テーブルに保存
-        $nreadRepository = $this->baseGetRepository(NreadManagementRepositoryInterface::class);
+        $groupRepository = $this->baseGetRepository(GroupRepositoryInterface::class);
 
-        foreach($users as $user) {
-            $data['user_id'] = $user->id;
-            $nreadRepository->save($data);
-        }
-        return;
-    }
-
-    /**
-     * データ削除
-     */
-    public function delete($user_id, $news_id)
-    {
-        $model = $this->baseSearchFirst(['user_id' => $user_id, 'news_id' => $news_id]);
-        
-        return $model->delete();
-    }
-
-    /**
-     * 新規保存用のニュースIDの取得
-     * 引数：ユーザID
-     */
-    public function getNewsId(int $user_id = 0)
-    {
-        return $this->baseSearchFirst(['user_id' => $user_id], ['news_id' => 'desc'])->news_id + 1;
-    }
-
-    /**
-     * 全ユーザ情報の取得
-     */
-    public function getAllUser()
-    {
-        $userRepository = $this->baseGetRepository(UserRepositoryInterface::class);
-        return $userRepository->searchQuery();
+        return $groupRepository->baseSearchFirst(['id' => $group_id]);
     }
 }

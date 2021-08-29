@@ -96,6 +96,22 @@ return [
         'DELETE_INFO'        => 'ニュースの削除が完了しました',
         'DELETE_ERR'         => 'サーバーエラーによりニュースの削除に失敗しました。管理者にお問い合わせください'
     ],
+    // Post関連で使用する定数
+    'Post' => [
+        'GET_ERR'            => '投稿を取得出来ませんでした',
+        'REGISTER_INFO'      => '投稿を登録しました',
+        'REGISTER_ERR'       => '投稿の登録に失敗しました',
+        'DELETE_INFO'        => '投稿の削除が完了しました',
+        'DELETE_ERR'         => 'サーバーエラーにより投稿の削除に失敗しました。管理者にお問い合わせください'
+    ],
+    // PostComment関連で使用する定数
+    'PostComment' => [
+        'GET_ERR'            => 'コメントを取得出来ませんでした',
+        'REGISTER_INFO'      => 'コメントを登録しました',
+        'REGISTER_ERR'       => 'コメントの登録に失敗しました',
+        'DELETE_INFO'        => 'コメントの削除が完了しました',
+        'DELETE_ERR'         => 'サーバーエラーによりコメントの削除に失敗しました。管理者にお問い合わせください'
+    ],
     // PushHistory関連で使用する定数
     'PushHistory' => [
         'EVERYONE'      => 1,

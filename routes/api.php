@@ -80,4 +80,10 @@ Route::middleware('auth:sanctum')->group(function(){
 
     /********** ニュース用未読管理(nread_managements) **********/
     Route::post('/news/{news}/nread',       'Api\NreadManagementController@destroy');
+
+    /********** 投稿管理(posts) **********/
+    Route::resource('/groups/{group}/posts',       'Api\PostController')->only('index', 'store', 'destroy');
+
+    /********** 投稿のコメント管理(post_comments) **********/
+    Route::resource('/groups/{group}/posts/{post}/comments',       'Api\PostCommentController')->only('index', 'store', 'destroy');
 });

@@ -94,6 +94,37 @@ class NewsRepository extends BaseRepository implements NewsRepositoryInterface
     }
 
     /**
+     * 掲示板投稿通知のデータ保存
+     * 引数1：ユーザID, 引数2: ユーザ名, 引数3：グループ名
+     */
+    public function savePostInfo($user_id, $user_name, $group_name)
+    {
+        $title = $group_name.'の掲示板が新規投稿されました';
+        $content = $user_name.'さんが'.$group_name.'の掲示板に新たな投稿が追加されました。掲示板にて内容を確認することが出来ます';
+        
+        $data = [
+            'user_id'           => $user_id,
+            'news_id'           => $this->getNewsId($user_id),
+            'title'             => $title,
+            'content'           => $content,
+            'update_user_id'    => $user_id
+        ];
+        $data = $this->baseSave($data);
+
+        // 未読管理テーブルに保存
+        $nreadRepository = $this->baseGetRepository(NreadManagementRepositoryInterface::class);
+
+        $nreadData = [
+            'news_user_id'  => $data->user_id,
+            'news_id'       => $data->news_id,
+            'user_id'       => $data->user_id
+        ];
+        $nreadRepository->save($nreadData);
+
+        return;
+    }
+
+    /**
      * 全体向けニュース作成時の未読管理データ保存
      * 引数1：保存データ, 引数2：ユーザデータ
      */
