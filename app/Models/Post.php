@@ -19,6 +19,15 @@ class Post extends Model
      */
     public function postComments()
     {
-        return $this->hasMany('App\Models\PostComment', 'post_id', 'id');
+        return $this->hasMany('App\Models\PostComment', 'post_id', 'id')
+                    ->with(['user:id,name,image_file']);
+    }
+
+    /**
+     * usersテーブルと1対多のリレーション構築(多側の設定)
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id', 'id');
     }
 }

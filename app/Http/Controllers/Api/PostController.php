@@ -70,8 +70,7 @@ class PostController extends Controller
             $groupMember = $this->db->getGroupMember($group);
 
             foreach($groupMember as $value) {
-                // $this->db->savePostInfo($value->user_id, Auth::user()->name, $groupInfo->name, Auth::user()->id);
-                $this->db->savePostInfo($value->user_id, 'root', $groupInfo->name, 1);
+                $this->db->savePostInfo($value->user_id, Auth::user()->name, $groupInfo->name, Auth::user()->id);
             }
 
             DB::commit();

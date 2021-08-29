@@ -26,7 +26,7 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
     public function searchQuery($conditions=[], $order=[], bool $softDelete=false)
     {
         return $this->baseSearchQuery($conditions, $order, $softDelete)
-                    ->with(['postComments'])
+                    ->with(['user:id,name,image_file','postComments'])
                     ->get();
     }
 
@@ -37,7 +37,7 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
     public function searchFirst($conditions=[], $order=[], bool $softDelete=false)
     {
         return $this->baseSearchQuery($conditions, $order, $softDelete)
-                    ->with(['postComments'])
+                    ->with(['user:id,name,image_file','postComments'])
                     ->first();
     }
     

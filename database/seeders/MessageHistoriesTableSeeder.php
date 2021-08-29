@@ -13,6 +13,6 @@ class MessageHistoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\MessageHistory::factory(30)->create();
+        \App\Models\MessageHistory::factory(50)->create();
     }
 }
