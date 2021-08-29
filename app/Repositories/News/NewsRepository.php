@@ -6,6 +6,7 @@ use App\Models\News;
 use App\Repositories\BaseRepository;
 use App\Repositories\NreadManagement\NreadManagementRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 class NewsRepository extends BaseRepository implements NewsRepositoryInterface
 {
@@ -51,9 +52,15 @@ class NewsRepository extends BaseRepository implements NewsRepositoryInterface
     /**
      * データ保存
      */
-    public function save($data, $model=null)
+    public function save($data)
     {
-        return $this->baseSave($data, $model);
+        return News::create([
+            'user_id'           => $data['user_id'],
+            'news_id'           => $data['news_id'],
+            'title'             => $data['title'],
+            'content'           => $data['content'],
+            'update_user_id'    => $data['update_user_id']
+        ]);
     }
 
     /**
@@ -78,6 +85,7 @@ class NewsRepository extends BaseRepository implements NewsRepositoryInterface
             'content'           => $content,
             'update_user_id'    => $user_id
         ];
+        
         $data = $this->baseSave($data);
 
         // 未読管理テーブルに保存
@@ -95,21 +103,21 @@ class NewsRepository extends BaseRepository implements NewsRepositoryInterface
 
     /**
      * 掲示板投稿通知のデータ保存
-     * 引数1：ユーザID, 引数2: ユーザ名, 引数3：グループ名
+     * 引数1：ユーザID, 引数2: ユーザ名, 引数3：グループ名, 引数4: 更新者ユーザID
      */
-    public function savePostInfo($user_id, $user_name, $group_name)
+    public function savePostInfo($user_id, $user_name, $group_name, $update_user_id)
     {
         $title = $group_name.'の掲示板が新規投稿されました';
-        $content = $user_name.'さんが'.$group_name.'の掲示板に新たな投稿が追加されました。掲示板にて内容を確認することが出来ます';
+        $content = $user_name.'さんが'.$group_name.'の掲示板に新たな投稿を追加しました。掲示板にて内容を確認することが出来ます';
         
         $data = [
             'user_id'           => $user_id,
             'news_id'           => $this->getNewsId($user_id),
             'title'             => $title,
             'content'           => $content,
-            'update_user_id'    => $user_id
+            'update_user_id'    => $update_user_id
         ];
-        $data = $this->baseSave($data);
+        $data = $this->save($data);
 
         // 未読管理テーブルに保存
         $nreadRepository = $this->baseGetRepository(NreadManagementRepositoryInterface::class);
@@ -142,12 +150,23 @@ class NewsRepository extends BaseRepository implements NewsRepositoryInterface
 
     /**
      * データ削除
+     * key: [news_id, user_id]
      */
-    public function delete($user_id, $news_id)
+    public function delete($key)
     {
-        $model = $this->baseSearchFirst(['user_id' => $user_id, 'news_id' => $news_id]);
-        
-        return $model->delete();
+        DB::delete(
+            'delete from news WHERE news_id = ? AND user_id = ?', 
+            [$key['news_id'], $key['user_id']]
+        );
+
+        // 未読管理テーブルも削除を実行
+        $nrkey = $key;
+        $nrkey['news_user_id'] = $key['user_id'];
+
+        $nreadRepository = $this->baseGetRepository(NreadManagementRepositoryInterface::class);
+        $nreadRepository->delete($nrkey);
+
+        return;
     }
 
     /**
@@ -156,7 +175,10 @@ class NewsRepository extends BaseRepository implements NewsRepositoryInterface
      */
     public function getNewsId(int $user_id = 0)
     {
-        return $this->baseSearchFirst(['user_id' => $user_id], ['news_id' => 'desc'])->news_id + 1;
+        if($this->baseSearchExists(['user_id' => $user_id])) {
+            return $this->baseSearchFirst(['user_id' => $user_id], ['news_id' => 'desc'])->news_id + 1;
+        }
+        return 1;
     }
 
     /**

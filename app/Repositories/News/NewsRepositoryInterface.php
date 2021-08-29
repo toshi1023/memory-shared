@@ -9,11 +9,11 @@ interface NewsRepositoryInterface
     public function baseSearchFirst($conditions=[], $order=[], bool $softDelete=false);
     public function baseSearchQueryLimit($conditions=[], $order=[], int $limit=10);
     public function baseSearchQueryPaginate($conditions=[], $order=[], int $paginate=10);
-    public function save($data, $model=null);
+    public function save($data);
     public function saveGroupInfo($user_id, $group_name, $status);
-    public function savePostInfo($user_id, $user_name, $group_name);
+    public function savePostInfo($user_id, $user_name, $group_name, $update_user_id);
     public function savePublicNread($data, $users);
-    public function delete($user_id, $news_id);
+    public function delete($key);
     public function baseAdminCertification($onetime_password);
     public function getNewsId(int $user_id = 0);
     public function getAllUser();

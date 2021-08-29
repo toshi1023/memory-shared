@@ -31,9 +31,10 @@ Route::resource('/users',       'Api\UserController');
 // Route::resource('/messages',       'Api\MessageHistoryController')->only('index', 'store', 'destroy');
 // Route::post('/groups/{group}/history',       'Api\GroupHistoryController@store');
 // Route::put('/groups/{group}/history',       'Api\GroupHistoryController@update');
-// Route::resource('/news',       'Api\NewsController');
+Route::resource('/news',       'Api\NewsController');
 // Route::post('users/{user}/messages/mread',       'Api\MreadManagementController@destroy');
 // Route::post('/news/{news}/nread',       'Api\NreadManagementController@destroy');
+Route::resource('/groups/{group}/posts',       'Api\PostController')->only('index', 'store', 'destroy');
 
  /************************************************
  *  アプリ側ルーティング(ログイン)
@@ -75,14 +76,14 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('users/{user}/messages/mread',       'Api\MreadManagementController@destroy');
 
     /********** ニュース管理(news) **********/
-    Route::resource('/news',       'Api\NewsController');
+    // Route::resource('/news',       'Api\NewsController');
     Route::post('/news/validate',  'Api\NewsController@newsValidate');
 
     /********** ニュース用未読管理(nread_managements) **********/
     Route::post('/news/{news}/nread',       'Api\NreadManagementController@destroy');
 
     /********** 投稿管理(posts) **********/
-    Route::resource('/groups/{group}/posts',       'Api\PostController')->only('index', 'store', 'destroy');
+    // Route::resource('/groups/{group}/posts',       'Api\PostController')->only('index', 'store', 'destroy');
 
     /********** 投稿のコメント管理(post_comments) **********/
     Route::resource('/groups/{group}/posts/{post}/comments',       'Api\PostCommentController')->only('index', 'store', 'destroy');

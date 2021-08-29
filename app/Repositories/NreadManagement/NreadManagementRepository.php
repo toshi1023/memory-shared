@@ -50,16 +50,15 @@ class NreadManagementRepository extends BaseRepository implements NreadManagemen
 
     /**
      * データ削除
+     * key: [news_user_id, news_id, user_id] 
      */
     public function delete($key)
     {
-        // $model = $this->baseSearchFirst($conditions);
-        
-        // return $model->delete();
-
         DB::delete(
             'delete from nread_managements WHERE news_user_id = ? AND news_id = ? AND user_id = ?', 
             [$key['news_user_id'], $key['news_id'], $key['user_id']]
         );
+
+        return;
     }
 }

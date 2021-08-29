@@ -38,7 +38,7 @@ class MreadManagementRepository extends BaseRepository implements MreadManagemen
 
     /**
      * データ削除()
-     * 引数1：検索条件
+     * 引数1：検索条件(key: [message_id, own_id, user_id])
      * 引数2：削除対象データのメッセージ
      */
     public function delete($key, $messages)

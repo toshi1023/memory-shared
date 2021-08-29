@@ -180,19 +180,22 @@ class NewsController extends Controller
     {
         try {
             // バリデーションチェック
-            if(Auth::user()->status !== config('const.User.ADMIN')) throw new Exception('管理者権限のないユーザがニュースの削除を実行しようとしました');
-            if(!$this->db->baseAdminCertification($request->onetime_password)) throw new Exception('ワンタイムパスワードの不一致により、管理者認証に失敗しました');
-
+            // if(Auth::user()->status !== config('const.User.ADMIN')) throw new Exception('管理者権限のないユーザがニュースの削除を実行しようとしました');
+            // if(!$this->db->baseAdminCertification($request->onetime_password)) throw new Exception('ワンタイムパスワードの不一致により、管理者認証に失敗しました');
+            
             DB::beginTransaction();
 
-            $user_id = 0;
+            $key = [
+                'news_id' => $news
+            ];
+            $key['user_id'] = 0;
             // 全体用以外のニュースを削除する場合
             if($request->user_id) {
-                $user_id = $request->user_id;
+                $key['user_id'] = $request->user_id;
             }
 
             // データ削除
-            $this->db->delete($user_id, $news);
+            $this->db->delete($key);
             
             DB::commit();
             return response()->json(['info_message' => config('const.News.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);

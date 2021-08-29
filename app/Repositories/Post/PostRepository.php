@@ -5,7 +5,9 @@ namespace App\Repositories\Post;
 use App\Models\Post;
 use App\Repositories\BaseRepository;
 use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\News\NewsRepositoryInterface;
 use App\Repositories\Group\GroupRepositoryInterface;
+use App\Repositories\GroupHistory\GroupHistoryRepositoryInterface;
 
 class PostRepository extends BaseRepository implements PostRepositoryInterface
 {
@@ -50,11 +52,11 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
      * 投稿通知のデータ保存
      * 引数1：ユーザID, 引数2：グループ名, 引数3：申請ステータス
      */
-    public function savePostInfo($user_id, $user_name, $group_name)
+    public function savePostInfo($user_id, $user_name, $group_name, $update_user_id)
     {
         $newsRepository = $this->baseGetRepository(NewsRepositoryInterface::class);
 
-        return $newsRepository->savePostInfo($user_id, $user_name, $group_name);
+        return $newsRepository->savePostInfo($user_id, $user_name, $group_name, $update_user_id);
     }
 
     /**
@@ -66,5 +68,31 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
         $groupRepository = $this->baseGetRepository(GroupRepositoryInterface::class);
 
         return $groupRepository->baseSearchFirst(['id' => $group_id]);
+    }
+
+    /**
+     * グループのメンバー情報の取得
+     * 引数：グループID
+     */
+    public function getGroupMember($group_id)
+    {
+        $ghRepository = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
+
+        return $ghRepository->searchQuery(['group_id' => $group_id, 'status' => config('const.GroupHistory.APPROVAL')]);
+    }
+
+    /**
+     * グループ参加確認
+     * 引数1: ユーザID, 引数2：グループID
+     */
+    public function confirmGroupMember($user_id, $group_id)
+    {
+        $ghRepository = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
+
+        return $ghRepository->baseSearchQuery([
+            'user_id'  => $user_id, 
+            'group_id' => $group_id, 
+            'status'   => config('const.GroupHistory.APPROVAL')
+        ])->exists();
     }
 }
