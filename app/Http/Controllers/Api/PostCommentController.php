@@ -80,40 +80,6 @@ class PostCommentController extends Controller
     }
 
     /**
-     * 投稿コメント更新処理用アクション
-     * 引数2: 投稿ID
-     */
-    // public function update(Request $request, $group, $post, $comment)
-    // {
-    //     DB::beginTransaction();
-    //     try {
-    //         $data = $request->all();
-
-    //         $data['id'] = $comment;
-    //         $data['post_id'] = $post;
-    //         $data['user_id'] = Auth::user()->id;
-    //         $data['update_user_id'] = Auth::user()->id;
-            
-    //         // データの保存処理
-    //         $this->db->save($data);
-
-    //         DB::commit();
-    //         return response()->json([
-    //             'info_message' => config('const.News.REGISTER_INFO'),
-    //         ], 200, [], JSON_UNESCAPED_UNICODE);
-    //     } catch (Exception $e) {
-    //         DB::rollback();
-    //         Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
-
-    //         // 作成失敗時はエラーメッセージを返す
-    //         return response()->json([
-    //           'error_message' => config('const.News.REGISTER_ERR'),
-    //           'status'        => 500,
-    //         ], 500, [], JSON_UNESCAPED_UNICODE);
-    //     }
-    // }
-
-    /**
      * 投稿コメントの削除用アクション
      * 引数2: 投稿ID
      */

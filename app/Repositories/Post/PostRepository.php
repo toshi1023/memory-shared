@@ -8,6 +8,7 @@ use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\News\NewsRepositoryInterface;
 use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\GroupHistory\GroupHistoryRepositoryInterface;
+use App\Repositories\PostComment\PostCommentRepositoryInterface;
 
 class PostRepository extends BaseRepository implements PostRepositoryInterface
 {
@@ -94,5 +95,27 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
             'group_id' => $group_id, 
             'status'   => config('const.GroupHistory.APPROVAL')
         ])->exists();
+    }
+
+    /**
+     * コメント情報の取得
+     * 引数：投稿ID
+     */
+    public function getPostComment($post_id)
+    {
+        $pcRepository = $this->baseGetRepository(PostCommentRepositoryInterface::class);
+
+        return $pcRepository->baseSearchQuery(['post_id' => $post_id])->get();
+    }
+
+    /**
+     * コメント情報の削除
+     * 引数：コメントID
+     */
+    public function deletePostComment($comment_id)
+    {
+        $pcRepository = $this->baseGetRepository(PostCommentRepositoryInterface::class);
+
+        return $pcRepository->baseDelete($comment_id);
     }
 }

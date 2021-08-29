@@ -180,8 +180,8 @@ class NewsController extends Controller
     {
         try {
             // バリデーションチェック
-            // if(Auth::user()->status !== config('const.User.ADMIN')) throw new Exception('管理者権限のないユーザがニュースの削除を実行しようとしました');
-            // if(!$this->db->baseAdminCertification($request->onetime_password)) throw new Exception('ワンタイムパスワードの不一致により、管理者認証に失敗しました');
+            if(Auth::user()->status !== config('const.User.ADMIN')) throw new Exception('管理者権限のないユーザがニュースの削除を実行しようとしました');
+            if(!$this->db->baseAdminCertification($request->onetime_password)) throw new Exception('ワンタイムパスワードの不一致により、管理者認証に失敗しました');
             
             DB::beginTransaction();
 

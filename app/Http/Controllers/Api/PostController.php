@@ -59,10 +59,8 @@ class PostController extends Controller
             $data = $request->all();
 
             $data['group_id'] = $group;
-            // $data['user_id'] = Auth::user()->id;
-            // $data['update_user_id'] = Auth::user()->id;
-            $data['user_id'] = 1;
-            $data['update_user_id'] = 1;
+            $data['user_id'] = Auth::user()->id;
+            $data['update_user_id'] = Auth::user()->id;
     
             // データの保存処理
             $data = $this->db->save($data);
@@ -93,40 +91,6 @@ class PostController extends Controller
     }
 
     /**
-     * 投稿更新処理用アクション
-     * 引数2: 投稿ID
-     */
-    // public function update(Request $request, $group, $post)
-    // {
-    //     DB::beginTransaction();
-    //     try {
-    //         $data = $request->all();
-
-    //         $data['id'] = $post;
-    //         $data['group_id'] = $group;
-    //         $data['user_id'] = Auth::user()->id;
-    //         $data['update_user_id'] = Auth::user()->id;
-            
-    //         // データの保存処理
-    //         $this->db->save($data);
-
-    //         DB::commit();
-    //         return response()->json([
-    //             'info_message' => config('const.Post.REGISTER_INFO'),
-    //         ], 200, [], JSON_UNESCAPED_UNICODE);
-    //     } catch (Exception $e) {
-    //         DB::rollback();
-    //         Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
-
-    //         // 作成失敗時はエラーメッセージを返す
-    //         return response()->json([
-    //           'error_message' => config('const.Post.REGISTER_ERR'),
-    //           'status'        => 500,
-    //         ], 500, [], JSON_UNESCAPED_UNICODE);
-    //     }
-    // }
-
-    /**
      * 投稿の削除用アクション
      * 引数2: 投稿ID
      */
@@ -135,13 +99,19 @@ class PostController extends Controller
         try {
             // バリデーションチェック
             $postInfo = $this->db->searchFirst(['id' => $post]);
-            // if(Auth::user()->id !== $postInfo->user_id) throw new Exception('作成者でないユーザが投稿の削除を実行しようとしました');
-            if(1 !== $postInfo->user_id) throw new Exception('作成者でないユーザが投稿の削除を実行しようとしました');
+            if(Auth::user()->id !== $postInfo->user_id) throw new Exception('作成者でないユーザが投稿の削除を実行しようとしました');
 
             DB::beginTransaction();
 
             // データ削除
             $this->db->baseDelete($post);
+
+            // 投稿に紐づくコメントも削除
+            $comments = $this->db->getPostComment($post);
+
+            foreach($comments as $value) {
+                $this->db->deletePostComment($value->id);
+            }
             
             DB::commit();
             return response()->json(['info_message' => config('const.Post.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
