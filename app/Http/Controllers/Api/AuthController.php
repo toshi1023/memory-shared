@@ -33,7 +33,7 @@ class AuthController extends Controller
             ]);
             if($this->getGuard()->attempt($credentials)) {
                 // 管理者の場合はワンタイムパスワードを保存
-                if(Auth::user()->status === 3) {
+                if(Auth::user()->status === config('const.User.ADMIN')) {
                     // ワンタイムパスワード発行
                     $onePass = Common::issueOnetimePassword(false);
                     // ワンタイムパスワードを保存
@@ -44,9 +44,6 @@ class AuthController extends Controller
                 }
                 
                 // セッションに認証情報を生成
-                $user = User::find(Auth::user()->id);
-                $user->tokens()->delete();
-                $token = $user->createToken("login:user{$user->id}")->plainTextToken;
                 $request->session()->regenerate();
 
                 return response()->json([
@@ -70,7 +67,7 @@ class AuthController extends Controller
     public function logout(Request $request) 
     {
         try {
-            if($request->id === Auth::user()->id) {
+            if((int)$request->id === Auth::user()->id) {
                 // 管理者の場合はワンタイムパスワードを削除
                 if(Auth::user()->status === 3) {
                     // ワンタイムパスワードを削除
