@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Lib\Common;
 use App\Jobs\SendEmail;
@@ -30,7 +31,7 @@ class AuthController extends Controller
                 'email' => 'required|email',
                 'password' => 'required'
             ]);
-            if(Auth::attempt($credentials)) {
+            if($this->getGuard()->attempt($credentials)) {
                 // 管理者の場合はワンタイムパスワードを保存
                 if(Auth::user()->status === 3) {
                     // ワンタイムパスワード発行
@@ -42,6 +43,12 @@ class AuthController extends Controller
                     SendEmail::dispatch(['id' => Auth::user()->id, 'email' => Auth::user()->email]);
                 }
                 
+                // セッションに認証情報を生成
+                $user = User::find(Auth::user()->id);
+                $user->tokens()->delete();
+                $token = $user->createToken("login:user{$user->id}")->plainTextToken;
+                $request->session()->regenerate();
+
                 return response()->json([
                     "user" => Auth::user()->id, 
                     "info_message" => config('const.SystemMessage.LOGIN_INFO')
@@ -71,11 +78,23 @@ class AuthController extends Controller
                     $repository->saveOnePass(null, Auth::user()->id);
                 }
 
-                Auth::logout();
+                $this->getGuard()->logout();
+                // セッションから認証情報を無効化
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
                 return response()->json(["info_message" => config('const.SystemMessage.LOGOUT_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
             }
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
         }
+    }
+
+    /**
+     * @return StatefulGuard
+     */
+    private function getGuard()
+    {
+        return Auth::guard(config('auth.defaults.guard'));
     }
 }

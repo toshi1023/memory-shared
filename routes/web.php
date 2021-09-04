@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+/************************************************
+ *  アプリ側ルーティング(非ログイン)
+ ************************************************/
+Route::post('/login', 'Api\AuthController@login')->name('login');
+Route::post('/reset-password/{token}', 'Api\AuthController@passwordReset')->name('passwordReset');
+Route::post('/logout', 'Api\AuthController@logout')->name('logout');

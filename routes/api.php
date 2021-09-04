@@ -14,12 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/************************************************
- *  アプリ側ルーティング(非ログイン)
- ************************************************/
-Route::post('/login', 'Api\AuthController@login')->name('login');
-Route::post('/reset-password/{token}', 'Api\AuthController@passwordReset')->name('passwordReset');
-Route::post('/logout', 'Api\AuthController@logout')->name('logout');
+
 // Route::resource('/users',       'Api\UserController');
 // Route::get('/users/{user}/families', 'Api\UserController@families')->name('users.families');
 // Route::get('/users/{user}/groups',  'Api\UserController@participating')->name('users.participating');
