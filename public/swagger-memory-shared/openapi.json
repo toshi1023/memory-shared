@@ -17,13 +17,6 @@
                         "type": "string"
                     },
                     {
-                        "name": "email",
-                        "in": "query",
-                        "description": "メールアドレスの検索値(あいまい検索に対応)",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
                         "name": "sort_name",
                         "in": "query",
                         "description": "ユーザ名でソート",

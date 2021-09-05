@@ -61,13 +61,6 @@ class UserController extends Controller
      *         type="string"
      *     ),
      *     @OA\Parameter(
-     *         name="email",
-     *         description="メールアドレスの検索値(あいまい検索に対応)",
-     *         in="query",
-     *         required=false,
-     *         type="string"
-     *     ),
-     *     @OA\Parameter(
      *         name="sort_name",
      *         description="ユーザ名でソート",
      *         in="query",
@@ -113,7 +106,7 @@ class UserController extends Controller
             // 検索条件
             $conditions = [];
             $conditions['status'] = config('const.User.MEMBER');
-            if($request->input('email@like') || $request->input('name@like')) $conditions = Common::setConditions($request);
+            if($request->input('name@like')) $conditions = Common::setConditions($request);
             
             // ソート条件
             $order = [];

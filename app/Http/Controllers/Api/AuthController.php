@@ -44,7 +44,7 @@ class AuthController extends Controller
                 }
                 
                 // セッションに認証情報を生成
-                $request->session()->regenerate();
+                // $request->session()->regenerate();
 
                 return response()->json([
                     "user" => Auth::user()->id, 
@@ -77,8 +77,8 @@ class AuthController extends Controller
 
                 $this->getGuard()->logout();
                 // セッションから認証情報を無効化
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
+                // $request->session()->invalidate();
+                // $request->session()->regenerateToken();
 
                 return response()->json(["info_message" => config('const.SystemMessage.LOGOUT_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
             }
