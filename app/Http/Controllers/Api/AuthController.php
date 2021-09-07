@@ -42,9 +42,6 @@ class AuthController extends Controller
                     // ワンタイムパスワードの通知メールを送信
                     SendEmail::dispatch(['id' => Auth::user()->id, 'email' => Auth::user()->email]);
                 }
-                
-                // セッションに認証情報を生成
-                // $request->session()->regenerate();
 
                 return response()->json([
                     "user" => Auth::user()->id, 
@@ -56,6 +53,9 @@ class AuthController extends Controller
             return response()->json(["error_message" => config('const.SystemMessage.LOGIN_ERR')], 401, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            // 認証に失敗した場合
+            return response()->json(["error_message" => config('const.SystemMessage.LOGIN_ERR')], 401, [], JSON_UNESCAPED_UNICODE);
         }
     }
 
@@ -76,14 +76,13 @@ class AuthController extends Controller
                 }
 
                 $this->getGuard()->logout();
-                // セッションから認証情報を無効化
-                // $request->session()->invalidate();
-                // $request->session()->regenerateToken();
 
                 return response()->json(["info_message" => config('const.SystemMessage.LOGOUT_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
             }
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            return response()->json(["error_message" => config('const.SystemMessage.UNEXPECTED_ERR')], 200, [], JSON_UNESCAPED_UNICODE);
         }
     }
 
