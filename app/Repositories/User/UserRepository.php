@@ -49,7 +49,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function searchQueryLimit($conditions=[], $order=[], int $limit=10)
     {
         return $this->baseSearchQuery($conditions, $order, false)
-                    ->select('id', 'name', 'email', 'status', 'image_file')            
+                    ->select('id', 'name', 'email', 'status', 'image_file')
+                    ->with(['families1', 'families2', 'message_relations1', 'message_relations2'])        
                     ->limit($limit);
     }
 
@@ -57,10 +58,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      * ページネーションを設定
      * 引数1: 検索条件, 引数2: ソート条件, 引数3: 表示件数
      */
-    public function searchQueryPaginate($conditions=[], $order=[], int $paginate=10)
+    public function searchQueryPaginate($conditions=[], $order=[], int $paginate=20)
     {
         return $this->baseSearchQuery($conditions, $order, false)
                     ->select('id', 'name', 'email', 'status', 'image_file')
+                    ->with(['families1', 'families2', 'message_relations1', 'message_relations2'])
                     ->paginate($paginate);
     }
 
@@ -98,9 +100,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     /**
      * 参加中のグループの参加者を取得
-     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
+     * 引数1: 検索条件, 引数2: ソート条件
      */
-    public function getFamilies($conditions, $order=[], bool $softDelete=false)
+    public function getFamilies($conditions, $order=[])
     {
         // ファミリーのIDを取得
         $groupHistoryRepository = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
@@ -109,10 +111,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
         // 取得したフレンドIDを検索条件に設定
         $friends_conditions['@inid'] = Common::setInCondition($users->toArray());
-        // $this->modelの値をUserクラスのインスタンスに書き換え
-        $this->baseGetModel(User::class);
 
-        return $this->searchQuery($friends_conditions, $order, $softDelete);
+        return $this->searchQueryPaginate($friends_conditions, $order);
     }
 
     /**

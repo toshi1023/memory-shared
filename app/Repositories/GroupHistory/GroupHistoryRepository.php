@@ -22,7 +22,7 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
      */
     public function searchQuery($conditions=[], $order=[], bool $softDelete=false)
     {
-        return $this->baseSearchQuery($conditions, $order, $softDelete)->get();
+        return $this->baseSearchQuery($conditions, $order, $softDelete)->where('user_id', '!=', config('const.User.ADMIN_ID'))->get();
     }
 
     /**

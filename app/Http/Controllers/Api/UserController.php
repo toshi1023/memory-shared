@@ -112,7 +112,7 @@ class UserController extends Controller
             $order = [];
             if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
     
-            $data = $this->db->searchQuery($conditions, $order);
+            $data = $this->db->searchQueryPaginate($conditions, $order);
             
             return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
@@ -199,7 +199,7 @@ class UserController extends Controller
                 return response()->json(['error_message' => config('const.User.SEARCH_ERR')], 404, [], JSON_UNESCAPED_UNICODE);    
             }
             
-            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['user' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 
@@ -378,8 +378,7 @@ class UserController extends Controller
         try {
             // 検索条件
             $mygroup_conditions = [
-                'user_id' => Auth::user()->id,  // 本番用
-                // 'user_id' => $user,                // テスト用
+                'user_id' => Auth::user()->id,
                 'status'  => config('const.GroupHistory.APPROVAL')
             ];
 
@@ -392,11 +391,11 @@ class UserController extends Controller
             // ソート条件
             $order = [];
             if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
-
+            
             // ファミリー情報取得
             $data = $this->db->getFamilies($families_conditions, $order);
             
-            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['families' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 

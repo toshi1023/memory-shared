@@ -3,6 +3,7 @@
 return [
     // User関連で使用する定数
     'User' => [
+        'ADMIN_ID'      => 1,
         'MEMBER'        => 1,
         'UNSUBSCRIBE'   => 2,
         'ADMIN'         => 3,
