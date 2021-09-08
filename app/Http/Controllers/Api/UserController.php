@@ -189,8 +189,7 @@ class UserController extends Controller
         try {
             // 検索条件の設定
             $conditions = [
-                'id'        => $user,
-                'status'    => config('const.User.MEMBER')
+                'id'        => $user
             ];
             
             $data = $this->db->searchFirst($conditions);

@@ -57,6 +57,7 @@ class User extends Authenticatable
         if($this->image_file) {
             return env('AWS_BUCKET_URL').'/'.config('const.Aws.USER').'/'.$this->name.'/'.$this->image_file;
         }
+        return env('AWS_BUCKET_URL').'/no-image.jpg';
     }
 
     /**
@@ -82,8 +83,7 @@ class User extends Authenticatable
     public function families1()
     {
         // 検索値を設定
-        // $user_id = Auth::user()->id;
-        $user_id = 1;
+        $user_id = Auth::user()->id;
 
         return $this->hasMany('App\Models\Family', 'user_id1', 'id')
                     ->where('user_id2', '=', $user_id);
@@ -96,8 +96,7 @@ class User extends Authenticatable
     public function families2()
     {
         // 検索値を設定
-        // $user_id = Auth::user()->id;
-        $user_id = 1;
+        $user_id = Auth::user()->id;
 
         return $this->hasMany('App\Models\Family', 'user_id2', 'id')
                     ->where('user_id1', '=', $user_id);
@@ -110,8 +109,7 @@ class User extends Authenticatable
     public function message_relations1()
     {
         // 検索値を設定
-        // $user_id = Auth::user()->id;
-        $user_id = 1;
+        $user_id = Auth::user()->id;
 
         return $this->hasMany('App\Models\MessageRelation', 'user_id1', 'id')
                     ->where('user_id2', '=', $user_id);
@@ -124,8 +122,7 @@ class User extends Authenticatable
     public function message_relations2()
     {
         // 検索値を設定
-        // $user_id = Auth::user()->id;
-        $user_id = 1;
+        $user_id = Auth::user()->id;
 
         return $this->hasMany('App\Models\MessageRelation', 'user_id2', 'id')
                     ->where('user_id1', '=', $user_id);

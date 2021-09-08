@@ -25,9 +25,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function searchQuery($conditions=[], $order=[], bool $softDelete=false)
     {
-        $user_id = 1;
         return $this->baseSearchQuery($conditions, $order, $softDelete)
-                    ->select('id', 'name', 'email', 'status', 'image_file')
+                    ->select('id', 'name', 'hobby', 'gender', 'description', 'status', 'image_file')
                     ->with(['families1', 'families2', 'message_relations1', 'message_relations2'])
                     ->get();
     }
@@ -39,7 +38,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function searchFirst($conditions=[], $order=[], bool $softDelete=false)
     {
         return $this->baseSearchQuery($conditions, $order, $softDelete)
-                    ->select('id', 'name', 'email', 'status', 'image_file')
+                    ->select('id', 'name', 'hobby', 'gender', 'description', 'status', 'image_file')
                     ->first();
     }
 
