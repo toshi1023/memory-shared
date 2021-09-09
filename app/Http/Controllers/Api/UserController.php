@@ -415,8 +415,7 @@ class UserController extends Controller
         try {
             // 検索条件
             $mygroup_conditions = [
-                'user_id' => Auth::user()->id,  // 本番用
-                // 'user_id' => $user,                // テスト用
+                'user_id' => Auth::user()->id,
                 'status'  => config('const.GroupHistory.APPROVAL')
             ];
 
@@ -432,7 +431,7 @@ class UserController extends Controller
             // 参加中グループ情報取得
             $data = $this->db->getParticipating($group_conditions, $order);
             
-            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['participants' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 
@@ -451,9 +450,8 @@ class UserController extends Controller
     {
         try {
             $data = $this->db->getMessageList(Auth::user()->id);
-            // $data = $this->db->getMessageList($user);
             
-            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['talklist' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 

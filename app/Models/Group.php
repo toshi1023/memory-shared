@@ -24,6 +24,7 @@ class Group extends Model
         if($this->image_file) {
             return env('AWS_BUCKET_URL').'/'.config('const.Aws.GROUP').'/'.$this->host_user_id.'/'.$this->image_file;
         }
+        return env('AWS_BUCKET_URL').'/no-image.jpg';
     }
 
     /**
@@ -33,7 +34,6 @@ class Group extends Model
     {
         return $this->belongsToMany('App\Models\User', 'group_histories', 'group_id')
                     ->where('users.id', '=', Auth::user()->id)
-                    // ->where('users.id', '=', 1)
                     ->withPivot('status', 'created_at', 'updated_at');
     }
 
@@ -43,5 +43,13 @@ class Group extends Model
     public function groupHistories()
     {
         return $this->hasMany('App\Models\GroupHistory', 'group_id', 'id');
+    }
+
+    /**
+     * albumsテーブルと1対多のリレーション構築(1側の設定)
+     */
+    public function albums()
+    {
+        return $this->hasMany('App\Models\Album', 'group_id', 'id');
     }
 }

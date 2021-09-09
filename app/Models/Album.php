@@ -12,6 +12,19 @@ class Album extends Model
 
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
+    protected $appends = ['image_url']; 
+
+    /**
+     * 画像のパスを取得
+     */
+    public function getImageUrlAttribute()
+    {
+        // 画像パスを設定
+        if($this->image_file) {
+            return env('AWS_BUCKET_URL').'/'.config('const.Aws.GROUP').'/'.$this->host_user_id.'/'.$this->image_file;
+        }
+        return env('AWS_BUCKET_URL').'/no-image.jpg';
+    }
 
     /**
      * usersテーブルと1対多のリレーション構築(多側の設定)

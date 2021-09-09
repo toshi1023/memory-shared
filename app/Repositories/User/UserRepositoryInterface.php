@@ -13,7 +13,7 @@ interface UserRepositoryInterface
     public function save($data, $model=null);
     public function saveOnePass($onetime_password, $user_id);
     public function getGroups($conditions);
-    public function getFamilies($conditions, $order=[]);
-    public function getParticipating($conditions, $order=[], bool $softDelete=false);
+    public function getFamilies($conditions, $order=[], int $paginate=15);
+    public function getParticipating($conditions, $order=[], bool $softDelete=false, int $paginate=15);
     public function getMessageList($user_id);
 }

@@ -100,9 +100,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     /**
      * 参加中のグループの参加者を取得
-     * 引数1: 検索条件, 引数2: ソート条件
+     * 引数1: 検索条件, 引数2: ソート条件, ページネーション件数
      */
-    public function getFamilies($conditions, $order=[])
+    public function getFamilies($conditions, $order=[], int $paginate=15)
     {
         // ファミリーのIDを取得
         $groupHistoryRepository = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
@@ -112,29 +112,28 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         // 取得したフレンドIDを検索条件に設定
         $friends_conditions['@inid'] = Common::setInCondition($users->toArray());
 
-        return $this->searchQueryPaginate($friends_conditions, $order);
+        return $this->searchQueryPaginate($friends_conditions, $order, $paginate);
     }
 
     /**
      * 参加中グループの取得
-     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ, 引数4: ページネーション件数
      */
-    public function getParticipating($conditions, $order=[], bool $softDelete=false)
+    public function getParticipating($conditions, $order=[], bool $softDelete=false, int $paginate=15)
     {
         // グループの取得
         $groupRepository = $this->baseGetRepository(GroupRepositoryInterface::class);
         
         return $groupRepository->baseSearchQuery($conditions, $order, $softDelete)
                                ->with([
-                                   'users:id,name,image_file,gender',
+                                   'albums:id,name,group_id',
                                    'groupHistories' => function ($query) {
-                                    $query->select('*')
-                                          ->where('status', '=', config('const.GroupHistory.APPROVAL'))
-                                          ->where('user_id', '!=', Auth::user()->id)
-                                          ->whereNull('deleted_at');
+                                        $query->select('id', 'group_id')
+                                              ->where('status', '=', config('const.GroupHistory.APPROVAL'))
+                                              ->whereNull('deleted_at');
                                     }
                                ])
-                               ->get();
+                               ->paginate($paginate);
     }
 
     /**

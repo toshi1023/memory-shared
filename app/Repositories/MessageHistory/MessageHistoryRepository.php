@@ -33,7 +33,7 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
      * トーク履歴の取得
      * 引数1: 検索条件, 引数2: 削除済みデータの取得フラグ, 引数3: ページネーション件数
      */
-    public function getMessages($conditions=[], bool $softDelete=false, $paginate=10)
+    public function getMessages($conditions=[], bool $softDelete=false, $paginate=15)
     {
         // own_idがログインユーザのデータを取得
         $anotherQuery = $this->baseSearchQuery($conditions, [], $softDelete)->whereNull('deleted_at');
@@ -55,9 +55,9 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
 
     /**
      * ログインユーザのトーク一覧を取得
-     * 引数： ユーザID
+     * 引数1： ユーザID, 引数2: ページネーション件数
      */
-    public function getMessageList($user_id)
+    public function getMessageList($user_id, int $paginate = 15)
     {
         // messagesテーブルの値をUnion結合して取得
         $subQuery = $this->baseSearchQuery(['own_id' => $user_id])
@@ -82,7 +82,7 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
                              ->rightJoinSub($query, 'messangers', 'message_histories.id', '=', 'messangers.messangers_id')
                              ->whereNull('message_histories.deleted_at')
                              ->with(['other:id,name,image_file'])
-                             ->get();
+                             ->paginate($paginate);
                              
         return $query;
     }
