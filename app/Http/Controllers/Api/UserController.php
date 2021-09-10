@@ -105,16 +105,16 @@ class UserController extends Controller
         try {
             // 検索条件
             $conditions = [];
+            if($request->input('name@like') !== '') $conditions = Common::setConditions($request);
             $conditions['status'] = config('const.User.MEMBER');
-            if($request->input('name@like')) $conditions = Common::setConditions($request);
             
             // ソート条件
             $order = [];
-            if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
+            if($request->sort_name || $request->sort_created_at) $order = Common::setOrder($request);
     
             $data = $this->db->searchQueryPaginate($conditions, $order);
             
-            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['users' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 

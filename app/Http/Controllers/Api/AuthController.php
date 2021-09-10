@@ -44,7 +44,8 @@ class AuthController extends Controller
                 }
 
                 return response()->json([
-                    "user" => Auth::user()->id, 
+                    "id"           => Auth::user()->id,
+                    "name"         => Auth::user()->name,
                     "info_message" => config('const.SystemMessage.LOGIN_INFO')
                 ], 200, [], JSON_UNESCAPED_UNICODE);
             }

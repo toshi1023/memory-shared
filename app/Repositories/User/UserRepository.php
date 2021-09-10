@@ -49,7 +49,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function searchQueryLimit($conditions=[], $order=[], int $limit=10)
     {
         return $this->baseSearchQuery($conditions, $order, false)
-                    ->select('id', 'name', 'email', 'status', 'image_file')
+                    ->select('id', 'name', 'hobby', 'gender', 'description', 'status', 'image_file')
                     ->with(['families1', 'families2', 'message_relations1', 'message_relations2'])        
                     ->limit($limit);
     }
@@ -61,7 +61,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function searchQueryPaginate($conditions=[], $order=[], int $paginate=20)
     {
         return $this->baseSearchQuery($conditions, $order, false)
-                    ->select('id', 'name', 'email', 'status', 'image_file')
+                    ->select('id', 'name', 'hobby', 'gender', 'description', 'status', 'image_file')
                     ->with(['families1', 'families2', 'message_relations1', 'message_relations2'])
                     ->paginate($paginate);
     }
