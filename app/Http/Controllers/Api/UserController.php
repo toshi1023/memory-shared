@@ -182,24 +182,74 @@ class UserController extends Controller
      * 
      * 【ハンバーガーメニュー】
      * ユーザ詳細の表示用アクション
-     *   ※$user: nameカラムの値を設定する
      */
     public function show(Request $request, $user)
     {
         try {
+            // ユーザ情報の取得
             // 検索条件の設定
             $conditions = [
                 'id'        => $user
             ];
             
-            $data = $this->db->searchFirst($conditions);
+            $profile = $this->db->searchFirst($conditions);
 
             // ユーザが存在しない場合
-            if(empty($data)) {
+            if(empty($profile)) {
                 return response()->json(['error_message' => config('const.User.SEARCH_ERR')], 404, [], JSON_UNESCAPED_UNICODE);    
             }
+
+            // 参加歓迎中のグループを取得
+            // 検索条件
+            $mygroup_conditions = [
+                'user_id' => $user,
+                'status'  => config('const.GroupHistory.APPROVAL')
+            ];
+
+            // 所属グループの取得
+            $groups = $this->db->getGroups($mygroup_conditions);
+
+            // 検索条件
+            $group_conditions['@ingroups.id'] = Common::setInCondition($groups->toArray());
+            $group_conditions['groups.host_user_id'] = $user;
+            $group_conditions['groups.welcome_flg']  = config('const.Group.WELCOME');
+            $group_conditions['groups.private_flg'] = config('const.Group.PUBLIC');
+            // ソート条件
+            $order = [
+                'created_at' => 'desc'
+            ];
             
-            return response()->json(['user' => $data], 200, [], JSON_UNESCAPED_UNICODE);
+            // 参加歓迎中グループ情報取得
+            $wgroups = $this->db->getParticipating($group_conditions, $order);
+
+
+            // 参加中のグループを取得
+            // 検索条件
+            $mygroup_conditions = [];
+            $mygroup_conditions = [
+                'user_id' => $user,
+                'status'  => config('const.GroupHistory.APPROVAL')
+            ];
+            
+            // 所属グループの取得
+            $groups = $this->db->getGroups($mygroup_conditions);
+            // 検索条件
+            $group_conditions = [];
+            $group_conditions['@ingroups.id']       = Common::setInCondition($groups->toArray());
+            $group_conditions['groups.private_flg'] = config('const.Group.PUBLIC');
+            // ソート条件
+            $order = [
+                'created_at' => 'desc'
+            ];
+
+            // 参加中グループ情報取得
+            $pgroups = $this->db->getGroupsInfo($group_conditions, $order);
+            
+            return response()->json([
+                'user'      => $profile,
+                'wgroups'   => $wgroups,
+                'pgroups'   => $pgroups
+            ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 

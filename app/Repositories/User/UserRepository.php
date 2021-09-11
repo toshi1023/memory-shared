@@ -39,6 +39,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         return $this->baseSearchQuery($conditions, $order, $softDelete)
                     ->select('id', 'name', 'hobby', 'gender', 'description', 'status', 'image_file')
+                    ->with(['families1', 'families2', 'message_relations1', 'message_relations2'])
                     ->first();
     }
 
@@ -96,6 +97,17 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $groupHistoryRepository = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
 
         return $groupHistoryRepository->baseSearchQuery($conditions)->select('group_id')->get();
+    }
+
+    /**
+     * 参加中のグループ情報を取得
+     * 引数1: 検索条件, 引数2: ソート条件, ページネーション件数
+     */
+    public function getGroupsInfo($conditions, $order = [], int $paginate = 15)
+    {
+        $groupRepository = $this->baseGetRepository(GroupRepositoryInterface::class);
+
+        return $groupRepository->baseSearchQuery($conditions, $order)->select('id', 'name', 'image_file')->paginate($paginate);
     }
 
     /**

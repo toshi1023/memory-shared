@@ -81,11 +81,8 @@ class User extends Authenticatable
      */
     public function families1()
     {
-        // 検索値を設定
-        $user_id = Auth::user()->id;
-
         return $this->hasMany('App\Models\Family', 'user_id1', 'id')
-                    ->where('user_id2', '=', $user_id);
+                    ->where('user_id2', '=', Auth::user()->id);
     }
 
     /**
@@ -94,11 +91,8 @@ class User extends Authenticatable
      */
     public function families2()
     {
-        // 検索値を設定
-        $user_id = Auth::user()->id;
-
         return $this->hasMany('App\Models\Family', 'user_id2', 'id')
-                    ->where('user_id1', '=', $user_id);
+                    ->where('user_id1', '=', Auth::user()->id);
     }
     
     /**
@@ -107,11 +101,8 @@ class User extends Authenticatable
      */
     public function message_relations1()
     {
-        // 検索値を設定
-        $user_id = Auth::user()->id;
-
         return $this->hasMany('App\Models\MessageRelation', 'user_id1', 'id')
-                    ->where('user_id2', '=', $user_id);
+                    ->where('user_id2', '=', Auth::user()->id);
     }
 
     /**
@@ -120,11 +111,8 @@ class User extends Authenticatable
      */
     public function message_relations2()
     {
-        // 検索値を設定
-        $user_id = Auth::user()->id;
-
         return $this->hasMany('App\Models\MessageRelation', 'user_id2', 'id')
-                    ->where('user_id1', '=', $user_id);
+                    ->where('user_id1', '=', Auth::user()->id);
     }
     
     /**
@@ -134,6 +122,15 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\Group', 'group_histories', 'user_id', 'group_id')
                     ->withPivot('status', 'created_at', 'updated_at');
+    }
+
+    /**
+     * 自身がホストのgroupsテーブルと1対多のリレーション構築(1側の設定)
+     */
+    public function host_groups()
+    {
+        return $this->belongsToMany('App\Models\Group', 'host_user_id', 'id')
+                    ->where('host_user_id', '=', Auth::user()->id);
     }
     
     /**
