@@ -81,9 +81,9 @@ abstract class  BaseRepository
             if (preg_match('/@like/', $key)) {
                 // LIKE検索
                 $query->where(str_replace("@like", "", $key), 'like', '%'.$value.'%');
-            } else if (preg_match('/@not/', $key)) {
+            } else if (preg_match('/@not_equal/', $key)) {
                 // NOT検索
-                $query->where(str_replace("@not", "", $key), '!=', $value);
+                $query->where(str_replace("@not_equal", "", $key), '!=', $value);
             } else if (preg_match('/@>equal/', $key)) {
                 // 大なりイコール
                 $query->where(str_replace("@>equal", "", $key), '>=', $value);

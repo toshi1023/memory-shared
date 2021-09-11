@@ -44,7 +44,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/users/{user}/messages', 'Api\UserController@messages')->name('users.messages');
     Route::get('/users/{user}/wgroups',  'Api\UserController@welcomeGgroups')->name('users.wgroups');
     Route::get('/users/{user}/pgroups',  'Api\UserController@participatingGroups')->name('users.pgroups');
-    Route::get('/users/{user}/igroups',  'Api\UserController@invaiteGgroups')->name('users.igroups');
+    Route::get('/users/{user}/igroups',  'Api\UserController@inviteGgroups')->name('users.igroups');
     Route::post('/users/validate',       'Api\UserController@userValidate');
     
     /********** グループ管理(groups) **********/

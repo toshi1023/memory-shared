@@ -391,7 +391,7 @@ class UserController extends Controller
 
             // 検索条件
             $families_conditions['@ingroup_id'] = Common::setInCondition($groups->toArray());
-            $families_conditions['@notuser_id'] = Auth::user()->id;
+            $families_conditions['@not_equaluser_id'] = Auth::user()->id;
             // ソート条件
             $order = [];
             if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
@@ -535,11 +535,21 @@ class UserController extends Controller
     /**
      * 招待用のグループ一覧(UserDetail用)
      */
-    public function invaiteGgroups(Request $request, $user)
+    public function inviteGgroups(Request $request, $user)
     {
         try {
             // 検索条件
+            $mygroup_conditions = [
+                'user_id' => $user,
+                'status'  => config('const.GroupHistory.APPROVAL')
+            ];
+            
+            // 招待ユーザの所属グループの取得
+            $groups = $this->db->getGroups($mygroup_conditions);
+
+            // 検索条件
             $conditions['groups.host_user_id'] = Auth::user()->id;
+            $conditions['@not_ingroups.id']    = Common::setInCondition($groups->toArray());
             // ソート条件
             $order = [
                 'created_at' => 'desc'
