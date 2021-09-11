@@ -31,8 +31,7 @@ class GroupHistoryController extends Controller
             // データの配列化
             $data = $request->all();
             $data['group_id'] = $group;
-            // $data['user_id'] = Auth::user()->id;
-            $data['user_id'] = 1;
+            $data['user_id'] = $request->input('user_id') ? $request->input('user_id') : Auth::user()->id;
     
             // データの保存処理
             $this->db->save($data);
@@ -43,8 +42,7 @@ class GroupHistoryController extends Controller
                 $group_name = $this->db->searchGroupFirst(['id' => $group])->name;
                 $this->db->saveGroupInfo(Auth::user()->id, $group_name, config('const.GroupHistory.APPROVAL'));
 
-                // CreateFamily::dispatch($group, Auth::user()->id);
-                CreateFamily::dispatch($group, 1);
+                CreateFamily::dispatch($group, Auth::user()->id);
             } else {
                 // ニュースデータの作成と未読管理データの作成
                 $group_name = $this->db->searchGroupFirst(['id' => $group])->name;
@@ -97,7 +95,6 @@ class GroupHistoryController extends Controller
             // 検索条件
             $conditions = [];
             $conditions['group_id'] = $group;
-            // $conditions['user_id'] = 1;
             $conditions['user_id'] = Auth::user()->id;
 
             // group_historiesのidを取得

@@ -192,7 +192,7 @@ abstract class  BaseRepository
                 $model = $model::query()->where('id', $data["id"])->first();
             }
             // 更新者ID
-            // $model->update_user_id  = $this->baseGetUserId();
+            $model->update_user_id  = $this->baseGetUserId();
             
             // 保存処理
             $model->fill($data);
