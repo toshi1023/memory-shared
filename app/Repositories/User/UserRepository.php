@@ -107,7 +107,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         $groupRepository = $this->baseGetRepository(GroupRepositoryInterface::class);
 
-        return $groupRepository->baseSearchQuery($conditions, $order)->select('id', 'name', 'image_file')->paginate($paginate);
+        return $groupRepository->baseSearchQuery($conditions, $order)->select('id', 'name', 'image_file', 'private_flg')->paginate($paginate);
     }
 
     /**

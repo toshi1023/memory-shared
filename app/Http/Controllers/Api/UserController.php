@@ -198,57 +198,9 @@ class UserController extends Controller
             if(empty($profile)) {
                 return response()->json(['error_message' => config('const.User.SEARCH_ERR')], 404, [], JSON_UNESCAPED_UNICODE);    
             }
-
-            // 参加歓迎中のグループを取得
-            // 検索条件
-            $mygroup_conditions = [
-                'user_id' => $user,
-                'status'  => config('const.GroupHistory.APPROVAL')
-            ];
-
-            // 所属グループの取得
-            $groups = $this->db->getGroups($mygroup_conditions);
-
-            // 検索条件
-            $group_conditions['@ingroups.id'] = Common::setInCondition($groups->toArray());
-            $group_conditions['groups.host_user_id'] = $user;
-            $group_conditions['groups.welcome_flg']  = config('const.Group.WELCOME');
-            $group_conditions['groups.private_flg'] = config('const.Group.PUBLIC');
-            // ソート条件
-            $order = [
-                'created_at' => 'desc'
-            ];
-            
-            // 参加歓迎中グループ情報取得
-            $wgroups = $this->db->getParticipating($group_conditions, $order);
-
-
-            // 参加中のグループを取得
-            // 検索条件
-            $mygroup_conditions = [];
-            $mygroup_conditions = [
-                'user_id' => $user,
-                'status'  => config('const.GroupHistory.APPROVAL')
-            ];
-            
-            // 所属グループの取得
-            $groups = $this->db->getGroups($mygroup_conditions);
-            // 検索条件
-            $group_conditions = [];
-            $group_conditions['@ingroups.id']       = Common::setInCondition($groups->toArray());
-            $group_conditions['groups.private_flg'] = config('const.Group.PUBLIC');
-            // ソート条件
-            $order = [
-                'created_at' => 'desc'
-            ];
-
-            // 参加中グループ情報取得
-            $pgroups = $this->db->getGroupsInfo($group_conditions, $order);
             
             return response()->json([
                 'user'      => $profile,
-                'wgroups'   => $wgroups,
-                'pgroups'   => $pgroups
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
@@ -266,7 +218,9 @@ class UserController extends Controller
      */
     public function userValidate(UserRegisterRequest $request)
     {
-        return;
+        return [
+            'validate_status' => config('const.SystemMessage.VALIDATE_STATUS')
+        ];
     }
 
     /**
@@ -507,6 +461,99 @@ class UserController extends Controller
 
             return response()->json([
               'error_message' => config('const.User.GET_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
+     * 歓迎中のグループ一覧(UserDetail用)
+     */
+    public function welcomeGgroups(Request $request, $user)
+    {
+        try {
+            // 検索条件
+            $conditions['groups.host_user_id'] = $user;
+            $conditions['groups.welcome_flg']  = config('const.Group.WELCOME');
+            $conditions['groups.private_flg'] = config('const.Group.PUBLIC');
+            // ソート条件
+            $order = [
+                'created_at' => 'desc'
+            ];
+            
+            // 参加歓迎中グループ情報取得
+            $wgroups = $this->db->getParticipating($conditions, $order);
+            
+            return response()->json(['wgroups' => $wgroups], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            return response()->json([
+              'error_message' => config('const.Group.GET_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
+     * 参加中のグループ一覧(UserDetail用)
+     */
+    public function participatingGroups(Request $request, $user)
+    {
+        try {
+            // 検索条件
+            $mygroup_conditions = [
+                'user_id' => $user,
+                'status'  => config('const.GroupHistory.APPROVAL')
+            ];
+            
+            // 所属グループの取得
+            $groups = $this->db->getGroups($mygroup_conditions);
+            // 検索条件
+            $conditions = [];
+            $conditions['@ingroups.id']       = Common::setInCondition($groups->toArray());
+            $conditions['groups.private_flg'] = config('const.Group.PUBLIC');
+            // ソート条件
+            $order = [
+                'created_at' => 'desc'
+            ];
+
+            // 参加中グループ情報取得
+            $pgroups = $this->db->getGroupsInfo($conditions, $order);
+            
+            return response()->json(['pgroups' => $pgroups], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            return response()->json([
+              'error_message' => config('const.Group.GET_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
+     * 招待用のグループ一覧(UserDetail用)
+     */
+    public function invaiteGgroups(Request $request, $user)
+    {
+        try {
+            // 検索条件
+            $conditions['groups.host_user_id'] = Auth::user()->id;
+            // ソート条件
+            $order = [
+                'created_at' => 'desc'
+            ];
+
+            // 参加中グループ情報取得
+            $igroups = $this->db->getGroupsInfo($conditions, $order);
+            
+            return response()->json(['igroups' => $igroups], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            return response()->json([
+              'error_message' => config('const.Group.GET_ERR'),
               'status'        => 500,
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }

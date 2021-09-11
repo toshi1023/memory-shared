@@ -136,6 +136,7 @@ return [
         'UNAUTHORIZATION'    => 'ログイン権限がありません',
         'LOGIN_ERR'          => 'メールアドレスもしくはパスワードが一致しません',
         'UNEXPECTED_ERR'     => '予期しないエラーが発生しました。管理者にお問い合わせください',
+        'VALIDATE_STATUS'    => 'OK'
     ],
     // AWSのバケット名で使用する定数
     'Aws' => [

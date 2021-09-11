@@ -38,11 +38,14 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function(){
 
     /********** ユーザ管理(users) **********/
-    Route::resource('/users',           'Api\UserController');
+    Route::resource('/users',            'Api\UserController');
     Route::get('/users/{user}/families', 'Api\UserController@families')->name('users.families');
-    Route::get('/users/{user}/groups',  'Api\UserController@participating')->name('users.participating');
+    Route::get('/users/{user}/groups',   'Api\UserController@participating')->name('users.participating');
     Route::get('/users/{user}/messages', 'Api\UserController@messages')->name('users.messages');
-    Route::post('/users/validate',      'Api\UserController@userValidate');
+    Route::get('/users/{user}/wgroups',  'Api\UserController@welcomeGgroups')->name('users.wgroups');
+    Route::get('/users/{user}/pgroups',  'Api\UserController@participatingGroups')->name('users.pgroups');
+    Route::get('/users/{user}/igroups',  'Api\UserController@invaiteGgroups')->name('users.igroups');
+    Route::post('/users/validate',       'Api\UserController@userValidate');
     
     /********** グループ管理(groups) **********/
     Route::resource('/groups',       'Api\GroupController');
@@ -50,7 +53,7 @@ Route::middleware('auth:sanctum')->group(function(){
 
     /********** グループ履歴管理(group_histories) **********/
     Route::post('/groups/{group}/history',       'Api\GroupHistoryController@store');
-    Route::put('/groups/{group}/history',       'Api\GroupHistoryController@update');
+    Route::put('/groups/{group}/history',        'Api\GroupHistoryController@update');
     
     /********** アルバム管理(albums) **********/
     Route::resource('/groups/{group}/albums',       'Api\AlbumController');
