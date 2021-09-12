@@ -37,7 +37,7 @@ class GroupController extends Controller
             
             // ソート条件
             $order = [];
-            if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
+            if($request->sort_name || $request->sort_created_at) $order = Common::setOrder($request);
     
             $data = $this->db->searchQueryPaginate($conditions, $order);
             
@@ -67,7 +67,7 @@ class GroupController extends Controller
                 return response()->json(['error_message' => config('const.Group.SEARCH_ERR')], 404, [], JSON_UNESCAPED_UNICODE);    
             }
             
-            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['group' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 
@@ -205,6 +205,42 @@ class GroupController extends Controller
 
             return response()->json([
               'error_message' => config('const.Group.DELETE_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
+     * 参加者一覧(GroupDetail用)
+     */
+    public function participating(Request $request, $group)
+    {
+        try {
+            // 検索条件
+            $group_conditions = [
+                'group_histories.group_id' => $group,
+                'group_histories.status'   => config('const.GroupHistory.APPROVAL')
+            ];
+            
+            // 参加者の取得
+            $users = $this->db->getParticipants($group_conditions);
+            // 検索条件
+            $conditions = [];
+            $conditions['@inusers.id'] = Common::setInCondition($users->toArray());;
+            // ソート条件
+            $order = [
+                'created_at' => 'desc'
+            ];
+
+            // 参加者情報取得
+            $users = $this->db->getUsersInfo($conditions, $order);
+            
+            return response()->json(['pusers' => $users], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            return response()->json([
+              'error_message' => config('const.User.GET_ERR'),
               'status'        => 500,
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }

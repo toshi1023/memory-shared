@@ -52,7 +52,7 @@ class AlbumController extends Controller
     
             $data = $this->db->baseSearchQueryPaginate($conditions, $order, 20);
             
-            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['albums' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 

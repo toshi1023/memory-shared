@@ -42,7 +42,8 @@ class Group extends Model
      */
     public function groupHistories()
     {
-        return $this->hasMany('App\Models\GroupHistory', 'group_id', 'id');
+        return $this->hasMany('App\Models\GroupHistory', 'group_id', 'id')
+                    ->where('group_histories.status', '=', config('const.GroupHistory.APPROVAL'));
     }
 
     /**
