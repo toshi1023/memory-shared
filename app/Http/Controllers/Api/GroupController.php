@@ -108,7 +108,7 @@ class GroupController extends Controller
 
             // ファイルの保存処理
             if($request->file('image_file')) {
-                Common::fileSave($request->file('image_file'), config('const.Aws.Group'), $request->name, $filename);
+                Common::fileSave($request->file('image_file'), config('const.Aws.Group'), $group->id, $filename);
             }
 
             // グループ履歴の作成
@@ -155,11 +155,11 @@ class GroupController extends Controller
             }
     
             // データの保存処理
-            $this->db->save($data);
+            $data = $this->db->save($data);
 
             // ファイルの保存処理
             if($request->file('image_file')) {
-                Common::fileSave($request->file('image_file'), config('const.Aws.Group'), $request->name, $filename);
+                Common::fileSave($request->file('image_file'), config('const.Aws.Group'), $data->id, $filename);
             }
 
             DB::commit();

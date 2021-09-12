@@ -285,11 +285,11 @@ class UserController extends Controller
             $data['image_file'] = $filename;
             
             // データの保存処理
-            $this->db->save($data);
+            $data = $this->db->save($data);
 
             // ファイルの保存処理
             if($request->file('image_file')) {
-                Common::fileSave($request->file('image_file'), config('const.Aws.USER'), $request->name, $filename);
+                Common::fileSave($request->file('image_file'), config('const.Aws.USER'), $data->id, $filename);
             }
 
             DB::commit();
@@ -326,11 +326,11 @@ class UserController extends Controller
             }
     
             // データの保存処理
-            $this->db->save($data);
+            $data = $this->db->save($data);
 
             // ファイルの保存処理
             if($request->file('image_file')) {
-                Common::fileSave($request->file('image_file'), config('const.Aws.USER'), $request->name, $filename);
+                Common::fileSave($request->file('image_file'), config('const.Aws.USER'), $data->id, $filename);
             }
 
             DB::commit();

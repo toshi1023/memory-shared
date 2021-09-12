@@ -157,7 +157,7 @@ class Common {
     {
         if ($file){
             try {
-                // バケットの`{バケット名}/{カテゴリー名}/{ニックネーム名}`フォルダへアップロード
+                // バケットの`{バケット名}/{カテゴリー名}/{id}`フォルダへアップロード
                 Storage::disk('s3')->putFileAs($category.'/'.$foldername, $file, $filename, 'public');
 
                 return true;
