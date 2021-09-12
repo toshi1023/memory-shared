@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\data\GroupsTableData;
+use Faker\Generator as Faker;
 
 class GroupsTableSeeder extends Seeder
 {
@@ -11,8 +13,9 @@ class GroupsTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(Faker $faker)
     {
-        \App\Models\Group::factory(10)->create();
+        // \App\Models\Group::factory(10)->create();
+        GroupsTableData::run($faker);
     }
 }

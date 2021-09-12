@@ -13,6 +13,6 @@ class AlbumsTableSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Album::factory(10)->create();
+        \App\Models\Album::factory(20)->create();
     }
 }

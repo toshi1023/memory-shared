@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\data\MessageRelationsTableData;
+use Faker\Generator as Faker;
 
 class MessageRelationsTableSeeder extends Seeder
 {
@@ -11,8 +13,9 @@ class MessageRelationsTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(Faker $faker)
     {
-        \App\Models\MessageRelation::factory(10)->create();
+        // \App\Models\MessageRelation::factory(10)->create();
+        MessageRelationsTableData::run($faker);
     }
 }

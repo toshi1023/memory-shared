@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\data\MreadManagementsTableData;
+use Faker\Generator as Faker;
 
 class MreadManagementTableSeeder extends Seeder
 {
@@ -11,8 +13,9 @@ class MreadManagementTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(Faker $faker)
     {
-        \App\Models\MreadManagement::factory(10)->create();
+        // \App\Models\MreadManagement::factory(10)->create();
+        MreadManagementsTableData::run($faker);
     }
 }

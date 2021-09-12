@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\data\MessageHistoriesTableData;
+use Faker\Generator as Faker;
 
 class MessageHistoriesTableSeeder extends Seeder
 {
@@ -11,8 +13,9 @@ class MessageHistoriesTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(Faker $faker)
     {
-        \App\Models\MessageHistory::factory(50)->create();
+        // \App\Models\MessageHistory::factory(50)->create();
+        MessageHistoriesTableData::run($faker);
     }
 }
