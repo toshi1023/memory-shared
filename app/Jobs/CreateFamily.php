@@ -49,14 +49,14 @@ class CreateFamily implements ShouldQueue
             $families = $ghRepository->searchUserId([
                             'group_id'       => $this->group_id,
                             'status'         => config('const.GroupHistory.APPROVAL'),
-                            '@notuser_id'    => $this->user_id
+                            '@not_equaluser_id'    => $this->user_id
                         ]);
             
             // 申請ユーザが属するグループのIDを取得
             $groups = $ghRepository->searchGroupId([
                             'user_id'       => $this->user_id, 
                             'status'        => config('const.GroupHistory.APPROVAL'),
-                            '@notgroup_id'  => $this->group_id
+                            '@not_equalgroup_id'  => $this->group_id
                         ]);
             
             // 所属するグループIDを配列に追加

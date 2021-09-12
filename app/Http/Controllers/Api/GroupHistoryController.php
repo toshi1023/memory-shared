@@ -34,19 +34,19 @@ class GroupHistoryController extends Controller
             $data['user_id'] = $request->input('user_id') ? $request->input('user_id') : Auth::user()->id;
     
             // データの保存処理
-            $this->db->save($data);
+            $data = $this->db->save($data);
 
             // 申請状況のデータが承認済みの場合、familiesテーブルへの保存処理を実行
             if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
                 // ニュースデータの作成と未読管理データの作成
                 $group_name = $this->db->searchGroupFirst(['id' => $group])->name;
-                $this->db->saveGroupInfo(Auth::user()->id, $group_name, config('const.GroupHistory.APPROVAL'));
+                $this->db->saveGroupInfo($data['user_id'], $group_name, config('const.GroupHistory.APPROVAL'));
 
-                CreateFamily::dispatch($group, Auth::user()->id);
+                CreateFamily::dispatch($group, $data['user_id']);
             } else {
                 // ニュースデータの作成と未読管理データの作成
                 $group_name = $this->db->searchGroupFirst(['id' => $group])->name;
-                $this->db->saveGroupInfo(Auth::user()->id, $group_name, config('const.GroupHistory.APPLY'));
+                $this->db->saveGroupInfo($data['user_id'], $group_name, config('const.GroupHistory.APPLY'));
             }
 
             DB::commit();
@@ -95,7 +95,7 @@ class GroupHistoryController extends Controller
             // 検索条件
             $conditions = [];
             $conditions['group_id'] = $group;
-            $conditions['user_id'] = Auth::user()->id;
+            $conditions['user_id'] = $request->input('user_id') ? $request->input('user_id') : Auth::user()->id;
 
             // group_historiesのidを取得
             $id = $this->db->baseSearchFirst($conditions)->id;
@@ -110,9 +110,9 @@ class GroupHistoryController extends Controller
             if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
                 // ニュースデータの作成と未読管理データの作成
                 $group_name = $this->db->searchGroupFirst(['id' => $group]);
-                $this->db->saveGroupInfo(Auth::user()->id, $group_name, config('const.GroupHistory.APPROVAL'));
+                $this->db->saveGroupInfo($data['user_id'], $group_name, config('const.GroupHistory.APPROVAL'));
 
-                CreateFamily::dispatch($group, Auth::user()->id);
+                CreateFamily::dispatch($group, $data['user_id']);
             }
 
             DB::commit();
