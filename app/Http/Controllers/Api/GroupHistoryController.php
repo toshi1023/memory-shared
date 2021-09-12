@@ -36,17 +36,18 @@ class GroupHistoryController extends Controller
             // データの保存処理
             $data = $this->db->save($data);
 
+            // 申請したグループ情報を取得
+            $groupInfo = $this->db->searchGroupFirst(['id' => $group]);
+
             // 申請状況のデータが承認済みの場合、familiesテーブルへの保存処理を実行
             if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
                 // ニュースデータの作成と未読管理データの作成
-                $group_name = $this->db->searchGroupFirst(['id' => $group])->name;
-                $this->db->saveGroupInfo($data['user_id'], $group_name, config('const.GroupHistory.APPROVAL'));
+                $this->db->saveGroupInfo($data['user_id'], $groupInfo->name, config('const.GroupHistory.APPROVAL'));
 
                 CreateFamily::dispatch($group, $data['user_id']);
             } else {
                 // ニュースデータの作成と未読管理データの作成
-                $group_name = $this->db->searchGroupFirst(['id' => $group])->name;
-                $this->db->saveGroupInfo($data['user_id'], $group_name, config('const.GroupHistory.APPLY'));
+                $this->db->saveGroupInfo($data['user_id'], $groupInfo->name, config('const.GroupHistory.APPLY'));
             }
 
             DB::commit();
@@ -61,6 +62,7 @@ class GroupHistoryController extends Controller
             if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
                 return response()->json([
                     'info_message' => config('const.GroupHistory.APPROVAL_INFO'),
+                    'group'        => $groupInfo,
                 ], 200, [], JSON_UNESCAPED_UNICODE);
             }
         } catch (Exception $e) {
@@ -106,11 +108,13 @@ class GroupHistoryController extends Controller
             // データの保存処理
             $this->db->save($data);
 
+            // グループ情報を取得
+            $groupInfo = $this->db->searchGroupFirst(['id' => $group]);
+
             // 申請状況のデータが承認済みの場合、familiesテーブルへの保存処理を実行
             if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
                 // ニュースデータの作成と未読管理データの作成
-                $group_name = $this->db->searchGroupFirst(['id' => $group]);
-                $this->db->saveGroupInfo($data['user_id'], $group_name, config('const.GroupHistory.APPROVAL'));
+                $this->db->saveGroupInfo($data['user_id'], $groupInfo->name, config('const.GroupHistory.APPROVAL'));
 
                 CreateFamily::dispatch($group, $data['user_id']);
             }
@@ -121,12 +125,14 @@ class GroupHistoryController extends Controller
             if($request->input('invite_flg')) {
                 return response()->json([
                     'info_message' => config('const.GroupHistory.INVITE_INFO'),
+                    'group'        => $groupInfo,
                 ], 200, [], JSON_UNESCAPED_UNICODE);
             }
             // 承認の場合
             if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
                 return response()->json([
                     'info_message' => config('const.GroupHistory.APPROVAL_INFO'),
+                    'group'        => $groupInfo,
                 ], 200, [], JSON_UNESCAPED_UNICODE);
             }
             // 拒否の場合

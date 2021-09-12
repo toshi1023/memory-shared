@@ -38,6 +38,17 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                     ->with(['users:id,name,image_file,gender'])
                     ->first();
     }
+
+    /**
+     * ページネーションを設定
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
+     */
+    public function searchQueryPaginate($conditions=[], $order=[], int $paginate=20)
+    {
+        return $this->baseSearchQuery($conditions, $order, false)
+                    ->with(['users:id,name,image_file,gender'])
+                    ->paginate($paginate);
+    }
     
     /**
      * データ保存
