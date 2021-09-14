@@ -31,16 +31,14 @@ class NewsController extends Controller
             // 検索条件
             $conditions = [];
             $conditions['@innews.user_id'] = [0, Auth::user()->id];
-            // $conditions['@innews.user_id'] = [0, $request->user_id];
-            if($request->input('title@like')) $conditions = Common::setConditions($request);
             
             // ソート条件
             $order = [];
             $order['news.created_at'] = 'desc';
     
-            $data = $this->db->searchQuery($conditions, $order);
+            $data = $this->db->searchQueryPaginate($conditions, $order);
             
-            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['news' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 

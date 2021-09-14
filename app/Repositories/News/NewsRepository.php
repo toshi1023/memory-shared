@@ -7,6 +7,7 @@ use App\Repositories\BaseRepository;
 use App\Repositories\NreadManagement\NreadManagementRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class NewsRepository extends BaseRepository implements NewsRepositoryInterface
 {
@@ -27,7 +28,8 @@ class NewsRepository extends BaseRepository implements NewsRepositoryInterface
                     ->leftJoin('nread_managements', function ($join) {
                         // nread_managementsテーブルのデータも同時に取得
                         $join->on('news.user_id', '=', 'nread_managements.news_user_id')
-                             ->on('news.news_id', '=', 'nread_managements.news_id');
+                             ->on('news.news_id', '=', 'nread_managements.news_id')
+                             ->where('nread_managements.user_id', '=', Auth::user()->id);
                     })
                     ->select('news.*', 'nread_managements.user_id as read_user_id')
                     ->get();
@@ -43,10 +45,28 @@ class NewsRepository extends BaseRepository implements NewsRepositoryInterface
                     ->leftJoin('nread_managements', function ($join) {
                         // nread_managementsテーブルのデータも同時に取得
                         $join->on('news.user_id', '=', 'nread_managements.news_user_id')
-                             ->on('news.news_id', '=', 'nread_managements.news_id');
+                             ->on('news.news_id', '=', 'nread_managements.news_id')
+                             ->where('nread_managements.user_id', '=', Auth::user()->id);
                     })
                     ->select('news.*', 'nread_managements.user_id as read_user_id')
                     ->first();
+    }
+
+    /**
+     * ページネーションを設定
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 表示件数
+     */
+    public function searchQueryPaginate($conditions=[], $order=[], int $paginate=15)
+    {
+        return $this->baseSearchQuery($conditions, $order, false)
+                    ->leftJoin('nread_managements', function ($join) {
+                        // nread_managementsテーブルのデータも同時に取得
+                        $join->on('news.user_id', '=', 'nread_managements.news_user_id')
+                             ->on('news.news_id', '=', 'nread_managements.news_id')
+                             ->where('nread_managements.user_id', '=', Auth::user()->id);
+                    })
+                    ->select('news.*', 'nread_managements.user_id as read_user_id')
+                    ->paginate($paginate);
     }
     
     /**
