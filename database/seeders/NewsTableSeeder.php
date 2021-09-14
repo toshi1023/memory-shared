@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\data\NewsTableData;
+use Faker\Generator as Faker;
 
 class NewsTableSeeder extends Seeder
 {
@@ -11,8 +13,9 @@ class NewsTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(Faker $faker)
     {
-        \App\Models\News::factory(20)->create();
+        // \App\Models\News::factory(20)->create();
+        NewsTableData::run($faker);
     }
 }

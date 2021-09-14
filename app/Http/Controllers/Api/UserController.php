@@ -212,6 +212,35 @@ class UserController extends Controller
         }
     }
 
+    public function edit(Request $request, $user)
+    {
+        try {
+            // ユーザ情報の取得
+            // 検索条件の設定
+            $conditions = [
+                'id'        => $user
+            ];
+            
+            $edituser = $this->db->getEditInfo($conditions);
+
+            // ユーザが存在しない場合
+            if(empty($edituser)) {
+                throw new Exception('編集用のユーザ情報取得に失敗しました');   
+            }
+            
+            return response()->json([
+                'edituser'      => $edituser,
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            return response()->json([
+              'error_message' => config('const.User.GET_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
     /**
      * ユーザバリデーション用メソッド
      *   ※データ登録時には非同期処理で常時確認に使用

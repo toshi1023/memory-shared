@@ -20,7 +20,6 @@ class PostController extends Controller
     }
 
     /**
-     * 【ハンバーガーメニュー】
      * 投稿一覧の表示用アクション
      */
     public function index(Request $request, $group)
@@ -36,9 +35,9 @@ class PostController extends Controller
             $order = [];
             $order['posts.updated_at'] = 'desc';
     
-            $data = $this->db->searchQuery($conditions, $order);
+            $data = $this->db->searchQueryPaginate($conditions, $order);
             
-            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['posts' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 
@@ -60,7 +59,6 @@ class PostController extends Controller
 
             $data['group_id'] = $group;
             $data['user_id'] = Auth::user()->id;
-            $data['update_user_id'] = Auth::user()->id;
     
             // データの保存処理
             $data = $this->db->save($data);

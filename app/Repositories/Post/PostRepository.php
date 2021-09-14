@@ -40,6 +40,17 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
                     ->with(['user:id,name,image_file','postComments'])
                     ->first();
     }
+
+    /**
+     * ページネーションを設定
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 表示件数
+     */
+    public function searchQueryPaginate($conditions=[], $order=[], int $paginate=10)
+    {
+        return $this->baseSearchQuery($conditions, $order, false)
+                    ->with(['user:id,name,image_file'])
+                    ->paginate($paginate);
+    }
     
     /**
      * データ保存

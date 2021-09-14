@@ -20,10 +20,9 @@ class PostCommentController extends Controller
     }
 
     /**
-     * 【ハンバーガーメニュー】
      * 投稿コメント一覧の表示用アクション
      */
-    public function index(Request $request, $post)
+    public function index(Request $request, $group, $post)
     {
         try {
             // 検索条件
@@ -34,9 +33,9 @@ class PostCommentController extends Controller
             $order = [];
             $order['updated_at'] = 'desc';
     
-            $data = $this->db->searchQuery($conditions, $order);
+            $data = $this->db->searchQueryPaginate($conditions, $order);
             
-            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['comments' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 
@@ -58,7 +57,6 @@ class PostCommentController extends Controller
 
             $data['post_id'] = $post;
             $data['user_id'] = Auth::user()->id;
-            $data['update_user_id'] = Auth::user()->id;
 
             // データの保存処理
             $data = $this->db->save($data);

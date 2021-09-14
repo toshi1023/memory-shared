@@ -17,4 +17,5 @@ interface UserRepositoryInterface
     public function getFamilies($conditions, $order=[], int $paginate=15);
     public function getParticipating($conditions, $order=[], bool $softDelete=false, int $paginate=15);
     public function getMessageList($user_id);
+    public function getEditInfo($conditions=[]);
 }

@@ -159,4 +159,15 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
         return $messageRepository->getMessageList($user_id);
     }
+
+    /**
+     * 編集用データの取得
+     * 引数: 検索条件
+     */
+    public function getEditInfo($conditions=[])
+    {
+        return $this->baseSearchQuery($conditions)
+                    ->select('id', 'name', 'email', 'hobby', 'gender', 'description', 'status', 'image_file')
+                    ->first();
+    }
 }
