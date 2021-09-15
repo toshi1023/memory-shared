@@ -76,10 +76,17 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
                              ->fromSub($subQuery, 'messangers')
                              ->whereNull('messangers.deleted_at')
                              ->groupByRaw('messangers.otherid');
+
+        // mread_managementsテーブルのデータをカウントで取得
+        $subQuery = $this->model->selectRaw('count(mread_managements.own_id) AS mcount')
+                                ->addSelect('mread_managements.own_id')
+                                ->from('mread_managements')
+                                ->groupByRaw('mread_managements.own_id');
                              
         // messagesテーブルとusersテーブルの内容を結合してログインユーザのメッセージ一覧情報を取得
-        $query = $this->model->select('*')
+        $query = $this->model->select('message_histories.*', 'messangers.otherid', 'mread_managements.mcount')
                              ->rightJoinSub($query, 'messangers', 'message_histories.id', '=', 'messangers.messangers_id')
+                             ->leftJoinSub($subQuery, 'mread_managements', 'messangers.otherid', '=', 'mread_managements.own_id')
                              ->whereNull('message_histories.deleted_at')
                              ->with(['other:id,name,image_file'])
                              ->paginate($paginate);

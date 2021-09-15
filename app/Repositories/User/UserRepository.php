@@ -8,6 +8,7 @@ use App\Repositories\GroupHistory\GroupHistoryRepositoryInterface;
 use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\MessageHistory\MessageHistoryRepositoryInterface;
 use App\Lib\Common;
+use App\Repositories\MreadManagement\MreadManagementRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
@@ -159,7 +160,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
         return $messageRepository->getMessageList($user_id);
     }
-
+    
     /**
      * 編集用データの取得
      * 引数: 検索条件

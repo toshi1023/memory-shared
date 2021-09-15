@@ -482,6 +482,7 @@ class UserController extends Controller
     public function messages(Request $request, $user)
     {
         try {
+            // トーク取得
             $data = $this->db->getMessageList(Auth::user()->id);
             
             return response()->json(['talklist' => $data], 200, [], JSON_UNESCAPED_UNICODE);

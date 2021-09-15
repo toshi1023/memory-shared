@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class MessageHistory extends Model
 {
@@ -41,6 +42,7 @@ class MessageHistory extends Model
      */
     public function mreadManagements()
     {
-        return $this->hasMany('App\Models\MreadManagement', 'message_id');
+        return $this->hasMany('App\Models\MreadManagement', 'message_id')
+                    ->where('user_id', '=', Auth::user()->id);
     }
 }
