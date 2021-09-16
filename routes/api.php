@@ -70,8 +70,8 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/groups/{group}/albums/{album}/video/validate',  'Api\UserVideoController@userVideoValidate');
 
     /********** メッセージ管理(messages) **********/
-    Route::resource('/messages',       'Api\MessageHistoryController')->only('index', 'store', 'destroy');
-    Route::post('/messages/validate',  'Api\MessageHistoryController@messageValidate');
+    Route::resource('/{user}/messages',       'Api\MessageHistoryController')->only('index', 'store', 'destroy');
+    Route::post('/messages/validate',         'Api\MessageHistoryController@messageValidate');
 
     /********** メッセージ用未読管理(mread_managements) **********/
     Route::post('users/{user}/messages/mread',       'Api\MreadManagementController@destroy');

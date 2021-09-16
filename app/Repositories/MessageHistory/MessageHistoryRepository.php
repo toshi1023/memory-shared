@@ -46,6 +46,7 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
         // user_idがログインユーザのデータを取得
         $query = $this->baseSearchQuery($anotherConditions, [], $softDelete)
                       ->union($anotherQuery)
+                      ->with(['own:id,name,image_file'])
                       ->whereNull('deleted_at')
                       ->orderBy('id', 'asc')
                       ->paginate($paginate);

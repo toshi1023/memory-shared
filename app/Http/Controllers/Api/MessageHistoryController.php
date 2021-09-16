@@ -24,30 +24,22 @@ class MessageHistoryController extends Controller
 
     /**
      * 特定ユーザとのメッセージ一覧
-     *   ※クエリストリングに受信者IDが必須
      */
-    public function index(Request $request)
+    public function index(Request $request, $user)
     {
         try {
-            // 受信者IDが設定されていない場合
-            if(!key_exists('user_id', $request->all())) {
-                throw new Exception("受信者IDが設定されていません");
-            }
             // 検索条件
             $conditions = [];
             $conditions['own_id']  = Auth::user()->id;
-            $conditions['user_id'] = $request->input('user_id');
+            $conditions['user_id'] = $user;
             
             // ソート条件
             $order = [];
     
             // データ
-            $data = [
-                'messages' => $this->db->getMessages($conditions),
-                'user'     => $this->db->getUser(['id' => $request->input('user_id')])
-            ];
+            $data = $this->db->getMessages($conditions);
 
-            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['talks' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 
