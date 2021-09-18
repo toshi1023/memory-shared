@@ -54,7 +54,7 @@ class User extends Authenticatable
     {
         // 画像パスを設定
         if($this->image_file) {
-            return env('AWS_BUCKET_URL').'/'.config('const.Aws.USER').'/'.$this->name.'/'.$this->image_file;
+            return env('AWS_BUCKET_URL').'/'.config('const.Aws.USER').'/'.$this->id.'/'.$this->image_file;
         }
         return env('AWS_BUCKET_URL').'/no-image.jpg';
     }

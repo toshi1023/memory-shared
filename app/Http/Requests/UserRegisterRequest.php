@@ -29,15 +29,16 @@ class UserRegisterRequest extends FormRequest
         if($this->register_mode == 'edit' && $this->password == null && request()->password_confirmation == null) {
             return [
                 // ユーザのバリデーションチェック
-                'name'                  => ['required', 'max:50', Rule::unique('users')->ignore($this->id, 'id')],
-                'email'                 => ['required', 'email', 'max:100', 'regex:/^[a-zA-Z0-9\.\-@]+$/'],
+                'name'                  => ['required', 'max:15', Rule::unique('users')->ignore($this->id, 'id')],
+                'email'                 => ['required', 'email', 'max:30', 'regex:/^[a-zA-Z0-9\.\-@]+$/'],
                 'image_file'            => 'image|mimes:jpeg,png,jpg,gif|max:1024',
             ];
         }
+        
         return [
             // ユーザのバリデーションチェック
-            'name'                  => ['required', 'max:20', Rule::unique('users')->ignore($this->id, 'id')],
-            'email'                 => ['required', 'email', 'max:100', 'regex:/^[a-zA-Z0-9\.\-@]+$/'],
+            'name'                  => ['required', 'max:15', Rule::unique('users')->ignore($this->id, 'id')],
+            'email'                 => ['required', 'email', 'max:30', 'regex:/^[a-zA-Z0-9\.\-@]+$/'],
             'password'              => ['required', 'min:6', 'confirmed', 'regex:/^[0-9a-zA-Z\_@!?#%&]+$/'],
             'password_confirmation' => ['required', 'min:6', 'regex:/^[0-9a-zA-Z\_@!?#%&]+$/'],
             'image_file'            => 'image|mimes:jpeg,png,jpg,gif|max:1024',
@@ -52,7 +53,7 @@ class UserRegisterRequest extends FormRequest
         return [
             "unique"                        => 'このユーザ名はすでに使用されています',
             "mines"                         => "指定された拡張子（PNG/JPG/GIF）ではありません。",
-            "name.max"                      => "ユーザ名は20文字以内で入力してください",
+            "name.max"                      => "ユーザ名は15文字以内で入力してください",
             "image_file.max"                => "1Mを超えています。",
             'email.regex'                   => '@以前は半角英数字で入力してください',
             "email.max"                     => "メールアドレスは100文字以内で入力してください",

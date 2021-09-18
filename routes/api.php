@@ -38,7 +38,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function(){
 
     /********** ユーザ管理(users) **********/
-    Route::resource('/users',            'Api\UserController');
+    Route::resource('/users',            'Api\UserController')->except('store');
     Route::get('/users/{user}/families', 'Api\UserController@families')->name('users.families');
     Route::get('/users/{user}/groups',   'Api\UserController@participating')->name('users.participating');
     Route::get('/users/{user}/messages', 'Api\UserController@messages')->name('users.messages');

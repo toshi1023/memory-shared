@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -311,6 +312,8 @@ class UserController extends Controller
             }
     
             $data = $request->all();
+            // パスワードのハッシュ処理
+            $data['password'] = Hash::make($data['password']);
             $data['image_file'] = $filename;
             
             // データの保存処理

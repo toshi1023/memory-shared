@@ -230,7 +230,10 @@ abstract class  BaseRepository
      * @return \Illuminate\Contracts\Auth\Authenticatable|int|null
      */
     private function baseGetUserId() {
-        return Auth::user()->id;
+        if(Auth::check()) {
+            return Auth::user()->id;
+        }
+        return 0;
     }
     
     /**
