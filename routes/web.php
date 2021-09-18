@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
  *  アプリ側ルーティング(非ログイン)
  ************************************************/
 Route::group(['middleware' => 'cors'], function() {
+    Route::post('/validate',                'Api\UserController@webValidate');
     Route::post('/register',                'Api\UserController@store')->name('register');
     Route::post('/login',                   'Api\AuthController@login')->name('login');
     Route::post('/reset-password/{token}',  'Api\AuthController@passwordReset')->name('passwordReset');

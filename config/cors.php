@@ -20,6 +20,7 @@ return [
         'login', // 追加
         'logout', // 追加
         'register', // 追加
+        'validate', // 追加
         'sanctum/csrf-cookie'
     ],
 

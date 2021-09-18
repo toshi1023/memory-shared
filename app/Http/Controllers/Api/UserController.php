@@ -243,7 +243,17 @@ class UserController extends Controller
     }
 
     /**
-     * ユーザバリデーション用メソッド
+     * ユーザバリデーション用メソッド(sanctumなし)
+     *   ※データ登録時には非同期処理で常時確認に使用
+     */
+    public function webValidate(UserRegisterRequest $request)
+    {
+        return [
+            'validate_status' => config('const.SystemMessage.VALIDATE_STATUS')
+        ];
+    }
+    /**
+     * ユーザバリデーション用メソッド(sanctumあり)
      *   ※データ登録時には非同期処理で常時確認に使用
      */
     public function userValidate(UserRegisterRequest $request)
