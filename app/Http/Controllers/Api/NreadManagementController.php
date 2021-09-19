@@ -29,26 +29,23 @@ class NreadManagementController extends Controller
             
             // データ削除
             $key = [
-                'news_user_id' => 0, 
+                'news_user_id' => $request->input('news_user_id'), 
                 'news_id' => $news, 
-                'user_id' => 1
+                'user_id' => $request->input('user_id')
             ];
             $this->db->delete($key);
 
             // 未読フラグ削除後のニュースデータを取得
             // 検索条件
             $conditions = [
-                'news.user_id' => Auth::user()->id, 
+                'news.user_id' => $request->input('news_user_id'), 
                 'news.news_id' => $news
             ];
-            // $conditions = [
-            //     'news.user_id' => 0, 
-            //     'news.news_id' => $news
-            // ];
+
             $data = $this->db->getNewsFirst($conditions);
             
             DB::commit();
-            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['news' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
