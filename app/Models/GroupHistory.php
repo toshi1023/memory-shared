@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class GroupHistory extends Pivot
 {
@@ -28,5 +29,13 @@ class GroupHistory extends Pivot
         if($this->status === config('const.GroupHistory.APPROVAL')) {
             return config('const.GroupHistory.APPROVAL_WORD');
         }
+    }
+
+    /**
+     * groupsテーブルと1対1のリレーション構築
+     */
+    public function group()
+    {
+        return $this->belongsTo('App\Models\Group', 'group_id', 'id');
     }
 }

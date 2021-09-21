@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Jobs\CreateFamily;
+use Carbon\Carbon;
 
 class GroupHistoryController extends Controller
 {
@@ -18,6 +19,37 @@ class GroupHistoryController extends Controller
     public function __construct(GroupHistoryRepositoryInterface $database)
     {
         $this->db = $database;
+    }
+
+    /**
+     * ニュース一覧画面の申請中グループ情報を取得
+     */
+    public function index(Request $request)
+    {
+        try {
+            // 検索条件
+            $conditions = [];
+            $conditions['group_histories.user_id'] = Auth::user()->id;
+            if($request->input('@not_equalstatus')) $conditions['@not_equalgroup_histories.status'] = $request->input('@not_equalstatus');
+            if($request->input('@date')) {
+                // 指定した日付までを遡ったデータを取得するように条件設定
+                $days = Carbon::today()->subDay((int)$request->input('@datecreated_at'));
+                $conditions['@dategroup_histories.created_at'] = $days;
+            }
+            // ソート条件
+            $order = [];
+
+            $data = $this->db->searchQuery($conditions, $order);
+            
+            return response()->json(['group_histories' => $data], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            return response()->json([
+              'error_message' => config('const.Group.GET_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
     }
 
     /**

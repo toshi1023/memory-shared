@@ -122,6 +122,8 @@ abstract class  BaseRepository
             } else if (preg_match('/@is_not_null/', $key)) {
                 // Is Not Null
                 $query->whereNotNull(str_replace("@is_not_null", "", $key));
+            } else if (preg_match('/@date/', $key)) {
+                $query->whereDate(str_replace("@date", "", $key), $value);
             } else if (preg_match('/@custom/', $key)) {
                 // カスタム条件
                 $query->whereRaw($value);
