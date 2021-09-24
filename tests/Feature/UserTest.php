@@ -80,8 +80,8 @@ class UserTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJson([
-                // 'user' => ['name' => $this->user->name],
-                'user' => $this->user->id,
+                'id' => $this->user->id,
+                'name' => $this->user->name,
                 'info_message' => config('const.SystemMessage.LOGIN_INFO')
             ]);
 
@@ -131,18 +131,19 @@ class UserTest extends TestCase
     public function api_usersにGETメソッドでアクセス()
     {
         // 認証前
-        $response = $this->get('api/users');
+        $response = $this->get('api/users?@instatus[]=1&@instatus[]=3');
         // リダイレクトが発生する
         $response->assertStatus(302);
 
         // ユーザを認証済みに書き換え
         $this->getActingAs($this->admin);
 
-        $response = $this->get('api/users');
+        $response = $this->get('api/users?@instatus[]=1&@instatus[]=3');
 
         $response->assertOk()
         ->assertJsonFragment([
             'status' => config('const.User.MEMBER'),
+            'status' => config('const.User.ADMIN')
         ]);
     }
 
@@ -160,14 +161,6 @@ class UserTest extends TestCase
         $response->assertOk()
         ->assertJsonFragment([
             'status' => config('const.User.MEMBER'),
-        ]);
-
-        // MEMBERステータス以外をリクエスト
-        $response = $this->get('api/users/'.$this->admin->id);
-
-        $response->assertStatus(404)
-        ->assertJsonFragment([
-            'error_message' => config('const.User.SEARCH_ERR')
         ]);
 
         // 存在しないユーザをリクエスト

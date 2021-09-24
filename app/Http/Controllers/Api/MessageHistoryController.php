@@ -28,10 +28,11 @@ class MessageHistoryController extends Controller
     public function index(Request $request, $user)
     {
         try {
+            if(!$request->input('user_id')) throw new Exception('requestの値にuser_idが設定されていません。');
             // 検索条件
             $conditions = [];
-            $conditions['own_id']  = Auth::user()->id;
-            $conditions['user_id'] = $user;
+            $conditions['own_id']  = $user;
+            $conditions['user_id'] = $request->input('user_id');
             
             // ソート条件
             $order = [];

@@ -50,6 +50,7 @@ class GroupTest extends TestCase
         $this->group = Group::create([
             'name'              => 'RoyalBlue',
             'description'       => self::DIS,
+            'private_flg'       => config('const.Group.PUBLIC'),
             'host_user_id'      => $this->admin->id,
             'update_user_id'    => $this->admin->id,
         ]);
@@ -148,20 +149,21 @@ class GroupTest extends TestCase
         // ユーザを認証済みに書き換え
         $this->getActingAs($this->admin);
 
-        // グループ作成(失敗例: アルバム名が重複する場合)
+        // グループ作成(失敗例: グループ名が重複する場合)
         $data = [
             'name'              => $this->group->name,
             'description'       => 'まったり旅をするグループです',
+            'private_flg'       => config('const.Group.PUBLIC'),
             'host_user_id'      => $this->admin->id,
             'update_user_id'    => $this->admin->id,
         ];
-
+        
         $response = $this->post('api/groups', $data);
 
         $response->assertStatus(400)
         ->assertJsonFragment([
             'errors' => [
-                'name' => ['このグループ名は既に存在します'],
+                'name' => ['公開する場合には重複したグループ名を使用できません。非公開にするか、グループ名を変更してください'],
         ]]);
 
         // グループ作成(成功例)

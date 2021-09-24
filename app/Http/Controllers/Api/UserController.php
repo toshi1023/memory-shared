@@ -106,8 +106,7 @@ class UserController extends Controller
         try {
             // 検索条件
             $conditions = [];
-            if($request->input('name@like') !== '') $conditions = Common::setConditions($request);
-            $conditions['status'] = config('const.User.MEMBER');
+            if($request->input('name@like') || $request->input('@instatus')) $conditions = Common::setConditions($request);
             
             // ソート条件
             $order = [];

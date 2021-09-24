@@ -14,24 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-// Route::resource('/users',       'Api\UserController');
-// Route::get('/users/{user}/families', 'Api\UserController@families')->name('users.families');
-// Route::get('/users/{user}/groups',  'Api\UserController@participating')->name('users.participating');
-// Route::get('/users/{user}/messages', 'Api\UserController@messages')->name('users.messages');
-// Route::resource('/groups',       'Api\GroupController');
-// Route::resource('/groups/{group}/albums',       'Api\AlbumController');
-// Route::post('/albums/validate',  'Api\AlbumController@albumValidate');
-// Route::resource('/groups/{group}/albums/{album}/images',       'Api\UserImageController')->only('store', 'destroy');
-// Route::resource('/messages',       'Api\MessageHistoryController')->only('index', 'store', 'destroy');
-// Route::post('/groups/{group}/history',       'Api\GroupHistoryController@store');
-// Route::put('/groups/{group}/history',       'Api\GroupHistoryController@update');
-// Route::resource('/news',       'Api\NewsController');
-// Route::post('users/{user}/messages/mread',       'Api\MreadManagementController@destroy');
-// Route::post('/news/{news}/nread',       'Api\NreadManagementController@destroy');
-// Route::resource('/groups/{group}/posts',       'Api\PostController')->only('index', 'store', 'destroy');
-// Route::resource('/groups/{group}/posts/{post}/comments',       'Api\PostCommentController')->only('index', 'store', 'destroy');
-
  /************************************************
  *  アプリ側ルーティング(ログイン)
  ************************************************/

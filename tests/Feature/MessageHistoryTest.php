@@ -87,7 +87,7 @@ class MessageHistoryTest extends TestCase
     public function api_messagesにGETメソッドでアクセス()
     {
         // 認証前
-        $response = $this->get('/api/messages');
+        $response = $this->get('api/'.$this->admin->id.'/messages');
 
         $response->assertStatus(302);
 
@@ -95,15 +95,15 @@ class MessageHistoryTest extends TestCase
         $this->getActingAs($this->admin);
 
         // 受信者IDを設定していない場合
-        $response = $this->get('/api/messages');
-
+        $response = $this->get('api/'.$this->admin->id.'/messages');
+        
         $response->assertStatus(500)
         ->assertJsonFragment([
             'error_message' => config('const.Message.GET_ERR')
         ]);
 
         // 正常なリクエストを実行
-        $response = $this->get('/api/messages?user_id='.$this->user->id);
+        $response = $this->get('api/'.$this->admin->id.'/messages?user_id='.$this->user->id);
         
         $response->assertOk()
         ->assertJsonFragment([
@@ -127,7 +127,7 @@ class MessageHistoryTest extends TestCase
             'update_user_id'    => $this->admin->id
         ];
 
-        $response = $this->post('api/messages', $data);
+        $response = $this->post('api/'.$this->admin->id.'/messages', $data);
 
         $response->assertStatus(400)
         ->assertJsonFragment([
@@ -138,7 +138,7 @@ class MessageHistoryTest extends TestCase
         // メッセージ作成(成功例)
         $data['content'] = $this->content[array_rand($this->content)];
 
-        $response = $this->post('api/messages', $data);
+        $response = $this->post('api/'.$this->admin->id.'/messages', $data);
 
         $response->assertOk()
         ->assertJsonFragment([
@@ -152,7 +152,7 @@ class MessageHistoryTest extends TestCase
         $this->getActingAs($this->user);
 
         // adminとのメッセージを取得
-        $response = $this->get('/api/messages?user_id='.$this->admin->id);
+        $response = $this->get('api/'.$this->user->id.'/messages?user_id='.$this->admin->id);
 
         $response->assertOk()
         ->assertJsonFragment([
