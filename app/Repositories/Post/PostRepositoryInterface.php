@@ -15,7 +15,7 @@ interface PostRepositoryInterface
     public function getGroupInfo($group_id);
     public function baseDelete($id);
     public function getGroupMember($group_id);
-    public function confirmGroupMember($user_id, $group_id);
+    public function baseConfirmGroupMember($user_id, $group_id);
     public function getPostComment($post_id);
     public function deletePostComment($comment_id);
 }

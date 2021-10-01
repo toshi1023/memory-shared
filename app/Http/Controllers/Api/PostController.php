@@ -26,7 +26,7 @@ class PostController extends Controller
     {
         try {
             // バリデーションチェック
-            if(!$this->db->confirmGroupMember(Auth::user()->id, $group)) throw new Exception('グループに加盟していないユーザがアクセスを要求しました');
+            if(!$this->db->baseConfirmGroupMember(Auth::user()->id, $group)) throw new Exception('グループに加盟していないユーザがアクセスを要求しました');
             // 検索条件
             $conditions = [];
             $conditions['posts.group_id'] = $group;
@@ -55,6 +55,9 @@ class PostController extends Controller
     {
         DB::beginTransaction();
         try {
+            // バリデーションチェック
+            if(!$this->db->baseConfirmGroupMember(Auth::user()->id, $group)) throw new Exception('グループに加盟していないユーザが投稿の作成を実行しようとしました');
+
             $data = $request->all();
 
             $data['group_id'] = $group;
