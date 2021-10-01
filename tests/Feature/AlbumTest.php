@@ -221,6 +221,14 @@ class AlbumTest extends TestCase
         ->assertJsonFragment([
             'info_message' => config('const.Album.REGISTER_INFO')
         ]);
+
+        // 更新されたデータが存在することを確認
+        $this->assertDatabaseHas('albums', [
+            'name'           => self::ALBUM3,
+            'group_id'       => $this->group->id,
+            'host_user_id'   => $this->admin->id,
+            'update_user_id' => $this->admin->id
+        ]);
     }
 
     /**
@@ -237,5 +245,13 @@ class AlbumTest extends TestCase
         ->assertJsonFragment([
             'info_message' => config('const.Album.DELETE_INFO'),
         ]);
+
+        // 削除されたデータがDBにないことを確認
+        // $this->assertDatabaseMissing('albums', [
+        //     'name'           => self::ALBUM3,
+        //     'group_id'       => $this->group->id,
+        //     'host_user_id'   => $this->admin->id,
+        //     'update_user_id' => $this->admin->id
+        // ]);
     }
 }
