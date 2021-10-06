@@ -94,21 +94,6 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
     }
 
     /**
-     * グループ参加確認
-     * 引数1: ユーザID, 引数2：グループID
-     */
-    public function confirmGroupMember($user_id, $group_id)
-    {
-        $ghRepository = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
-
-        return $ghRepository->baseSearchQuery([
-            'user_id'  => $user_id, 
-            'group_id' => $group_id, 
-            'status'   => config('const.GroupHistory.APPROVAL')
-        ])->exists();
-    }
-
-    /**
      * コメント情報の取得
      * 引数：投稿ID
      */

@@ -245,5 +245,15 @@ class GroupTest extends TestCase
         ->assertJsonFragment([
             'info_message' => config('const.Group.DELETE_INFO'),
         ]);
+
+        // 削除されたデータがDBにないことを確認
+        $this->assertDatabaseMissing('groups', [
+            'id'                => $this->group->id,
+            'name'              => $this->group->name,
+            'description'       => $this->group->description,
+            'private_flg'       => config('const.Group.PRIVATE'),
+            'host_user_id'      => $this->admin->id,
+            'update_user_id'    => $this->admin->id,
+        ]);
     }
 }

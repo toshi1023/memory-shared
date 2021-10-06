@@ -12,4 +12,5 @@ interface PostCommentRepositoryInterface
     public function baseSearchQueryPaginate($conditions=[], $order=[], int $paginate=10);
     public function save($data, $model=null);
     public function baseDelete($id);
+    public function baseConfirmGroupMember($user_id, $group_id);
 }

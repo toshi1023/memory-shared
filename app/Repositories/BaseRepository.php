@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use App\Repositories\GroupHistory\GroupHistoryRepositoryInterface;
 
 abstract class  BaseRepository
 {
@@ -248,5 +249,20 @@ abstract class  BaseRepository
             return true;
         }
         return false;
+    }
+
+    /**
+     * グループ参加確認
+     * 引数1: ユーザID, 引数2：グループID
+     */
+    public function baseConfirmGroupMember($user_id, $group_id)
+    {
+        $ghRepository = $this->baseGetRepository(GroupHistoryRepositoryInterface::class);
+
+        return $ghRepository->baseSearchQuery([
+            'user_id'  => $user_id, 
+            'group_id' => $group_id, 
+            'status'   => config('const.GroupHistory.APPROVAL')
+        ])->exists();
     }
 }

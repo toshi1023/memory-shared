@@ -25,6 +25,9 @@ class PostCommentController extends Controller
     public function index(Request $request, $group, $post)
     {
         try {
+            // バリデーションチェック
+            if(!$this->db->baseConfirmGroupMember(Auth::user()->id, $group)) throw new Exception('グループに加盟していないユーザがアクセスを要求しました');
+
             // 検索条件
             $conditions = [];
             $conditions['post_id'] = $post;
@@ -53,6 +56,9 @@ class PostCommentController extends Controller
     {
         DB::beginTransaction();
         try {
+            // バリデーションチェック
+            if(!$this->db->baseConfirmGroupMember(Auth::user()->id, $group)) throw new Exception('グループに加盟していないユーザがコメントの作成を実行しようとしました');
+
             $data = $request->all();
 
             $data['post_id'] = $post;
