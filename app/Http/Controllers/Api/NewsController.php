@@ -62,8 +62,9 @@ class NewsController extends Controller
             
             // 検索条件の設定
             $conditions = [
-                'user_id'    => $user_id,
-                'news_id'    => $news
+                'user_id'       => $user_id,
+                'news_id'       => $news,
+                '@>created_at'  => Auth::user()->created_at
             ];
             
             $data = $this->db->baseSearchFirst($conditions);

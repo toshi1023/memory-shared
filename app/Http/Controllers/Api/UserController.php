@@ -374,9 +374,17 @@ class UserController extends Controller
                 Common::fileSave($request->file('image_file'), config('const.Aws.USER'), $data->id, $filename);
             }
 
+            // 検索条件の設定
+            $conditions = [
+                'id'        => $data->id
+            ];
+            
+            $edituser = $this->db->getEditInfo($conditions);
+
             DB::commit();
             return response()->json([
                 'info_message' => config('const.User.REGISTER_INFO'),
+                'edituser'     => $edituser,
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();

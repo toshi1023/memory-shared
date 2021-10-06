@@ -84,7 +84,9 @@ class GroupController extends Controller
      */
     public function groupValidate(GroupRegisterRequest $request)
     {
-        return;
+        return [
+            'validate_status' => config('const.SystemMessage.VALIDATE_STATUS')
+        ];
     }
 
     /**
