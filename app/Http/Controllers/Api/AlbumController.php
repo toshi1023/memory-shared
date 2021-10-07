@@ -99,7 +99,9 @@ class AlbumController extends Controller
      */
     public function albumValidate(AlbumRegisterRequest $request)
     {
-        return;
+        return [
+            'validate_status' => config('const.SystemMessage.VALIDATE_STATUS')
+        ];
     }
 
     /**
