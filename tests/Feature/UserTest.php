@@ -324,6 +324,28 @@ class UserTest extends TestCase
         ->assertJsonFragment([
             'info_message' => config('const.User.DELETE_INFO'),
         ]);
+
+        // 削除されたデータがDBにないことを確認
+        $this->assertDatabaseMissing('users', [
+            'id'                => $this->admin->id,
+            'name'              => $this->admin->name,
+            'hobby'             => $this->admin->hobby,
+            'gender'            => $this->admin->gender,
+            'description'       => $this->admin->description,
+            'email'             => $this->admin->email,
+            'email_verified_at' => $this->admin->email_verified_at,
+            'password'          => $this->admin->password,
+            'remember_token'    => $this->admin->remember_token,
+            'status'            => $this->admin->status,
+            'user_agent'        => $this->admin->user_agent,
+            'image_file'        => $this->admin->image_file,
+            'onetime_password'  => $this->admin->onetime_password,
+            'memo'              => $this->admin->memo,
+            'update_user_id'    => $this->admin->update_user_id,
+            'created_at'        => $this->admin->created_at,
+            'updated_at'        => $this->admin->updated_at,
+            'deleted_at'        => $this->admin->deleted_at
+        ]);
     }
 
     /**

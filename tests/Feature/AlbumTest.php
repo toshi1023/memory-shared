@@ -247,11 +247,11 @@ class AlbumTest extends TestCase
         ]);
 
         // 削除されたデータがDBにないことを確認
-        // $this->assertDatabaseMissing('albums', [
-        //     'name'           => self::ALBUM3,
-        //     'group_id'       => $this->group->id,
-        //     'host_user_id'   => $this->admin->id,
-        //     'update_user_id' => $this->admin->id
-        // ]);
+        $this->assertDatabaseMissing('albums', [
+            'name'           => self::ALBUM3,
+            'group_id'       => $this->group->id,
+            'host_user_id'   => $this->admin->id,
+            'update_user_id' => $this->admin->id
+        ]);
     }
 }

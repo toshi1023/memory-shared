@@ -108,7 +108,7 @@ class PostController extends Controller
 
             // 投稿に紐づくコメントも削除
             $comments = $this->db->getPostComment($post);
-
+            
             foreach($comments as $value) {
                 $this->db->deletePostComment($value->id);
             }

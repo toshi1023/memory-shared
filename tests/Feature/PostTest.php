@@ -242,6 +242,7 @@ class PostTest extends TestCase
 
         // 削除されたデータがDBにないことを確認
         $this->assertDatabaseMissing('posts', [
+            'id'                => $this->post1->id,
             'content'           => '8月31日にBBQしましょう！',
             'user_id'           => $this->admin->id,
             'group_id'          => $this->group->id,
@@ -249,12 +250,14 @@ class PostTest extends TestCase
         ]);
         // 削除した投稿に紐づくコメントも削除されていることを確認
         $this->assertDatabaseMissing('post_comments', [
+            'id'                => $this->comment1->id,
             'content'           => '楽しみー！',
             'user_id'           => $this->user->id,
             'post_id'           => $this->post1->id,
             'update_user_id'    => $this->user->id,
         ]);
         $this->assertDatabaseMissing('post_comments', [
+            'id'                => $this->comment1->id,
             'content'           => 'BBQ楽しかったねー！',
             'user_id'           => $this->user->id,
             'post_id'           => $this->post1->id,

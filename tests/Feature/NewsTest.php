@@ -206,27 +206,36 @@ class NewsTest extends TestCase
     /**
      * @test
      */
-    // public function ニュース削除の動作を確認()
-    // {
-    //     // ユーザを認証済みに書き換え(user)
-    //     $this->getActingAs($this->user);
+    public function ニュース削除の動作を確認()
+    {
+        // ユーザを認証済みに書き換え(user)
+        $this->getActingAs($this->user);
 
-    //     // ニュースを削除(管理者権限のない認証済みユーザの場合)
-    //     $response = $this->delete('api/news/'.$this->news2->news_id.'?user_id='.$this->admin->id);
+        // ニュースを削除(管理者権限のない認証済みユーザの場合)
+        $response = $this->delete('api/news/'.$this->news2->news_id.'?user_id='.$this->admin->id);
 
-    //     $response->assertStatus(500)
-    //     ->assertJsonFragment([
-    //         'error_message' => config('const.News.DELETE_ERR')
-    //     ]);
-    //     // var_dump($this->news2);
-    //     // ユーザを認証済みに書き換え(admin)
-    //     $this->getActingAs($this->admin);
+        $response->assertStatus(500)
+        ->assertJsonFragment([
+            'error_message' => config('const.News.DELETE_ERR')
+        ]);
+        
+        // ユーザを認証済みに書き換え(admin)
+        $this->getActingAs($this->admin);
 
-    //     $response = $this->delete('api/news/'.$this->news2->news_id.'?user_id='.$this->admin->id);
+        $response = $this->delete('api/news/'.$this->news2->news_id.'?user_id='.$this->admin->id.'&onetime_password='.$this->admin->onetime_password);
 
-    //     $response->assertOk()
-    //     ->assertJsonFragment([
-    //         'info_message' => config('const.News.DELETE_INFO'),
-    //     ]);
-    // }
+        $response->assertOk()
+        ->assertJsonFragment([
+            'info_message' => config('const.News.DELETE_INFO'),
+        ]);
+
+        // 削除されたデータがDBにないことを確認
+        $this->assertDatabaseMissing('news', [
+            'user_id'           => $this->admin->id,
+            'news_id'           => $this->news2->news_id,
+            'title'             => $this->news2->title,
+            'content'           => $this->news2->content,
+            'update_user_id'    => $this->admin->id,
+        ]);
+    }
 }
