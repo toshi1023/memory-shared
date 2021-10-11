@@ -9,6 +9,8 @@ use Laravel\Sanctum\Sanctum;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
+use App\Events\MessageCreated;
 use App\Models\User;
 use App\Models\MessageHistory;
 use Exception;
@@ -135,6 +137,9 @@ class MessageHistoryTest extends TestCase
                 'content' => ['メッセージが入力されていません'],
         ]]);
 
+        // イベントをコントローラからdispatchしないように設定
+        Event::fake();
+
         // メッセージ作成(成功例)
         $data['content'] = $this->content[array_rand($this->content)];
 
@@ -148,12 +153,18 @@ class MessageHistoryTest extends TestCase
             'update_user_id'    => $this->admin->id
         ]);
 
+        // イベントのdispatchを確認し、受け取った値の内容が上記で作成したメッセージと一致するかどうかを確認
+        Event::assertDispatched(function (MessageCreated $event) use ($response) {
+            return $event->message->content === $response->json()['content'];
+        });
+
         // ユーザを認証済みに書き換え
         $this->getActingAs($this->user);
 
         // adminとのメッセージを取得
         $response = $this->get('api/'.$this->user->id.'/messages?user_id='.$this->admin->id);
 
+        // 先ほど保存されたメッセージが確認できることを確認
         $response->assertOk()
         ->assertJsonFragment([
             'content'           => $data['content'],
