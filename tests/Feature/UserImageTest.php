@@ -84,12 +84,15 @@ class UserImageTest extends TestCase
      */
     public function 画像保存の動作を確認()
     {
-        // 新規ユーザを作成
-        $user = User::factory()->create();
+        // // ダミーフォルダを作成
+        // Storage::fake('memory');
+
+        // // 新規ユーザを作成
+        // $user = User::factory()->create();
         // ユーザを認証済みに書き換え
         $this->getActingAs($this->admin);
 
-        // // 画像作成
+        // // // 画像作成
         // $file1 = UploadedFile::fake()->image('memory.jpg');
         // $file2 = UploadedFile::fake()->image('share.jpg');
 
