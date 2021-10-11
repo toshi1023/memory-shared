@@ -85,7 +85,7 @@ class MessageHistoryController extends Controller
     /**
      * メッセージの削除用アクション
      */
-    public function destroy(Request $request, $message)
+    public function destroy(Request $request, $user, $message)
     {
         try {
             DB::beginTransaction();

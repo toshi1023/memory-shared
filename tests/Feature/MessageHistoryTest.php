@@ -170,4 +170,50 @@ class MessageHistoryTest extends TestCase
         $exists = DB::table('message_relations')->where('user_id1', '=', $this->admin->id)->where('user_id2', '=', $this->user->id)->exists();
         if(!$exists) throw new Exception();
     }
+
+    /**
+     * @test
+     */
+    public function メッセージ削除の動作を確認()
+    {
+        // ユーザを認証済みに書き換え
+        $this->getActingAs($this->admin);
+
+        // 自身以外のメッセージを削除する場合はエラーを返す
+        $response = $this->delete('api/'.$this->admin->id.'/messages/'.$this->message2->id);
+
+        $response->assertStatus(500)
+        ->assertJsonFragment([
+            'error_message' => config('const.Message.DELETE_ERR')
+        ]);
+
+        // 削除エラーとなったデータは引き続きDBに存在することを確認
+        $this->assertDatabaseHas('message_histories', [
+            'id'                => $this->message2->id,
+            'content'           => $this->message2->content,
+            'own_id'            => $this->message2->own_id,
+            'user_id'           => $this->message2->user_id,
+            'update_user_id'    => $this->message2->update_user_id
+        ]);
+
+        // 自身のメッセージを削除する場合は正常動作を実行
+        $response = $this->delete('api/'.$this->admin->id.'/messages/'.$this->message1->id);
+
+        $response->assertOk()
+        ->assertJsonFragment([
+            'info_message' => config('const.Message.DELETE_INFO'),
+        ]);
+
+        // 削除されたデータがDBにないことを確認
+        $this->assertDatabaseMissing('message_histories', [
+            'id'                => $this->message1->id,
+            'content'           => $this->message1->content,
+            'own_id'            => $this->message1->own_id,
+            'user_id'           => $this->message1->user_id,
+            'update_user_id'    => $this->message1->update_user_id,
+            'created_at'        => $this->message1->created_at,
+            'updated_at'        => $this->message1->updated_at,
+            'deleted_at'        => $this->message1->deleted_at
+        ]);
+    }
 }

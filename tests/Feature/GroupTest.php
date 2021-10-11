@@ -234,7 +234,7 @@ class GroupTest extends TestCase
     /**
      * @test
      */
-    public function group削除の動作を確認()
+    public function グループ削除の動作を確認()
     {
         // ユーザを認証済みに書き換え
         $this->getActingAs($this->admin);
