@@ -30,7 +30,7 @@ class UserRegisterRequest extends FormRequest
             return [
                 // ユーザのバリデーションチェック
                 'name'                  => ['required', 'max:15', Rule::unique('users')->ignore($this->id, 'id')],
-                'email'                 => ['required', 'email', 'max:30', 'regex:/^[a-zA-Z0-9\.\-@]+$/'],
+                'email'                 => ['required', 'email', 'max:50', 'regex:/^[a-zA-Z0-9\.\-@]+$/'],
                 'image_file'            => 'image|mimes:jpeg,png,jpg,gif|max:1024',
             ];
         }
@@ -38,7 +38,7 @@ class UserRegisterRequest extends FormRequest
         return [
             // ユーザのバリデーションチェック
             'name'                  => ['required', 'max:15', Rule::unique('users')->ignore($this->id, 'id')],
-            'email'                 => ['required', 'email', 'max:30', 'regex:/^[a-zA-Z0-9\.\-@]+$/'],
+            'email'                 => ['required', 'email', 'max:50', 'regex:/^[a-zA-Z0-9\.\-@]+$/'],
             'password'              => ['required', 'min:6', 'confirmed', 'regex:/^[0-9a-zA-Z\_@!?#%&]+$/'],
             'password_confirmation' => ['required', 'min:6', 'regex:/^[0-9a-zA-Z\_@!?#%&]+$/'],
             'image_file'            => 'image|mimes:jpeg,png,jpg,gif|max:1024',
@@ -56,7 +56,7 @@ class UserRegisterRequest extends FormRequest
             "name.max"                      => "ユーザ名は15文字以内で入力してください",
             "image_file.max"                => "1Mを超えています。",
             'email.regex'                   => '@以前は半角英数字で入力してください',
-            "email.max"                     => "メールアドレスは100文字以内で入力してください",
+            "email.max"                     => "メールアドレスは50文字以内で入力してください",
             'password.regex'                => 'パスワードは半角英数字及び「_@!?#%&」の記号のみで入力してください',
             'password_confirmation.regex'   => 'パスワード（確認）は半角英数字及び「_@!?#%&」の記号のみで入力してください',
         ];

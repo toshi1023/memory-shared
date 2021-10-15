@@ -163,7 +163,7 @@ return [
         'prefecture'                => '都道府県',
         'birthday'                  => '誕生日',
         'gender'                    => '性別',
-        'image_file'                => 'アップロード画像',
+        'image_file'                => 'アップロードファイル',
         'video_file'                => 'アップロード動画',
         'title'                     => 'タイトル',
         'content'                   => '内容',

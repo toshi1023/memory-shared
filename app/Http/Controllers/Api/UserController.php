@@ -25,9 +25,25 @@ class UserController extends Controller
     /**
      * @OA\Schema(
      *     schema="user_list",
-     *     required={"id", "name", "email", "status", "image_file"},
+     *     required={"id", "name", "hobby", "gender", "description", "status", "image_file"},
      *     @OA\Property(property="id", type="integer", example=1),
      *     @OA\Property(property="name", type="string", example="test1"),
+     *     @OA\Property(property="hobby", type="string", example="野球観戦"),
+     *     @OA\Property(property="gender", type="integer", example="0"),
+     *     @OA\Property(property="description", type="string", example="仲良くしましょう！よろしく！"),
+     *     @OA\Property(property="status", type="integer", example="1"),
+     *     @OA\Property(property="image_file", type="string", example="xxxxoooo.png"),
+     * )
+     */
+    /**
+     * @OA\Schema(
+     *     schema="user_detail",
+     *     required={"id", "name", "hobby", "gender", "description", "email", "status", "image_file"},
+     *     @OA\Property(property="id", type="integer", example=1),
+     *     @OA\Property(property="name", type="string", example="test1"),
+     *     @OA\Property(property="hobby", type="string", example="野球観戦"),
+     *     @OA\Property(property="gender", type="integer", example="0"),
+     *     @OA\Property(property="description", type="string", example="仲良くしましょう！よろしく！"),
      *     @OA\Property(property="email", type="string", example="test1@xxx.co.jp"),
      *     @OA\Property(property="status", type="integer", example="1"),
      *     @OA\Property(property="image_file", type="string", example="xxxxoooo.png"),
@@ -36,14 +52,54 @@ class UserController extends Controller
     /**
      * @OA\Schema(
      *     schema="user_register",
-     *     required={"id", "name", "email", "password", "status", "user_agent", "image_file"},
-     *     @OA\Property(property="id", type="integer", example=1),
+     *     required={"name", "email", "password", "password_confirmation", "user_agent", "image_file"},
      *     @OA\Property(property="name", type="string", example="test1"),
-     *     @OA\Property(property="password", type="string", example="test1234"),
      *     @OA\Property(property="email", type="string", example="test1@xxx.co.jp"),
-     *     @OA\Property(property="status", type="integer", example="1"),
+     *     @OA\Property(property="password", type="string", example="test1234"),
+     *     @OA\Property(property="password_confirmation", type="string", example="test1234"),
      *     @OA\Property(property="user_agent", type="string", example="Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_8_8) AppleWebKit/5330 (KHTML, like Gecko) Chrome/36.0.833.0 Mobile Safari/5330"),
      *     @OA\Property(property="image_file", type="string", example="xxxxoooo.png"),
+     * )
+     */
+    /**
+     * @OA\Schema(
+     *     schema="user_update",
+     *     required={"id", "name", "email", "password", "password_confirmation", "hobby", "gender", "description", "user_agent", "image_file"},
+     *     @OA\Property(property="id", type="integer", example=1),
+     *     @OA\Property(property="name", type="string", example="test1"),
+     *     @OA\Property(property="email", type="string", example="test1@xxx.co.jp"),
+     *     @OA\Property(property="password", type="string", example="test1234"),
+     *     @OA\Property(property="password_confirmation", type="string", example="test1234"),
+     *     @OA\Property(property="hobby", type="string", example="野球観戦"),
+     *     @OA\Property(property="gender", type="integer", example="0"),
+     *     @OA\Property(property="description", type="string", example="仲良くしましょう！よろしく！"),
+     *     @OA\Property(property="user_agent", type="string", example="Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_8_8) AppleWebKit/5330 (KHTML, like Gecko) Chrome/36.0.833.0 Mobile Safari/5330"),
+     *     @OA\Property(property="image_file", type="string", example="xxxxoooo.png"),
+     * )
+     */
+    /**
+     * @OA\Schema(
+     *     schema="errors",
+     *     required={"name", "email", "password", "password_confirmation", "image_file"},
+     *     @OA\Property(property="name", type="object", required={"unique", "name.max"},
+     *          @OA\Property(property="unique", type="string", example="このユーザ名はすでに使用されています"),
+     *          @OA\Property(property="name.max", type="string", example="ユーザ名は15文字以内で入力してください"),
+     *     ),
+     *     @OA\Property(property="email", type="object", required={"email", "email.regex"},
+     *          @OA\Property(property="email", type="string", example="メールアドレスの書式のみ有効です"),
+     *          @OA\Property(property="email.regex", type="string", example="@以前は半角英数字で入力してください"),
+     *     ),
+     *     @OA\Property(property="password", type="object", required={"confirmed", "password.regex"},
+     *          @OA\Property(property="confirmed", type="string", example="パスワードを確認用と一致させてください"),
+     *          @OA\Property(property="password.regex", type="string", example="パスワードは半角英数字及び「_@!?#%&」の記号のみで入力してください"),
+     *     ),
+     *     @OA\Property(property="password_confirmation", type="object", required={"password_confirmation.regex"},
+     *          @OA\Property(property="password_confirmation.regex", type="string", example="パスワード（確認）は半角英数字及び「_@!?#%&」の記号のみで入力してください"),
+     *     ),
+     *     @OA\Property(property="image_file", type="object", required={"mimes", "image_file.max"},
+     *          @OA\Property(property="mimes", type="string", example="アップロードファイルはjpeg,png,jpg,gifタイプのみ有効です"),
+     *          @OA\Property(property="image_file.max", type="string", example="1Mを超えています。"),
+     *     ),
      * )
      */
 
@@ -134,7 +190,7 @@ class UserController extends Controller
      *     tags={"users"},
      *     @OA\Parameter(
      *         name="user",
-     *         description="ユーザ名",
+     *         description="ユーザID",
      *         in="path",
      *         required=true,
      *         type="string"
@@ -148,7 +204,7 @@ class UserController extends Controller
      *                 property="data",
      *                 type="object",
      *                 description="存在するユーザかつステータスがMEMBERのユーザデータ",
-     *                 ref="#/components/schemas/user_list"
+     *                 ref="#/components/schemas/user_detail"
      *             )
      *         )
      *     ),
@@ -180,7 +236,7 @@ class UserController extends Controller
      *     ),
      * )
      * 
-     * 【ハンバーガーメニュー】
+     * 
      * ユーザ詳細の表示用アクション
      */
     public function show(Request $request, $user)
@@ -212,6 +268,50 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="api/users/{user}/edit",
+     *     description="編集対象のユーザ情報を取得する",
+     *     produces={"application/json"},
+     *     tags={"users"},
+     *     @OA\Parameter(
+     *         name="user",
+     *         description="ユーザID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 description="存在するユーザのデータ",
+     *                 ref="#/components/schemas/user_detail"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="ユーザ情報を取得出来ませんでした"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
+     * 
+     * ユーザ情報の編集時表示用アクション
+     */
     public function edit(Request $request, $user)
     {
         try {
@@ -242,6 +342,51 @@ class UserController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *     path="/api/validate",
+     *     description="ユーザ新規登録時のバリデーションを実行する",
+     *     produces={"application/json"},
+     *     tags={"users"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="request",
+     *                 type="object",
+     *                 description="リクエストボディのjsonのプロパティの例",
+     *                 ref="#/components/schemas/user_register"
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="validate_status",
+     *                 type="string",
+     *                 description="バリデーションチェック通過のメッセージをリターン",
+     *                 example="OK"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="string",
+     *                 description="バリデーションエラーのメッセージを表示",
+     *                 ref="#/components/schemas/errors"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * ユーザバリデーション用メソッド(sanctumなし)
      *   ※データ登録時には非同期処理で常時確認に使用
      */
