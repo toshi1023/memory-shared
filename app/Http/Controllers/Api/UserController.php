@@ -396,7 +396,53 @@ class UserController extends Controller
             'validate_status' => config('const.SystemMessage.VALIDATE_STATUS')
         ];
     }
+    
     /**
+     * @OA\Post(
+     *     path="api/users/validate",
+     *     description="ユーザ更新時のバリデーションを実行する",
+     *     produces={"application/json"},
+     *     tags={"users"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="request",
+     *                 type="object",
+     *                 description="リクエストボディのjsonのプロパティの例",
+     *                 ref="#/components/schemas/user_update"
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="validate_status",
+     *                 type="string",
+     *                 description="バリデーションチェック通過のメッセージをリターン",
+     *                 example="OK"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="string",
+     *                 description="バリデーションエラーのメッセージを表示",
+     *                 ref="#/components/schemas/errors"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * ユーザバリデーション用メソッド(sanctumあり)
      *   ※データ登録時には非同期処理で常時確認に使用
      */
@@ -495,6 +541,64 @@ class UserController extends Controller
     }
 
     /**
+     * @OA\Put(
+     *     path="/api/users/{user}",
+     *     description="ユーザデータを更新保存する",
+     *     produces={"application/json"},
+     *     tags={"users"},
+     *     @OA\Parameter(
+     *         name="user",
+     *         description="ユーザID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="request",
+     *                 type="object",
+     *                 description="リクエストボディのjsonのプロパティの例",
+     *                 ref="#/components/schemas/user_update"
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="info_message",
+     *                 type="string",
+     *                 description="保存成功のメッセージを表示",
+     *                 example="ユーザ情報を登録しました"
+     *             ),
+     *             @OA\Property(
+     *                 property="edituser",
+     *                 type="string",
+     *                 description="更新完了後のユーザデータ",
+     *                 ref="#/components/schemas/user_update"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="ユーザ情報の登録に失敗しました"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * ユーザ更新処理用アクション
      */
     public function update(UserRegisterRequest $request)
@@ -544,6 +648,46 @@ class UserController extends Controller
     }
 
     /**
+     * @OA\Delete(
+     *     path="/api/users/{user}",
+     *     description="ユーザデータを論理削除する",
+     *     produces={"application/json"},
+     *     tags={"users"},
+     *     @OA\Parameter(
+     *         name="user",
+     *         description="ユーザID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="info_message",
+     *                 type="string",
+     *                 description="論理削除成功のメッセージを表示",
+     *                 example="退会が完了しました"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="サーバーエラーにより退会に失敗しました。管理者にお問い合わせください"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * アカウント退会用アクション
      */
     public function destroy(Request $request, $user)

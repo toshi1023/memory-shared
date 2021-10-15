@@ -198,6 +198,134 @@
                 "produces": [
                     "application/json"
                 ]
+            },
+            "put": {
+                "tags": [
+                    "users"
+                ],
+                "description": "ユーザデータを更新保存する",
+                "operationId": "App\\Http\\Controllers\\Api\\UserController::update",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ユーザID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "request": {
+                                        "$ref": "#/components/schemas/user_update"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "info_message": {
+                                            "description": "保存成功のメッセージを表示",
+                                            "type": "string",
+                                            "example": "ユーザ情報を登録しました"
+                                        },
+                                        "edituser": {
+                                            "$ref": "#/components/schemas/user_update"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "ユーザ情報の登録に失敗しました"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "users"
+                ],
+                "description": "ユーザデータを論理削除する",
+                "operationId": "App\\Http\\Controllers\\Api\\UserController::destroy",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ユーザID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "info_message": {
+                                            "description": "論理削除成功のメッセージを表示",
+                                            "type": "string",
+                                            "example": "退会が完了しました"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "サーバーエラーにより退会に失敗しました。管理者にお問い合わせください"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
             }
         },
         "api/users/{user}/edit": {
@@ -270,6 +398,67 @@
                                 "properties": {
                                     "request": {
                                         "$ref": "#/components/schemas/user_register"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "validate_status": {
+                                            "description": "バリデーションチェック通過のメッセージをリターン",
+                                            "type": "string",
+                                            "example": "OK"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "$ref": "#/components/schemas/errors"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "api/users/validate": {
+            "post": {
+                "tags": [
+                    "users"
+                ],
+                "description": "ユーザ更新時のバリデーションを実行する",
+                "operationId": "App\\Http\\Controllers\\Api\\UserController::userValidate",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "request": {
+                                        "$ref": "#/components/schemas/user_update"
                                     }
                                 },
                                 "type": "object"
