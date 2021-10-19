@@ -107,7 +107,7 @@ class UserController extends Controller
     /**
      * @OA\Get(
      *     path="/api/users",
-     *     description="statusがMEMBERのユーザ情報をすべて取得する",
+     *     description="statusがMEMBERもしくはADMINのユーザ情報をページネーション形式で取得する(件数：50件)",
      *     produces={"application/json"},
      *     tags={"users"},
      *     @OA\Parameter(
@@ -124,6 +124,13 @@ class UserController extends Controller
      *         required=false,
      *         type="string"
      *     ),
+     *     @OA\Parameter(
+     *         name="sort_created_at",
+     *         description="作成日時順でソート",
+     *         in="query",
+     *         required=false,
+     *         type="string"
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Success",
@@ -132,7 +139,7 @@ class UserController extends Controller
      *             @OA\Property(
      *                 property="data",
      *                 type="array",
-     *                 description="statusがMEMBERのユーザデータを返す",
+     *                 description="statusがMEMBERもしくはADMINのユーザデータを返す",
      *                 @OA\Items(
      *                      ref="#/components/schemas/user_list"
      *                 ),
@@ -168,7 +175,7 @@ class UserController extends Controller
             $order = [];
             if($request->sort_name || $request->sort_created_at) $order = Common::setOrder($request);
     
-            $data = $this->db->searchQueryPaginate($conditions, $order);
+            $data = $this->db->searchQueryPaginate($conditions, $order, 50);
             
             return response()->json(['users' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {

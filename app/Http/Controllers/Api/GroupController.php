@@ -39,7 +39,7 @@ class GroupController extends Controller
             $order = [];
             if($request->sort_name || $request->sort_created_at) $order = Common::setOrder($request);
     
-            $data = $this->db->searchQueryPaginate($conditions, $order);
+            $data = $this->db->searchQueryPaginate($conditions, $order, 50);
             
             return response()->json(['groups' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
