@@ -113,6 +113,15 @@ class GroupController extends Controller
      *     ),
      * )
      */
+    /**
+     * @OA\Schema(
+     *     schema="group_users_info",
+     *     required={"id", "name", "image_file"},
+     *     @OA\Property(property="id", type="integer", example="8"),
+     *     @OA\Property(property="name", type="string", example="test group 8"),
+     *     @OA\Property(property="image_file", type="string", example="xxxxoooo.png")
+     * )
+     */
 
      /**
      * @OA\Get(
@@ -529,6 +538,46 @@ class GroupController extends Controller
     }
 
     /**
+     * @OA\Delete(
+     *     path="/api/groups/{group}",
+     *     description="グループデータを論理削除する",
+     *     produces={"application/json"},
+     *     tags={"groups"},
+     *     @OA\Parameter(
+     *         name="group",
+     *         description="グループID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / 論理削除成功のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="info_message",
+     *                 type="string",
+     *                 description="論理削除成功のメッセージを表示",
+     *                 example="グループの削除が完了しました"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="サーバーエラーによりグループの削除に失敗しました。管理者にお問い合わせください"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * グループの削除用アクション
      */
     public function destroy(Request $request, $group)
@@ -561,6 +610,49 @@ class GroupController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="api/groups/{group}/users",
+     *     description="指定したグループに参加しているユーザ情報をすべて取得する",
+     *     produces={"application/json"},
+     *     tags={"groups"},
+     *     @OA\Parameter(
+     *         name="group",
+     *         description="グループID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / グループ一覧画面からアクセスしたグループ詳細ページに、そのグループに参加しているユーザ情報をusersテーブルから取得して表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="pusers",
+     *                 type="array",
+     *                 description="グループ一覧画面からアクセスしたグループ詳細ページに、そのグループに参加しているユーザ情報をusersテーブルから取得して表示",
+     *                 @OA\Items(
+     *                      ref="#/components/schemas/group_users_info"
+     *                 ),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="ユーザ情報を取得出来ませんでした"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
+     * 
      * 参加者一覧(GroupDetail用)
      */
     public function participating(Request $request, $group)
