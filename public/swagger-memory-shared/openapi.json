@@ -1,6 +1,346 @@
 {
     "openapi": "3.0.0",
     "paths": {
+        "/api/groups": {
+            "get": {
+                "tags": [
+                    "groups"
+                ],
+                "description": "private_flgが0(公開)のグループデータをページネーション形式で取得する(件数：50件)",
+                "operationId": "App\\Http\\Controllers\\Api\\GroupController::index",
+                "parameters": [
+                    {
+                        "name": "name@like",
+                        "in": "query",
+                        "description": "グループ名の検索値(あいまい検索に対応)",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "sort_name",
+                        "in": "query",
+                        "description": "グループ名でソート",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "sort_created_at",
+                        "in": "query",
+                        "description": "作成日時順でソート",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / private_flgが0(公開)のグループデータを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "private_flgが0(公開)のグループデータを表示",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/group_list"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "グループ情報を取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            },
+            "post": {
+                "tags": [
+                    "groups"
+                ],
+                "description": "グループデータを保存する",
+                "operationId": "App\\Http\\Controllers\\Api\\GroupController::store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "request": {
+                                        "$ref": "#/components/schemas/group_register"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success / 保存成功のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "info_message": {
+                                            "description": "保存成功のメッセージを表示",
+                                            "type": "string",
+                                            "example": "グループ情報を登録しました"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "グループ情報の登録に失敗しました"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/api/groups/{group}": {
+            "get": {
+                "tags": [
+                    "groups"
+                ],
+                "description": "指定したグループの情報をすべて取得する",
+                "operationId": "App\\Http\\Controllers\\Api\\GroupController::show",
+                "parameters": [
+                    {
+                        "name": "group",
+                        "in": "path",
+                        "description": "グループID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / 指定したグループのデータを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/group_detail"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "存在しないグループのページをリクエストした場合、検索結果が0件であることを表すメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "検索結果が0件であることを表すメッセージを表示",
+                                            "type": "string",
+                                            "example": "指定したグループは存在しません"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "グループ情報を取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            },
+            "put": {
+                "tags": [
+                    "groups"
+                ],
+                "description": "グループデータを更新保存する",
+                "operationId": "App\\Http\\Controllers\\Api\\GroupController::update",
+                "parameters": [
+                    {
+                        "name": "group",
+                        "in": "path",
+                        "description": "グループID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "request": {
+                                        "$ref": "#/components/schemas/group_update"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success / 保存成功のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "info_message": {
+                                            "description": "保存成功のメッセージを表示",
+                                            "type": "string",
+                                            "example": "グループ情報を登録しました"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/group_update"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "グループ情報の登録に失敗しました"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "api/groups/validate": {
+            "post": {
+                "tags": [
+                    "groups"
+                ],
+                "description": "グループ作成時もしくは更新時のバリデーションを実行する",
+                "operationId": "App\\Http\\Controllers\\Api\\GroupController::groupValidate",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "request": {
+                                        "$ref": "#/components/schemas/group_update"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success / バリデーションチェック通過のメッセージをリターン",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "validate_status": {
+                                            "description": "バリデーションチェック通過のメッセージをリターン",
+                                            "type": "string",
+                                            "example": "OK"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Server error / バリデーションエラーのメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "$ref": "#/components/schemas/group_errors"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
         "/api/users": {
             "get": {
                 "tags": [
@@ -941,6 +1281,333 @@
     },
     "components": {
         "schemas": {
+            "group_list": {
+                "required": [
+                    "id",
+                    "name",
+                    "description",
+                    "private_flg",
+                    "welcome_flg",
+                    "image_file",
+                    "host_user_id",
+                    "created_at",
+                    "updated_at",
+                    "users"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "test group 1"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "盛り上げていきましょう！"
+                    },
+                    "private_flg": {
+                        "type": "integer",
+                        "example": "0"
+                    },
+                    "welcome_flg": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "image_file": {
+                        "type": "string",
+                        "example": "xxxxoooo.png"
+                    },
+                    "host_user_id": {
+                        "type": "number",
+                        "example": "1"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2021-04-25 12:02:55"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2021-04-28 14:13:00"
+                    },
+                    "users": {
+                        "description": "usersテーブルとのリレーションデータ",
+                        "required": [
+                            "id",
+                            "name",
+                            "image_file",
+                            "gender"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": "7"
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "test user"
+                            },
+                            "image_file": {
+                                "type": "string",
+                                "example": "xxxxoooo.png"
+                            },
+                            "gender": {
+                                "type": "integer",
+                                "example": "1"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "group_detail": {
+                "required": [
+                    "id",
+                    "name",
+                    "description",
+                    "private_flg",
+                    "welcome_flg",
+                    "image_file",
+                    "host_user_id",
+                    "created_at",
+                    "updated_at",
+                    "users"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "test group 2"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "バスケを楽しむグループです"
+                    },
+                    "private_flg": {
+                        "type": "integer",
+                        "example": "0"
+                    },
+                    "welcome_flg": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "image_file": {
+                        "type": "string",
+                        "example": "xxxxoooo.png"
+                    },
+                    "host_user_id": {
+                        "type": "number",
+                        "example": "1"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2021-04-25 12:02:55"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2021-04-28 14:13:00"
+                    },
+                    "users": {
+                        "description": "usersテーブルとのリレーションデータ",
+                        "required": [
+                            "id",
+                            "name",
+                            "image_file",
+                            "gender"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": "9"
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "test user 9"
+                            },
+                            "image_file": {
+                                "type": "string",
+                                "example": "xxxxoooo.png"
+                            },
+                            "gender": {
+                                "type": "integer",
+                                "example": "0"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "groupHistories": {
+                        "description": "group_historiesテーブルとのリレーションデータ",
+                        "required": [
+                            "id",
+                            "group_id",
+                            "user_id",
+                            "status"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": "11"
+                            },
+                            "group_id": {
+                                "type": "integer",
+                                "example": "2"
+                            },
+                            "user_id": {
+                                "type": "integer",
+                                "example": "4"
+                            },
+                            "gender": {
+                                "type": "integer",
+                                "example": "2"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "group_register": {
+                "required": [
+                    "name",
+                    "description",
+                    "private_flg",
+                    "welcome_flg",
+                    "image_file",
+                    "host_user_id"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "test group 4"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "ヒッチハイクを楽しむために作りました！"
+                    },
+                    "private_flg": {
+                        "type": "integer",
+                        "example": "0"
+                    },
+                    "welcome_flg": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "image_file": {
+                        "type": "string",
+                        "example": "xxxxoooo.png"
+                    },
+                    "host_user_id": {
+                        "type": "number",
+                        "example": "6"
+                    }
+                },
+                "type": "object"
+            },
+            "group_update": {
+                "required": [
+                    "id",
+                    "name",
+                    "description",
+                    "private_flg",
+                    "welcome_flg",
+                    "image_file",
+                    "host_user_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "test group 4"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "ヒッチハイクを楽しむために作りました！"
+                    },
+                    "private_flg": {
+                        "type": "integer",
+                        "example": "0"
+                    },
+                    "welcome_flg": {
+                        "type": "integer",
+                        "example": "0"
+                    },
+                    "image_file": {
+                        "type": "string",
+                        "example": "xxxxoooo.png"
+                    },
+                    "host_user_id": {
+                        "type": "number",
+                        "example": "6"
+                    }
+                },
+                "type": "object"
+            },
+            "group_errors": {
+                "required": [
+                    "name",
+                    "image_file",
+                    "host_user_id"
+                ],
+                "properties": {
+                    "name": {
+                        "required": [
+                            "name.max",
+                            "GroupNameRule"
+                        ],
+                        "properties": {
+                            "name.max": {
+                                "type": "string",
+                                "example": "グループ名は50文字以内で入力してください"
+                            },
+                            "GroupNameRule": {
+                                "description": "独自ルールを作成。private_flgが0(公開)の場合のみ、グループ名の重複を許さない",
+                                "type": "string",
+                                "example": "公開する場合には重複したグループ名を使用できません。非公開にするか、グループ名を変更してください"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "image_file": {
+                        "required": [
+                            "mimes",
+                            "image_file.max"
+                        ],
+                        "properties": {
+                            "mimes": {
+                                "type": "string",
+                                "example": "アップロードファイルはjpeg,png,jpg,gifタイプのみ有効です"
+                            },
+                            "image_file.max": {
+                                "type": "string",
+                                "example": "1Mを超えています。"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "host_user_id": {
+                        "required": [
+                            "GroupUpdateRule"
+                        ],
+                        "properties": {
+                            "GroupUpdateRule": {
+                                "description": "独自ルールを作成。グループの作成者以外、グループデータの更新を許さない",
+                                "type": "string",
+                                "example": "グループ作成者以外はグループ情報を更新できません"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
             "user_list": {
                 "required": [
                     "id",
