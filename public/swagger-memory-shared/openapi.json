@@ -530,13 +530,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Success / 同一グループにいる、group_historiesのstatusが2(メンバー)であるユーザの情報を表示",
+                        "description": "Success / 同一グループにいる、group_historiesテーブルのstatusが2(メンバー)であるユーザの情報を表示",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "data": {
-                                            "description": "同一グループにいる、group_historiesのstatusが2(メンバー)であるユーザの情報を表示",
+                                            "description": "同一グループにいる、group_historiesテーブルのstatusが2(メンバー)であるユーザの情報を表示",
                                             "type": "array",
                                             "items": {
                                                 "$ref": "#/components/schemas/user_list"
@@ -589,13 +589,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Success / ログインしているユーザの、group_historiesのstatusが2(メンバー)であるグループ情報を表示",
+                        "description": "Success / ログインしているユーザの、group_historiesテーブルのstatusが2(メンバー)であるグループ情報を表示",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "data": {
-                                            "description": "ログインしているユーザの、group_historiesのstatusが2(メンバー)であるグループ情報を表示",
+                                            "description": "ログインしているユーザの、group_historiesテーブルのstatusが2(メンバー)であるグループ情報を表示",
                                             "type": "array",
                                             "items": {
                                                 "$ref": "#/components/schemas/user_groups"
@@ -660,7 +660,7 @@
                                                 "properties": {
                                                     "id": {
                                                         "type": "integer",
-                                                        "example": 1
+                                                        "example": 24
                                                     },
                                                     "content": {
                                                         "type": "string",
@@ -748,6 +748,183 @@
                                             "description": "サーバエラー用のメッセージを表示",
                                             "type": "string",
                                             "example": "ユーザ情報を取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "api/users/{user}/wgroups": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "description": "自身が作成したグループで、「歓迎中」として、すべてのユーザに公開するデータを取得する",
+                "operationId": "App\\Http\\Controllers\\Api\\UserController::welcomeGgroups",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ユーザID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / ログインしているユーザが作成した、groupsテーブルのwelcome_flgが1(歓迎中)であるグループ情報を表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "ログインしているユーザが作成した、groupsテーブルのwelcome_flgが1(歓迎中)であるグループ情報を表示",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/user_groups"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "ユーザ情報を取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "api/users/{user}/pgroups": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "description": "ユーザの詳細ページにて、そのユーザ参加していて、かつ公開設定が「公開」となっているグループ情報を取得する",
+                "operationId": "App\\Http\\Controllers\\Api\\UserController::participatingGroups",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ユーザID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / アクセスしたユーザ詳細ページに紹介されているユーザが、参加しているグループ情報をgroupsテーブルのprivate_flgが0(公開)である情報に限定して表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "アクセスしたユーザ詳細ページに紹介されているユーザが、参加しているグループ情報をgroupsテーブルのprivate_flgが0(公開)である情報に限定して表示",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/user_groups_info"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "グループ情報を取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "api/users/{user}/igroups": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "description": "自身が作成したグループに、別ユーザを招待するためのデータを取得する",
+                "operationId": "App\\Http\\Controllers\\Api\\UserController::inviteGgroups",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ユーザID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / ログインしているユーザが作成した、groupsテーブルのhost_user_idが自身のIDであるグループ情報を表示。また、すでに招待するユーザが参加しているグループ情報は省いて表示する",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "\r\n     *                      ログインしているユーザが作成した、groupsテーブルのhost_user_idが自身のIDであるグループ情報を表示。\r\n     *                      また、すでに招待するユーザが参加しているグループ情報は省いて表示する\r\n     *                 ",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/user_groups_info"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "グループ情報を取得出来ませんでした"
                                         }
                                     },
                                     "type": "object"
@@ -1130,6 +1307,33 @@
                             }
                         },
                         "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "user_groups_info": {
+                "required": [
+                    "id",
+                    "name",
+                    "image_file",
+                    "private_flg"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "10"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "test10"
+                    },
+                    "image_file": {
+                        "type": "string",
+                        "example": "xxxxoooo.png"
+                    },
+                    "private_flg": {
+                        "type": "integer",
+                        "example": "0"
                     }
                 },
                 "type": "object"

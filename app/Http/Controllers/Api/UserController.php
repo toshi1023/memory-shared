@@ -126,6 +126,16 @@ class UserController extends Controller
      *     )
      * )
      */
+    /**
+     * @OA\Schema(
+     *     schema="user_groups_info",
+     *     required={"id", "name", "image_file", "private_flg"},
+     *     @OA\Property(property="id", type="integer", example="10"),
+     *     @OA\Property(property="name", type="string", example="test10"),
+     *     @OA\Property(property="image_file", type="string", example="xxxxoooo.png"),
+     *     @OA\Property(property="private_flg", type="integer", example="0"),
+     * )
+     */
 
 
     /**
@@ -757,13 +767,13 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Success / 同一グループにいる、group_historiesのstatusが2(メンバー)であるユーザの情報を表示",
+     *         description="Success / 同一グループにいる、group_historiesテーブルのstatusが2(メンバー)であるユーザの情報を表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
      *                 property="data",
      *                 type="array",
-     *                 description="同一グループにいる、group_historiesのstatusが2(メンバー)であるユーザの情報を表示",
+     *                 description="同一グループにいる、group_historiesテーブルのstatusが2(メンバー)であるユーザの情報を表示",
      *                 @OA\Items(
      *                      ref="#/components/schemas/user_list"
      *                 ),
@@ -836,13 +846,13 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Success / ログインしているユーザの、group_historiesのstatusが2(メンバー)であるグループ情報を表示",
+     *         description="Success / ログインしているユーザの、group_historiesテーブルのstatusが2(メンバー)であるグループ情報を表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
      *                 property="data",
      *                 type="array",
-     *                 description="ログインしているユーザの、group_historiesのstatusが2(メンバー)であるグループ情報を表示",
+     *                 description="ログインしているユーザの、group_historiesテーブルのstatusが2(メンバー)であるグループ情報を表示",
      *                 @OA\Items(
      *                      ref="#/components/schemas/user_groups"
      *                 ),
@@ -977,6 +987,49 @@ class UserController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="api/users/{user}/wgroups",
+     *     description="自身が作成したグループで、「歓迎中」として、すべてのユーザに公開するデータを取得する",
+     *     produces={"application/json"},
+     *     tags={"users"},
+     *     @OA\Parameter(
+     *         name="user",
+     *         description="ユーザID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / ログインしているユーザが作成した、groupsテーブルのwelcome_flgが1(歓迎中)であるグループ情報を表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 description="ログインしているユーザが作成した、groupsテーブルのwelcome_flgが1(歓迎中)であるグループ情報を表示",
+     *                 @OA\Items(
+     *                      ref="#/components/schemas/user_groups"
+     *                 ),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="ユーザ情報を取得出来ませんでした"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
+     * 
      * 歓迎中のグループ一覧(UserDetail用)
      */
     public function welcomeGgroups(Request $request, $user)
@@ -1006,6 +1059,49 @@ class UserController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="api/users/{user}/pgroups",
+     *     description="ユーザの詳細ページにて、そのユーザ参加していて、かつ公開設定が「公開」となっているグループ情報を取得する",
+     *     produces={"application/json"},
+     *     tags={"users"},
+     *     @OA\Parameter(
+     *         name="user",
+     *         description="ユーザID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / アクセスしたユーザ詳細ページに紹介されているユーザが、参加しているグループ情報をgroupsテーブルのprivate_flgが0(公開)である情報に限定して表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 description="アクセスしたユーザ詳細ページに紹介されているユーザが、参加しているグループ情報をgroupsテーブルのprivate_flgが0(公開)である情報に限定して表示",
+     *                 @OA\Items(
+     *                      ref="#/components/schemas/user_groups_info"
+     *                 ),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="グループ情報を取得出来ませんでした"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
+     * 
      * 参加中のグループ一覧(UserDetail用)
      */
     public function participatingGroups(Request $request, $user)
@@ -1043,6 +1139,52 @@ class UserController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="api/users/{user}/igroups",
+     *     description="自身が作成したグループに、別ユーザを招待するためのデータを取得する",
+     *     produces={"application/json"},
+     *     tags={"users"},
+     *     @OA\Parameter(
+     *         name="user",
+     *         description="ユーザID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / ログインしているユーザが作成した、groupsテーブルのhost_user_idが自身のIDであるグループ情報を表示。また、すでに招待するユーザが参加しているグループ情報は省いて表示する",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 description="
+     *                      ログインしているユーザが作成した、groupsテーブルのhost_user_idが自身のIDであるグループ情報を表示。
+     *                      また、すでに招待するユーザが参加しているグループ情報は省いて表示する
+     *                 ",
+     *                 @OA\Items(
+     *                      ref="#/components/schemas/user_groups_info"
+     *                 ),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="グループ情報を取得出来ませんでした"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
+     * 
      * 招待用のグループ一覧(UserDetail用)
      */
     public function inviteGgroups(Request $request, $user)
