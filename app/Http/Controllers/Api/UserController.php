@@ -79,7 +79,7 @@ class UserController extends Controller
      */
     /**
      * @OA\Schema(
-     *     schema="errors",
+     *     schema="user_errors",
      *     required={"name", "email", "password", "password_confirmation", "image_file"},
      *     @OA\Property(property="name", type="object", required={"unique", "name.max"},
      *          @OA\Property(property="unique", type="string", example="このユーザ名はすでに使用されています"),
@@ -100,6 +100,30 @@ class UserController extends Controller
      *          @OA\Property(property="mimes", type="string", example="アップロードファイルはjpeg,png,jpg,gifタイプのみ有効です"),
      *          @OA\Property(property="image_file.max", type="string", example="1Mを超えています。"),
      *     ),
+     * )
+     */
+    /**
+     * @OA\Schema(
+     *     schema="user_groups",
+     *     required={"id", "name", "description", "private_flg", "welcome_flg", "image_file", "host_user_id", "created_at", "updated_at", "albums", "groupHistories"},
+     *     @OA\Property(property="id", type="integer", example=1),
+     *     @OA\Property(property="name", type="string", example="test group 1"),
+     *     @OA\Property(property="description", type="string", example="盛り上げていきましょう！"),
+     *     @OA\Property(property="private_flg", type="integer", example="0"),
+     *     @OA\Property(property="welcome_flg", type="integer", example="1"),
+     *     @OA\Property(property="image_file", type="string", example="xxxxoooo.png"),
+     *     @OA\Property(property="host_user_id", type="number", example="1"),
+     *     @OA\Property(property="created_at", type="string", example="2021-04-25 12:02:55"),
+     *     @OA\Property(property="updated_at", type="string", example="2021-04-28 14:13:00"),
+     *     @OA\Property(property="albums", type="object", description="albumsテーブルとのリレーションデータ", required={"id", "name", "group_id"},
+     *         @OA\Property(property="id", type="integer", example="1"),
+     *         @OA\Property(property="name", type="string", example="test album"),
+     *         @OA\Property(property="group_id", type="integer", example="3"),
+     *     ),
+     *     @OA\Property(property="groupHistories", type="object", description="group_historiesテーブルとのリレーションデータ", required={"id", "group_id"},
+     *         @OA\Property(property="id", type="integer", example="12"),
+     *         @OA\Property(property="group_id", type="integer", example="3"),
+     *     )
      * )
      */
 
@@ -133,13 +157,13 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Success",
+     *         description="Success / statusがMEMBERもしくはADMINのユーザデータを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
      *                 property="data",
      *                 type="array",
-     *                 description="statusがMEMBERもしくはADMINのユーザデータを返す",
+     *                 description="statusがMEMBERもしくはADMINのユーザデータを表示",
      *                 @OA\Items(
      *                      ref="#/components/schemas/user_list"
      *                 ),
@@ -148,7 +172,7 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Server error / サーバエラー用のメッセージを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
@@ -204,20 +228,20 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Success",
+     *         description="Success / 存在するユーザかつステータスがMEMBERもしくはADMINのユーザデータを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
      *                 property="data",
      *                 type="object",
-     *                 description="存在するユーザかつステータスがMEMBERのユーザデータ",
+     *                 description="存在するユーザかつステータスがMEMBERもしくはADMINのユーザデータを表示",
      *                 ref="#/components/schemas/user_detail"
      *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="存在しないユーザのページをリクエストした場合",
+     *         description="存在しないユーザのページをリクエストした場合、検索結果が0件であることを表すメッセージを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
@@ -230,7 +254,7 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Server error / サーバエラー用のメッセージを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
@@ -290,20 +314,20 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Success",
+     *         description="Success / 編集するユーザのデータを表示(基本的にはログインしているユーザは自身の情報しか編集できないようにする)",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
      *                 property="data",
      *                 type="object",
-     *                 description="存在するユーザのデータ",
+     *                 description="編集するユーザのデータを表示(基本的にはログインしているユーザは自身の情報しか編集できないようにする)",
      *                 ref="#/components/schemas/user_detail"
      *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Server error / サーバエラー用のメッセージを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
@@ -368,7 +392,7 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Success",
+     *         description="Success / バリデーションチェック通過のメッセージをリターン",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
@@ -381,14 +405,14 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Server error",
+     *         description="Server error / バリデーションエラーのメッセージを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
      *                 property="errors",
      *                 type="string",
      *                 description="バリデーションエラーのメッセージを表示",
-     *                 ref="#/components/schemas/errors"
+     *                 ref="#/components/schemas/user_errors"
      *             )
      *         )
      *     ),
@@ -424,7 +448,7 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Success",
+     *         description="Success / バリデーションチェック通過のメッセージをリターン",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
@@ -437,14 +461,14 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Server error",
+     *         description="Server error / バリデーションエラーのメッセージを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
      *                 property="errors",
      *                 type="string",
      *                 description="バリデーションエラーのメッセージを表示",
-     *                 ref="#/components/schemas/errors"
+     *                 ref="#/components/schemas/user_errors"
      *             )
      *         )
      *     ),
@@ -480,7 +504,7 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Success",
+     *         description="Success / 保存成功のメッセージを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
@@ -493,7 +517,7 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Server error / サーバエラー用のメッセージを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
@@ -574,7 +598,7 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Success",
+     *         description="Success / 保存成功のメッセージを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
@@ -593,7 +617,7 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Server error / サーバエラー用のメッセージを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
@@ -669,7 +693,7 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Success",
+     *         description="Success / 論理削除成功のメッセージを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
@@ -682,7 +706,7 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Server error / サーバエラー用のメッセージを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
@@ -719,7 +743,49 @@ class UserController extends Controller
     }
 
     /**
-     * 【navメニュー】
+     * @OA\Get(
+     *     path="api/users/{user}/families",
+     *     description="同じグループに加盟しているユーザ情報をすべて取得する",
+     *     produces={"application/json"},
+     *     tags={"users"},
+     *     @OA\Parameter(
+     *         name="user",
+     *         description="ユーザID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / 同一グループにいる、group_historiesのstatusが2(メンバー)であるユーザの情報を表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 description="同一グループにいる、group_historiesのstatusが2(メンバー)であるユーザの情報を表示",
+     *                 @OA\Items(
+     *                      ref="#/components/schemas/user_list"
+     *                 ),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="ユーザ情報を取得出来ませんでした"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
+     * 
      * 同じグループに参加中のユーザ一覧
      */
     public function families(Request $request, $user)
@@ -756,8 +822,50 @@ class UserController extends Controller
     }
 
     /**
-     * 【navメニュー】
-     * 参加グループの一覧
+     * @OA\Get(
+     *     path="api/users/{user}/groups",
+     *     description="自身が加盟しているグループ情報をすべて取得する",
+     *     produces={"application/json"},
+     *     tags={"users"},
+     *     @OA\Parameter(
+     *         name="user",
+     *         description="ユーザID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / ログインしているユーザの、group_historiesのstatusが2(メンバー)であるグループ情報を表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 description="ログインしているユーザの、group_historiesのstatusが2(メンバー)であるグループ情報を表示",
+     *                 @OA\Items(
+     *                      ref="#/components/schemas/user_groups"
+     *                 ),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="ユーザ情報を取得出来ませんでした"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
+     * 
+     * 自身が参加しているグループの一覧
      */
     public function participating(Request $request, $user)
     {
@@ -792,7 +900,63 @@ class UserController extends Controller
     }
 
     /**
-     * 【navメニュー】
+     * @OA\Get(
+     *     path="api/users/{user}/messages",
+     *     description="自身がトークでメッセージのやり取りをしているすべてのユーザの情報と、それらのユーザに紐づく最新メッセージをすべて取得する",
+     *     produces={"application/json"},
+     *     tags={"users"},
+     *     @OA\Parameter(
+     *         name="user",
+     *         description="ユーザID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / メッセージのやり取りをしているすべてのユーザの情報と、それらのユーザに紐づく最新メッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 description="メッセージのやり取りをしているすべてのユーザの情報と、それらのユーザに紐づく最新メッセージを表示",
+     *                 require={"id", "content", "own_id", "user_id", "update_user_id", "created_at", "updated_at", "otherid", "mcount"},
+     *                 @OA\Items(
+     *                      @OA\Property(property="id", type="integer", example=24),
+     *                      @OA\Property(property="content", type="string", example="元気にしてたー？"),
+     *                      @OA\Property(property="own_id", type="integer", example=2),
+     *                      @OA\Property(property="user_id", type="integer", example=4),
+     *                      @OA\Property(property="update_user_id", type="integer", example=2),
+     *                      @OA\Property(property="created_at", type="string", example="2021-04-25 12:02:55"),
+     *                      @OA\Property(property="updated_at", type="string", example="2021-04-28 14:13:00"),
+     *                      @OA\Property(property="otherid", type="integer", example=4),
+     *                      @OA\Property(property="mcount", type="integer", example=3),
+     *                      @OA\Property(property="other", type="object", description="usersテーブルとのリレーションデータ", required={"id", "name", "image_file"},
+     *                          @OA\Property(property="id", type="integer", example="6"),
+     *                          @OA\Property(property="name", type="string", example="test user"),
+     *                          @OA\Property(property="image_file", type="string", example="xxxxoooo.png"),
+     *                      )
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="ユーザ情報を取得出来ませんでした"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
+     * 
      * トークリストの一覧
      */
     public function messages(Request $request, $user)

@@ -33,13 +33,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Success",
+                        "description": "Success / statusがMEMBERもしくはADMINのユーザデータを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "data": {
-                                            "description": "statusがMEMBERもしくはADMINのユーザデータを返す",
+                                            "description": "statusがMEMBERもしくはADMINのユーザデータを表示",
                                             "type": "array",
                                             "items": {
                                                 "$ref": "#/components/schemas/user_list"
@@ -52,7 +52,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Server error / サーバエラー用のメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -96,7 +96,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Success",
+                        "description": "Success / 保存成功のメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -113,7 +113,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Server error / サーバエラー用のメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -153,7 +153,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Success",
+                        "description": "Success / 存在するユーザかつステータスがMEMBERもしくはADMINのユーザデータを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -168,7 +168,7 @@
                         }
                     },
                     "404": {
-                        "description": "存在しないユーザのページをリクエストした場合",
+                        "description": "存在しないユーザのページをリクエストした場合、検索結果が0件であることを表すメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -185,7 +185,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Server error / サーバエラー用のメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -238,7 +238,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Success",
+                        "description": "Success / 保存成功のメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -258,7 +258,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Server error / サーバエラー用のメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -296,7 +296,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Success",
+                        "description": "Success / 論理削除成功のメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -313,7 +313,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Server error / サーバエラー用のメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -353,7 +353,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Success",
+                        "description": "Success / 編集するユーザのデータを表示(基本的にはログインしているユーザは自身の情報しか編集できないようにする)",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -368,7 +368,7 @@
                         }
                     },
                     "500": {
-                        "description": "Server error",
+                        "description": "Server error / サーバエラー用のメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -414,7 +414,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Success",
+                        "description": "Success / バリデーションチェック通過のメッセージをリターン",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -431,13 +431,13 @@
                         }
                     },
                     "400": {
-                        "description": "Server error",
+                        "description": "Server error / バリデーションエラーのメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "errors": {
-                                            "$ref": "#/components/schemas/errors"
+                                            "$ref": "#/components/schemas/user_errors"
                                         }
                                     },
                                     "type": "object"
@@ -475,7 +475,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Success",
+                        "description": "Success / バリデーションチェック通過のメッセージをリターン",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -492,13 +492,262 @@
                         }
                     },
                     "400": {
-                        "description": "Server error",
+                        "description": "Server error / バリデーションエラーのメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "errors": {
-                                            "$ref": "#/components/schemas/errors"
+                                            "$ref": "#/components/schemas/user_errors"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "api/users/{user}/families": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "description": "同じグループに加盟しているユーザ情報をすべて取得する",
+                "operationId": "App\\Http\\Controllers\\Api\\UserController::families",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ユーザID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / 同一グループにいる、group_historiesのstatusが2(メンバー)であるユーザの情報を表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "同一グループにいる、group_historiesのstatusが2(メンバー)であるユーザの情報を表示",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/user_list"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "ユーザ情報を取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "api/users/{user}/groups": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "description": "自身が加盟しているグループ情報をすべて取得する",
+                "operationId": "App\\Http\\Controllers\\Api\\UserController::participating",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ユーザID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / ログインしているユーザの、group_historiesのstatusが2(メンバー)であるグループ情報を表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "ログインしているユーザの、group_historiesのstatusが2(メンバー)であるグループ情報を表示",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/user_groups"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "ユーザ情報を取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "api/users/{user}/messages": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "description": "自身がトークでメッセージのやり取りをしているすべてのユーザの情報と、それらのユーザに紐づく最新メッセージをすべて取得する",
+                "operationId": "App\\Http\\Controllers\\Api\\UserController::messages",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ユーザID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / メッセージのやり取りをしているすべてのユーザの情報と、それらのユーザに紐づく最新メッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "メッセージのやり取りをしているすべてのユーザの情報と、それらのユーザに紐づく最新メッセージを表示",
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "元気にしてたー？"
+                                                    },
+                                                    "own_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 4
+                                                    },
+                                                    "update_user_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "example": "2021-04-25 12:02:55"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "example": "2021-04-28 14:13:00"
+                                                    },
+                                                    "otherid": {
+                                                        "type": "integer",
+                                                        "example": 4
+                                                    },
+                                                    "mcount": {
+                                                        "type": "integer",
+                                                        "example": 3
+                                                    },
+                                                    "other": {
+                                                        "description": "usersテーブルとのリレーションデータ",
+                                                        "required": [
+                                                            "id",
+                                                            "name",
+                                                            "image_file"
+                                                        ],
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": "6"
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "test user"
+                                                            },
+                                                            "image_file": {
+                                                                "type": "string",
+                                                                "example": "xxxxoooo.png"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "require": [
+                                                "id",
+                                                "content",
+                                                "own_id",
+                                                "user_id",
+                                                "update_user_id",
+                                                "created_at",
+                                                "updated_at",
+                                                "otherid",
+                                                "mcount"
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "ユーザ情報を取得出来ませんでした"
                                         }
                                     },
                                     "type": "object"
@@ -698,7 +947,7 @@
                 },
                 "type": "object"
             },
-            "errors": {
+            "user_errors": {
                 "required": [
                     "name",
                     "email",
@@ -783,6 +1032,101 @@
                             "image_file.max": {
                                 "type": "string",
                                 "example": "1Mを超えています。"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "user_groups": {
+                "required": [
+                    "id",
+                    "name",
+                    "description",
+                    "private_flg",
+                    "welcome_flg",
+                    "image_file",
+                    "host_user_id",
+                    "created_at",
+                    "updated_at",
+                    "albums",
+                    "groupHistories"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "test group 1"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "盛り上げていきましょう！"
+                    },
+                    "private_flg": {
+                        "type": "integer",
+                        "example": "0"
+                    },
+                    "welcome_flg": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "image_file": {
+                        "type": "string",
+                        "example": "xxxxoooo.png"
+                    },
+                    "host_user_id": {
+                        "type": "number",
+                        "example": "1"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2021-04-25 12:02:55"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2021-04-28 14:13:00"
+                    },
+                    "albums": {
+                        "description": "albumsテーブルとのリレーションデータ",
+                        "required": [
+                            "id",
+                            "name",
+                            "group_id"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": "1"
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "test album"
+                            },
+                            "group_id": {
+                                "type": "integer",
+                                "example": "3"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "groupHistories": {
+                        "description": "group_historiesテーブルとのリレーションデータ",
+                        "required": [
+                            "id",
+                            "group_id"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": "12"
+                            },
+                            "group_id": {
+                                "type": "integer",
+                                "example": "3"
                             }
                         },
                         "type": "object"
