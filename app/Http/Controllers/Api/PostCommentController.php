@@ -108,9 +108,21 @@ class PostCommentController extends Controller
 
             // データ削除
             $this->db->baseDelete($comment);
+
+            // コメントの再取得
+            $conditions = [
+                'post_id' => $post
+            ];
+            $order = [
+                'updated_at' => 'desc'
+            ];
+            $data = $this->db->searchQuery($conditions, $order);
             
             DB::commit();
-            return response()->json(['info_message' => config('const.PostComment.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json([
+                'info_message' => config('const.PostComment.DELETE_INFO'),
+                'comments'     => $data
+            ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
