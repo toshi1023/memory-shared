@@ -23,6 +23,7 @@ class PostCommentRepository extends BaseRepository implements PostCommentReposit
     public function searchQuery($conditions=[], $order=[], bool $softDelete=false)
     {
         return $this->baseSearchQuery($conditions, $order, $softDelete)
+                    ->with(['user:id,name,image_file'])
                     ->get();
     }
 
@@ -33,6 +34,7 @@ class PostCommentRepository extends BaseRepository implements PostCommentReposit
     public function searchFirst($conditions=[], $order=[], bool $softDelete=false)
     {
         return $this->baseSearchQuery($conditions, $order, $softDelete)
+                    ->with(['user:id,name,image_file'])
                     ->first();
     }
 

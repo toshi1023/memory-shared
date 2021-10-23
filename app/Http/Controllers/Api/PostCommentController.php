@@ -36,7 +36,7 @@ class PostCommentController extends Controller
             $order = [];
             $order['updated_at'] = 'desc';
     
-            $data = $this->db->searchQueryPaginate($conditions, $order);
+            $data = $this->db->searchQuery($conditions, $order);
             
             return response()->json(['comments' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
@@ -67,9 +67,19 @@ class PostCommentController extends Controller
             // データの保存処理
             $data = $this->db->save($data);
 
+            // コメント再取得
+            $conditions = [
+                'post_id' => $data->post_id
+            ];
+            $order = [
+                'updated_at' => 'desc'
+            ];
+            $data = $this->db->searchQuery($conditions, $order);
+
             DB::commit();
             return response()->json([
                 'info_message' => config('const.PostComment.REGISTER_INFO'),
+                'comments'     => $data
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
