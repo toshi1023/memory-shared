@@ -112,9 +112,23 @@ class PostController extends Controller
             foreach($comments as $value) {
                 $this->db->deletePostComment($value->id);
             }
+
+            // 投稿データの再取得
+            // 検索条件
+            $conditions = [];
+            $conditions['posts.group_id'] = $group;
+            
+            // ソート条件
+            $order = [];
+            $order['posts.updated_at'] = 'desc';
+    
+            $data = $this->db->searchQueryPaginate($conditions, $order);
             
             DB::commit();
-            return response()->json(['info_message' => config('const.Post.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json([
+                'info_message' => config('const.Post.DELETE_INFO'),
+                'posts'        => $data,
+            ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
