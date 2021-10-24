@@ -31,6 +31,7 @@ class NewsController extends Controller
             // 検索条件
             $conditions = [];
             $conditions['@innews.user_id'] = [0, Auth::user()->id];
+            $conditions['@>equalnews.created_at'] = Auth::user()->created_at;
             
             // ソート条件
             $order = [];
