@@ -11,6 +11,7 @@ interface NewsRepositoryInterface
     public function baseSearchQueryLimit($conditions=[], $order=[], int $limit=10);
     public function baseSearchQueryPaginate($conditions=[], $order=[], int $paginate=10);
     public function save($data);
+    public function saveWelcomeInfo($user_id);
     public function saveGroupInfo($user_id, $group_name, $status);
     public function savePostInfo($user_id, $user_name, $group_name, $update_user_id);
     public function savePublicNread($data, $users);

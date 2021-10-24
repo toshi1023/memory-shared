@@ -9,6 +9,7 @@ use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\MessageHistory\MessageHistoryRepositoryInterface;
 use App\Lib\Common;
 use App\Repositories\MreadManagement\MreadManagementRepositoryInterface;
+use App\Repositories\News\NewsRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
@@ -170,5 +171,15 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return $this->baseSearchQuery($conditions)
                     ->select('id', 'name', 'email', 'hobby', 'gender', 'description', 'status', 'image_file')
                     ->first();
+    }
+
+    /**
+     * ユーザアカウント登録時の自動配信用データ保存
+     * 引数：ユーザID
+     */
+    public function saveWelcomeInfo($user_id)
+    {
+        $newsRepository = $this->baseGetRepository(NewsRepositoryInterface::class);
+        return $newsRepository->saveWelcomeInfo($user_id);
     }
 }

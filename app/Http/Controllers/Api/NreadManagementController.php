@@ -20,6 +20,30 @@ class NreadManagementController extends Controller
     }
 
     /**
+     * ニュースの未読数を取得
+     */
+    public function count(Request $request)
+    {
+        try {
+            // 検索条件
+            $conditions = [];
+            $conditions['@innews_user_id'] = [Auth::user()->id, 0];  // ログインユーザ向け & 全体向け
+            $conditions['user_id'] = Auth::user()->id;
+            // 件数取得
+            $data = $this->db->searchQueryCount($conditions);
+            
+            return response()->json(['nread_count' => $data], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            return response()->json([
+              'error_message' => config('const.SystemMessage.UNEXPECTED_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
      * 未読の削除用アクション
      */
     public function destroy(Request $request, $news)

@@ -64,6 +64,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/news/validate',  'Api\NewsController@newsValidate');
 
     /********** ニュース用未読管理(nread_managements) **********/
+    Route::get('/nread',                    'Api\NreadManagementController@count');
     Route::post('/news/{news}/nread',       'Api\NreadManagementController@destroy');
 
     /********** 投稿管理(posts) **********/

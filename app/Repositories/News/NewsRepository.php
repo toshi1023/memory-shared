@@ -84,6 +84,40 @@ class NewsRepository extends BaseRepository implements NewsRepositoryInterface
     }
 
     /**
+     * ユーザアカウント登録時の自動配信用データ保存
+     * 引数：ユーザID
+     */
+    public function saveWelcomeInfo($user_id)
+    {
+        $title = 'MemoryShareAppへようこそ';
+        $content = '
+            MemoryShareAppの会員登録が完了しました。
+            素敵な仲間と一緒に写真や動画を投稿し合って、思い出を共有しましょう！
+        ';
+        
+        $data = [
+            'user_id'           => $user_id,
+            'news_id'           => $this->getNewsId($user_id),
+            'title'             => $title,
+            'content'           => $content,
+            'update_user_id'    => $user_id
+        ];
+        $data = $this->save($data);
+
+        // 未読管理テーブルに保存
+        $nreadRepository = $this->baseGetRepository(NreadManagementRepositoryInterface::class);
+
+        $nreadData = [
+            'news_user_id'  => $data->user_id,
+            'news_id'       => $data->news_id,
+            'user_id'       => $data->user_id
+        ];
+        $nreadRepository->save($nreadData);
+
+        return;
+    }
+
+    /**
      * グループ申請通知のデータ保存
      * 引数1：ユーザID, 引数2：グループ名, 引数3：申請ステータス
      */

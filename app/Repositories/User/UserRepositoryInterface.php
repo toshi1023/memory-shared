@@ -18,4 +18,5 @@ interface UserRepositoryInterface
     public function getParticipating($conditions, $order=[], bool $softDelete=false, int $paginate=15);
     public function getMessageList($user_id);
     public function getEditInfo($conditions=[]);
+    public function saveWelcomeInfo($user_id);
 }

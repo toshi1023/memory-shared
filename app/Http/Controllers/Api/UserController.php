@@ -565,6 +565,9 @@ class UserController extends Controller
                 Common::fileSave($request->file('image_file'), config('const.Aws.USER'), $data->id, $filename);
             }
 
+            // 登録時の自動配信用ニュースを保存
+            $this->db->saveWelcomeInfo($data->id);
+
             DB::commit();
             return response()->json([
                 'info_message' => config('const.User.REGISTER_INFO'),
