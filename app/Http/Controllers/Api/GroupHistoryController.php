@@ -82,12 +82,18 @@ class GroupHistoryController extends Controller
                 $this->db->saveGroupInfo($data['user_id'], $groupInfo->name, config('const.GroupHistory.APPLY'));
             }
 
+            // 申請状況のデータが申請中の場合
+            if((int)$data['status'] === config('const.GroupHistory.APPLY')) {
+                $groupInfo = $this->db->searchGroupDetailFirst(['id' => $group]);
+            }
+
             DB::commit();
             
             // 申請の場合
             if((int)$data['status'] === config('const.GroupHistory.APPLY')) {
                 return response()->json([
                     'info_message' => config('const.GroupHistory.APPLY_INFO'),
+                    'group'        => $groupInfo,
                 ], 200, [], JSON_UNESCAPED_UNICODE);
             }
             // 承認の場合
@@ -122,20 +128,13 @@ class GroupHistoryController extends Controller
      * グループ履歴登録処理用アクション
      *   ※$request: 'status'のみ
      */
-    public function update(Request $request, $group)
+    public function update(Request $request, $group, $history)
     {
         DB::beginTransaction();
         try {
-            // 検索条件
-            $conditions = [];
-            $conditions['group_id'] = $group;
-            $conditions['user_id'] = $request->input('user_id') ? $request->input('user_id') : Auth::user()->id;
-
-            // group_historiesのidを取得
-            $id = $this->db->baseSearchFirst($conditions)->id;
             // データの配列化
             $data = $request->all();
-            $data['id'] = $id;
+            $data['id'] = $history;
     
             // データの保存処理
             $this->db->save($data);

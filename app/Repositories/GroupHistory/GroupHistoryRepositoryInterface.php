@@ -9,6 +9,7 @@ interface GroupHistoryRepositoryInterface
     public function searchUserId($conditions=[], $order=[], bool $softDelete=false);
     public function searchExists($conditions=[], $order=[], bool $softDelete=false);
     public function searchGroupFirst($conditions=[], $order=[], bool $softDelete=false);
+    public function searchGroupDetailFirst($conditions=[], $order=[], bool $softDelete=false);
     public function baseSearchFirst($conditions=[], $order=[], bool $softDelete=false);
     public function baseSearchQueryLimit($conditions=[], $order=[], int $limit=10);
     public function baseSearchQueryPaginate($conditions=[], $order=[], int $paginate=10);

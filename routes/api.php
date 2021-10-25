@@ -36,9 +36,9 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/groups/validate',       'Api\GroupController@groupValidate');
 
     /********** グループ履歴管理(group_histories) **********/
-    Route::get('/history',                       'Api\GroupHistoryController@index');
-    Route::post('/groups/{group}/history',       'Api\GroupHistoryController@store');
-    Route::put('/groups/{group}/history',        'Api\GroupHistoryController@update');
+    Route::get('/history',                                  'Api\GroupHistoryController@index');
+    Route::post('/groups/{group}/history',                  'Api\GroupHistoryController@store');
+    Route::put('/groups/{group}/history/{history}',         'Api\GroupHistoryController@update');
     
     /********** アルバム管理(albums) **********/
     Route::resource('/groups/{group}/albums',       'Api\AlbumController');
