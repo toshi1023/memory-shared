@@ -38,4 +38,12 @@ class GroupHistory extends Pivot
     {
         return $this->belongsTo('App\Models\Group', 'group_id', 'id');
     }
+
+    /**
+     * usersテーブルと1対1のリレーション構築
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id', 'id');
+    }
 }

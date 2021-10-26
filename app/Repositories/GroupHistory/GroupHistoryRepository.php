@@ -24,7 +24,6 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
     {
         return $this->baseSearchQuery($conditions, $order, $softDelete)
                     ->with(['group:id,name,image_file'])
-                    // ->where('user_id', '!=', config('const.User.ADMIN_ID'))
                     ->get();
     }
 
@@ -36,6 +35,17 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
     {
         return $this->baseSearchQuery($conditions, $order, $softDelete)
                     ->select('user_id')
+                    ->get();
+    }
+
+    /**
+     * ユーザ情報も結合して取得
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
+     */
+    public function searchQueryUsers($conditions=[], $order=[], bool $softDelete=false)
+    {
+        return $this->baseSearchQuery($conditions, $order, $softDelete)
+                    ->with(['user:id,name,image_file'])
                     ->get();
     }
 

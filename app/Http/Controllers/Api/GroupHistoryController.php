@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Lib\Common;
 use App\Jobs\CreateFamily;
 use Carbon\Carbon;
 
@@ -40,8 +41,26 @@ class GroupHistoryController extends Controller
             $order = [];
 
             $data = $this->db->searchQuery($conditions, $order);
+
+            // ユーザ情報のみ結合して取得する場合
+            $users = null;
+            if($request->input('status')) {
+                // 検索条件
+                $conditions = [];
+                $conditions['group_histories.user_id'] = Auth::user()->id;
+                if($request->input('group_id') || $request->input('status')) $conditions = Common::setConditions($request);
+
+                // ソート条件
+                $order = [];
+                if($request->input('sort_created_at')) $order = Common::setOrder($request);
+
+                $users = $this->db->searchQueryUsers($conditions, $order);
+            }
             
-            return response()->json(['group_histories' => $data], 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json([
+                'group_histories' => $data,
+                'ghusers'         => $users,
+            ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 

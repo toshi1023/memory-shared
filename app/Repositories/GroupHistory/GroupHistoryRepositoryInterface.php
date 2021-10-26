@@ -6,6 +6,7 @@ interface GroupHistoryRepositoryInterface
 {
     public function searchQuery($conditions=[], $order=[], bool $softDelete=false);
     public function searchGroupId($conditions=[], $order=[], bool $softDelete=false);
+    public function searchQueryUsers($conditions=[], $order=[], bool $softDelete=false);
     public function searchUserId($conditions=[], $order=[], bool $softDelete=false);
     public function searchExists($conditions=[], $order=[], bool $softDelete=false);
     public function searchGroupFirst($conditions=[], $order=[], bool $softDelete=false);
