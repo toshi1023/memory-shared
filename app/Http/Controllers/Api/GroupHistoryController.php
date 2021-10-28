@@ -115,10 +115,10 @@ class GroupHistoryController extends Controller
                     'group'        => $groupInfo,
                 ], 200, [], JSON_UNESCAPED_UNICODE);
             }
-            // 承認の場合
+            // 承認の場合(招待したときのみ実行)
             if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
                 return response()->json([
-                    'info_message' => config('const.GroupHistory.APPROVAL_INFO'),
+                    'info_message' => config('const.GroupHistory.INVITE_INFO'),
                     'group'        => $groupInfo,
                 ], 200, [], JSON_UNESCAPED_UNICODE);
             }
@@ -136,7 +136,7 @@ class GroupHistoryController extends Controller
             // 承認の場合
             if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
                 return response()->json([
-                    'error_message' => config('const.GroupHistory.APPROVAL_ERR'),
+                    'error_message' => config('const.GroupHistory.INVITE_ERR'),
                     'status'        => 500,
                 ], 500, [], JSON_UNESCAPED_UNICODE);
             }
@@ -153,13 +153,15 @@ class GroupHistoryController extends Controller
         try {
             // データの配列化
             $data = $request->all();
-            $data['id'] = $history;
-    
+            
             // データの保存処理
             $this->db->save($data);
 
             // グループ情報を取得
             $groupInfo = $this->db->searchGroupFirst(['id' => $group]);
+
+            $pusers = null;
+            $ghusers = null;
 
             // 申請状況のデータが承認済みの場合、familiesテーブルへの保存処理を実行
             if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
@@ -167,22 +169,38 @@ class GroupHistoryController extends Controller
                 $this->db->saveGroupInfo($data['user_id'], $groupInfo->name, config('const.GroupHistory.APPROVAL'));
 
                 CreateFamily::dispatch($group, $data['user_id']);
+
+                // 検索条件
+                $conditions = [
+                    'group_histories.group_id' => $group,
+                    'group_histories.status'   => config('const.GroupHistory.APPROVAL')
+                ];
+                $users = $this->db->getFamilies($conditions);
+                $conditions = [];
+                $conditions['@inusers.id'] = Common::setInCondition($users->toArray());
+                // 参加中ユーザ
+                $pusers = $this->db->getUsersInfo($conditions);
             }
+
+            // 検索条件
+            $conditions = [];
+            $conditions['group_histories.group_id'] = $group;
+            $conditions['group_histories.status'] = config('const.GroupHistory.APPLY');
+
+            // ソート条件
+            $order = [];
+            if($request->input('sort_created_at')) $order = Common::setOrder($request);
+            // 参加申請中ユーザ
+            $ghusers = $this->db->searchQueryUsers($conditions, $order);
 
             DB::commit();
 
-            // 招待した場合
-            if($request->input('invite_flg')) {
-                return response()->json([
-                    'info_message' => config('const.GroupHistory.INVITE_INFO'),
-                    'group'        => $groupInfo,
-                ], 200, [], JSON_UNESCAPED_UNICODE);
-            }
             // 承認の場合
             if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
                 return response()->json([
                     'info_message' => config('const.GroupHistory.APPROVAL_INFO'),
-                    'group'        => $groupInfo,
+                    'pusers'       => $pusers,
+                    'ghusers'      => $ghusers
                 ], 200, [], JSON_UNESCAPED_UNICODE);
             }
             // 拒否の場合
@@ -196,14 +214,14 @@ class GroupHistoryController extends Controller
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 
             // 承認の場合
-            if((int)$data['status'] === config('const.GroupHistory.APPROVAL')) {
+            if((int)$request->input('status') === config('const.GroupHistory.APPROVAL')) {
                 return response()->json([
                     'error_message' => config('const.GroupHistory.APPROVAL_ERR'),
                     'status'        => 500,
                 ], 500, [], JSON_UNESCAPED_UNICODE);
             }
             // 拒否の場合
-            if((int)$data['status'] === config('const.GroupHistory.REJECT')) {
+            if((int)$request->input('status') === config('const.GroupHistory.REJECT')) {
                 return response()->json([
                     'error_message' => config('const.GroupHistory.REJECT_ERR'),
                     'status'        => 500,

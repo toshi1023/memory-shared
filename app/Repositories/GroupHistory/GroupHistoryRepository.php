@@ -6,6 +6,7 @@ use App\Models\GroupHistory;
 use App\Repositories\BaseRepository;
 use App\Repositories\News\NewsRepositoryInterface;
 use App\Repositories\Group\GroupRepositoryInterface;
+use App\Repositories\User\UserRepositoryInterface;
 
 class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepositoryInterface
 {
@@ -136,6 +137,20 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
                       ->get();
 
         return $query;
+    }
+
+    /**
+     * ユーザ情報を取得
+     * 引数1: 検索条件, 引数2: ソート条件, 引数3: 削除済みデータの取得フラグ
+     */
+    public function getUsersInfo($conditions, $order=[], int $paginate = 15)
+    {
+        // グループ参加者を取得
+        $userRepository = $this->baseGetRepository(UserRepositoryInterface::class);
+
+        return $userRepository->baseSearchQuery($conditions, $order, false)
+                              ->select('id', 'name', 'image_file')
+                              ->paginate($paginate);
     }
 
     /**

@@ -47,6 +47,7 @@ return [
         'APPROVAL_WORD'      => 'メンバー',
         'REJECT_WORD'        => '却下',
         'INVITE_INFO'        => 'グループに招待しました',
+        'INVITE_ERR'         => 'グループの招待に失敗しました',
         'APPLY_INFO'         => 'グループに参加を申請しました',
         'APPLY_ERR'          => 'グループの参加申請に失敗しました',
         'APPROVAL_INFO'      => 'グループの参加を承認しました',

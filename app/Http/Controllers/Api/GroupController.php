@@ -668,7 +668,7 @@ class GroupController extends Controller
             $users = $this->db->getParticipants($group_conditions);
             // 検索条件
             $conditions = [];
-            $conditions['@inusers.id'] = Common::setInCondition($users->toArray());;
+            $conditions['@inusers.id'] = Common::setInCondition($users->toArray());
             // ソート条件
             $order = [
                 'created_at' => 'desc'
