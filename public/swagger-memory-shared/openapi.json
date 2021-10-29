@@ -1,6 +1,462 @@
 {
     "openapi": "3.0.0",
     "paths": {
+        "api/groups/{group}/albums": {
+            "get": {
+                "tags": [
+                    "albums"
+                ],
+                "description": "IDの値が{group}のグループと紐づく、アルバムデータをページネーション形式で取得する(件数：20件)",
+                "operationId": "App\\Http\\Controllers\\Api\\AlbumController::index",
+                "parameters": [
+                    {
+                        "name": "group",
+                        "in": "path",
+                        "description": "グループID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "name@like",
+                        "in": "query",
+                        "description": "アルバム名の検索値(あいまい検索に対応)",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "created_at@>equal",
+                        "in": "query",
+                        "description": "アルバムの作成日時で検索（指定日以降に作成されたもので限定）",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "created_at@<equal",
+                        "in": "query",
+                        "description": "アルバムの作成日時で検索（指定日以前に作成されたもので限定）",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "updated_at@>equal",
+                        "in": "query",
+                        "description": "アルバムの更新日時で検索（指定日以降に更新されたもので限定）",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "created_at@<equal",
+                        "in": "query",
+                        "description": "アルバムの更新日時で検索（指定日以前に更新されたもので限定）",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "sort_name",
+                        "in": "query",
+                        "description": "アルバム名でソート",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "sort_created_at",
+                        "in": "query",
+                        "description": "作成日時順でソート",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "sort_updated_at",
+                        "in": "query",
+                        "description": "更新日時順でソート",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / 指定したグループのアルバムデータを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "指定したグループのアルバムデータを表示",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/album_list"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "アルバム情報を取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            },
+            "post": {
+                "tags": [
+                    "albums"
+                ],
+                "description": "アルバムデータを保存する",
+                "operationId": "App\\Http\\Controllers\\Api\\AlbumController::store",
+                "parameters": [
+                    {
+                        "name": "group",
+                        "in": "path",
+                        "description": "グループID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "request": {
+                                        "$ref": "#/components/schemas/album_register"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success / 保存成功のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "info_message": {
+                                            "description": "保存成功のメッセージを表示",
+                                            "type": "string",
+                                            "example": "アルバム情報を登録しました"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "アルバム情報の登録に失敗しました"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "api/groups/{group}/albums/{album}": {
+            "get": {
+                "tags": [
+                    "albums"
+                ],
+                "description": "指定したアルバムの情報とそのアルバムに紐づく画像、動画のデータをすべて取得する",
+                "operationId": "App\\Http\\Controllers\\Api\\AlbumController::show",
+                "parameters": [
+                    {
+                        "name": "group",
+                        "in": "path",
+                        "description": "グループID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "album",
+                        "in": "path",
+                        "description": "アルバムID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / 指定したアルバムとそのアルバムに紐づく画像、動画のデータを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "album": {
+                                            "$ref": "#/components/schemas/album_list"
+                                        },
+                                        "image": {
+                                            "$ref": "#/components/schemas/image_list"
+                                        },
+                                        "video": {
+                                            "$ref": "#/components/schemas/video_list"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "アルバム情報を取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            },
+            "put": {
+                "tags": [
+                    "albums"
+                ],
+                "description": "アルバムデータを更新保存する",
+                "operationId": "App\\Http\\Controllers\\Api\\AlbumController::update",
+                "parameters": [
+                    {
+                        "name": "group",
+                        "in": "path",
+                        "description": "グループID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "album",
+                        "in": "path",
+                        "description": "アルバムID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "request": {
+                                        "$ref": "#/components/schemas/album_update"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success / 保存成功のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "info_message": {
+                                            "description": "保存成功のメッセージを表示",
+                                            "type": "string",
+                                            "example": "アルバム情報を登録しました"
+                                        },
+                                        "album": {
+                                            "$ref": "#/components/schemas/album_update"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "アルバム情報の登録に失敗しました"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "albums"
+                ],
+                "description": "グループデータを論理削除する",
+                "operationId": "App\\Http\\Controllers\\Api\\AlbumController::destroy",
+                "parameters": [
+                    {
+                        "name": "group",
+                        "in": "path",
+                        "description": "グループID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "album",
+                        "in": "path",
+                        "description": "アルバムID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / 論理削除成功のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "info_message": {
+                                            "description": "論理削除成功のメッセージを表示",
+                                            "type": "string",
+                                            "example": "アルバムの削除が完了しました"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "サーバーエラーによりアルバムの削除に失敗しました。管理者にお問い合わせください"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "api/groups/{group}/albums/validate": {
+            "post": {
+                "tags": [
+                    "albums"
+                ],
+                "description": "アルバム登録・更新時のバリデーションを実行する",
+                "operationId": "App\\Http\\Controllers\\Api\\AlbumController::albumValidate",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "request": {
+                                        "$ref": "#/components/schemas/album_register"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success / バリデーションチェック通過のメッセージをリターン",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "validate_status": {
+                                            "description": "バリデーションチェック通過のメッセージをリターン",
+                                            "type": "string",
+                                            "example": "OK"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Server error / バリデーションエラーのメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "$ref": "#/components/schemas/album_errors"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
         "/api/groups": {
             "get": {
                 "tags": [
@@ -1395,6 +1851,285 @@
     },
     "components": {
         "schemas": {
+            "album_list": {
+                "required": [
+                    "id",
+                    "name",
+                    "group_id",
+                    "image_file",
+                    "host_user_id",
+                    "memo",
+                    "update_user_id",
+                    "created_at",
+                    "updated_at",
+                    "deleted_at"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "test album 1"
+                    },
+                    "group_id": {
+                        "type": "integer",
+                        "example": "4"
+                    },
+                    "image_file": {
+                        "type": "string",
+                        "example": "xxxxoooo.png"
+                    },
+                    "host_user_id": {
+                        "type": "integer",
+                        "example": "2"
+                    },
+                    "memo": {
+                        "type": "string",
+                        "example": "ここに備考を記載（フロント画面では使用しない）"
+                    },
+                    "update_user_id": {
+                        "type": "integer",
+                        "example": "2"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2021-04-25 12:02:55"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2021-04-28 14:13:00"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "example": "null"
+                    }
+                },
+                "type": "object"
+            },
+            "image_list": {
+                "required": [
+                    "id",
+                    "image_file",
+                    "user_id",
+                    "album_id",
+                    "black_list",
+                    "white_list",
+                    "update_user_id",
+                    "created_at",
+                    "updated_at",
+                    "deleted_at"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "image_file": {
+                        "type": "string",
+                        "example": "xxxxoooo.png"
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": "4"
+                    },
+                    "album_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "black_list": {
+                        "type": "json",
+                        "example": "{black_list: 1, 3, 10}"
+                    },
+                    "white_list": {
+                        "type": "json",
+                        "example": "null"
+                    },
+                    "update_user_id": {
+                        "type": "integer",
+                        "example": "4"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2021-04-25 12:02:55"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2021-04-28 14:13:00"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "example": "null"
+                    }
+                },
+                "type": "object"
+            },
+            "video_list": {
+                "required": [
+                    "id",
+                    "image_file",
+                    "user_id",
+                    "album_id",
+                    "black_list",
+                    "white_list",
+                    "update_user_id",
+                    "created_at",
+                    "updated_at",
+                    "deleted_at"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "image_file": {
+                        "type": "string",
+                        "example": "xxxxoooo.mp4"
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": "4"
+                    },
+                    "album_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "black_list": {
+                        "type": "json",
+                        "example": "null"
+                    },
+                    "white_list": {
+                        "type": "json",
+                        "example": "{white_list: 2, 6, 8}"
+                    },
+                    "update_user_id": {
+                        "type": "integer",
+                        "example": "4"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2021-04-25 12:02:55"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2021-04-28 14:13:00"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "example": "null"
+                    }
+                },
+                "type": "object"
+            },
+            "album_errors": {
+                "required": [
+                    "name",
+                    "image_file",
+                    "host_user_id"
+                ],
+                "properties": {
+                    "name": {
+                        "required": [
+                            "unique",
+                            "name.max"
+                        ],
+                        "properties": {
+                            "name.max": {
+                                "type": "string",
+                                "example": "アルバム名は50文字以内で入力してください"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "image_file": {
+                        "required": [
+                            "mimes",
+                            "image_file.max"
+                        ],
+                        "properties": {
+                            "mimes": {
+                                "type": "string",
+                                "example": "アップロードファイルはjpeg,png,jpg,gifタイプのみ有効です"
+                            },
+                            "image_file.max": {
+                                "type": "string",
+                                "example": "1Mを超えています。"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "host_user_id": {
+                        "required": [
+                            "mimes",
+                            "image_file.max"
+                        ],
+                        "properties": {
+                            "GroupMemberRule": {
+                                "description": "アルバムに紐づくグループに加盟しているかどうか確認",
+                                "type": "string",
+                                "example": "このグループでアルバムを作成する権限がありません"
+                            },
+                            "AlbumUpdateRule": {
+                                "description": "アルバム作成者と一致するかどうか確認",
+                                "type": "string",
+                                "example": "アルバム作成者以外はアルバム情報を更新できません"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "album_register": {
+                "required": [
+                    "name",
+                    "group_id",
+                    "image_file"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "test album 12"
+                    },
+                    "group_id": {
+                        "type": "integer",
+                        "example": "4"
+                    },
+                    "image_file": {
+                        "type": "string",
+                        "example": "xxxxoooo.png"
+                    }
+                },
+                "type": "object"
+            },
+            "album_update": {
+                "required": [
+                    "id",
+                    "name",
+                    "group_id",
+                    "image_file"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 8
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "test album 12"
+                    },
+                    "group_id": {
+                        "type": "integer",
+                        "example": "4"
+                    },
+                    "image_file": {
+                        "type": "string",
+                        "example": "xxxxoooo.png"
+                    }
+                },
+                "type": "object"
+            },
             "group_list": {
                 "required": [
                     "id",
