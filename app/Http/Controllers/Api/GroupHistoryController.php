@@ -182,6 +182,11 @@ class GroupHistoryController extends Controller
                 $pusers = $this->db->getUsersInfo($conditions);
             }
 
+            // 却下の場合論理削除を実行
+            if((int)$data['status'] === config('const.GroupHistory.REJECT')) {
+                $this->db->baseDelete($history);
+            }
+
             // 検索条件
             $conditions = [];
             $conditions['group_histories.group_id'] = $group;

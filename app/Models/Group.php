@@ -34,7 +34,8 @@ class Group extends Model
     {
         return $this->belongsToMany('App\Models\User', 'group_histories', 'group_id')
                     ->where('users.id', '=', Auth::user()->id)
-                    ->withPivot('status', 'created_at', 'updated_at');
+                    ->withPivot('status', 'created_at', 'updated_at')
+                    ->whereNull('group_histories.deleted_at');
     }
 
     /**
