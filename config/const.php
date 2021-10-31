@@ -145,6 +145,7 @@ return [
     'Aws' => [
         'USER'               => 'User',
         'GROUP'              => 'Group',
+        'ALBUM'              => 'Album',
         'MAIN'               => 'Main',
     ]
 ];

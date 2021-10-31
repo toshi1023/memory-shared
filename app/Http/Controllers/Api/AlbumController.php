@@ -467,7 +467,7 @@ class AlbumController extends Controller
 
             // ファイルの保存処理
             if($request->file('image_file')) {
-                Common::fileSave($request->file('image_file'), config('const.Aws.USER'), $data->id, $filename);
+                Common::fileSave($request->file('image_file'), config('const.Aws.ALBUM'), $data->id, $filename);
             }
 
             DB::commit();
@@ -481,6 +481,80 @@ class AlbumController extends Controller
             // 作成失敗時はエラーメッセージを返す
             return response()->json([
               'error_message' => config('const.Album.REGISTER_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="api/groups/{group}/albums/{album}/edit",
+     *     description="編集対象のアルバム情報を取得する",
+     *     produces={"application/json"},
+     *     tags={"albums"},
+     *     @OA\Parameter(
+     *         name="group",
+     *         description="グループID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Parameter(
+     *         name="album",
+     *         description="アルバムID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / 編集対象のアルバムデータを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="album",
+     *                 type="object",
+     *                 description="指定したアルバムデータを表示",
+     *                 ref="#/components/schemas/album_list"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="アルバム情報を取得出来ませんでした"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
+     * 
+     * アルバム編集データの表示用アクション
+     */
+    public function edit(Request $request, $group, $album)
+    {
+        try {
+            $data = [];
+
+            // 検索条件
+            $conditions = [];
+            $conditions['id'] = $album;
+
+            // アルバム情報取得
+            $data = $this->db->baseSearchFirst($conditions);
+            
+            return response()->json(['album' => $data], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            return response()->json([
+              'error_message' => config('const.Album.GET_ERR'),
               'status'        => 500,
             ], 500, [], JSON_UNESCAPED_UNICODE);
         }
@@ -573,7 +647,7 @@ class AlbumController extends Controller
 
             // ファイルの保存処理
             if($request->file('image_file')) {
-                Common::fileSave($request->file('image_file'), config('const.Aws.USER'), $data->id, $filename);
+                Common::fileSave($request->file('image_file'), config('const.Aws.ALBUM'), $data->id, $filename);
             }
 
             DB::commit();
