@@ -815,6 +815,7 @@ class UserController extends Controller
 
             // 検索条件
             $families_conditions['@ingroup_id'] = Common::setInCondition($groups->toArray());
+            $families_conditions['status'] = config('const.GroupHistory.APPROVAL');
             $families_conditions['@not_equaluser_id'] = Auth::user()->id;
             // ソート条件
             $order = [];
