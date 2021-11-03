@@ -55,6 +55,21 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
     }
 
     /**
+     * トーク履歴の取得(単数)
+     * 引数1: 検索条件, 引数2: 削除済みデータの取得フラグ, 引数3: ソフトデリート
+     */
+    public function getMessage($conditions=[], bool $softDelete=false)
+    {
+        // own_idがログインユーザのデータを取得
+        $query = $this->baseSearchQuery($conditions, [], $softDelete)
+                      ->with(['own:id,name,image_file'])
+                      ->whereNull('deleted_at')
+                      ->first();
+
+        return $query;
+    }
+
+    /**
      * ログインユーザのトーク一覧を取得
      * 引数1： ユーザID, 引数2: ページネーション件数
      */

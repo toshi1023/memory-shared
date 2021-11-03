@@ -20,14 +20,14 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function(){
 
     /********** ユーザ管理(users) **********/
-    Route::resource('/users',            'Api\UserController')->except('store');
-    Route::get('/users/{user}/families', 'Api\UserController@families')->name('users.families');
-    Route::get('/users/{user}/groups',   'Api\UserController@participating')->name('users.participating');
-    Route::get('/users/{user}/messages', 'Api\UserController@messages')->name('users.messages');
-    Route::get('/users/{user}/wgroups',  'Api\UserController@welcomeGgroups')->name('users.wgroups');
-    Route::get('/users/{user}/pgroups',  'Api\UserController@participatingGroups')->name('users.pgroups');
-    Route::get('/users/{user}/igroups',  'Api\UserController@inviteGgroups')->name('users.igroups');
-    Route::post('/users/validate',       'Api\UserController@userValidate');
+    Route::resource('/users',                'Api\UserController')->except('store');
+    Route::get('/users/{user}/families',     'Api\UserController@families')->name('users.families');
+    Route::get('/users/{user}/groups',       'Api\UserController@participating')->name('users.participating');
+    Route::get('/users/{user}/messagelists', 'Api\UserController@messages')->name('users.messages');
+    Route::get('/users/{user}/wgroups',      'Api\UserController@welcomeGgroups')->name('users.wgroups');
+    Route::get('/users/{user}/pgroups',      'Api\UserController@participatingGroups')->name('users.pgroups');
+    Route::get('/users/{user}/igroups',      'Api\UserController@inviteGgroups')->name('users.igroups');
+    Route::post('/users/validate',           'Api\UserController@userValidate');
     
     /********** グループ管理(groups) **********/
     Route::resource('/groups',            'Api\GroupController');
@@ -53,11 +53,11 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/groups/{group}/albums/{album}/video/validate',  'Api\UserVideoController@userVideoValidate');
 
     /********** メッセージ管理(messages) **********/
-    Route::resource('/{user}/messages',       'Api\MessageHistoryController')->only('index', 'store', 'destroy');
-    Route::post('/messages/validate',         'Api\MessageHistoryController@messageValidate');
+    Route::resource('/users/{user}/messages',       'Api\MessageHistoryController')->only('index', 'store', 'destroy');
+    Route::post('/messages/validate',               'Api\MessageHistoryController@messageValidate');
 
     /********** メッセージ用未読管理(mread_managements) **********/
-    Route::post('users/{user}/messages/mread',       'Api\MreadManagementController@destroy');
+    Route::post('users/{user}/mread',       'Api\MreadManagementController@destroy');
 
     /********** ニュース管理(news) **********/
     Route::resource('/news',       'Api\NewsController');

@@ -68,8 +68,16 @@ class MessageHistoryController extends Controller
             // Pusherにデータを送信(リアルタイム通信を実行)
             event(new MessageCreated($data));
 
+            // 検索条件
+            $conditions = [];
+            $conditions['own_id']  = $data->own_id;
+            $conditions['user_id'] = $data->user_id;
+    
+            // データ
+            $talk = $this->db->getMessages($conditions);
+
             DB::commit();
-            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['talk' => $talk], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
