@@ -70,11 +70,10 @@ class MessageHistoryController extends Controller
 
             // 検索条件
             $conditions = [];
-            $conditions['own_id']  = $data->own_id;
-            $conditions['user_id'] = $data->user_id;
+            $conditions['id']  = $data->id;
     
             // データ
-            $talk = $this->db->getMessages($conditions);
+            $talk = $this->db->getMessage($conditions);
 
             DB::commit();
             return response()->json(['talk' => $talk], 200, [], JSON_UNESCAPED_UNICODE);

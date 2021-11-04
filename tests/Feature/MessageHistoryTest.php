@@ -89,7 +89,7 @@ class MessageHistoryTest extends TestCase
     public function api_messagesにGETメソッドでアクセス()
     {
         // 認証前
-        $response = $this->get('api/'.$this->admin->id.'/messages');
+        $response = $this->get('api/users/'.$this->admin->id.'/messages');
 
         $response->assertStatus(302);
 
@@ -97,7 +97,7 @@ class MessageHistoryTest extends TestCase
         $this->getActingAs($this->admin);
 
         // 受信者IDを設定していない場合
-        $response = $this->get('api/'.$this->admin->id.'/messages');
+        $response = $this->get('api/users/'.$this->admin->id.'/messages');
         
         $response->assertStatus(500)
         ->assertJsonFragment([
@@ -105,7 +105,7 @@ class MessageHistoryTest extends TestCase
         ]);
 
         // 正常なリクエストを実行
-        $response = $this->get('api/'.$this->admin->id.'/messages?user_id='.$this->user->id);
+        $response = $this->get('api/users/'.$this->admin->id.'/messages?user_id='.$this->user->id);
         
         $response->assertOk()
         ->assertJsonFragment([
@@ -129,7 +129,7 @@ class MessageHistoryTest extends TestCase
             'update_user_id'    => $this->admin->id
         ];
 
-        $response = $this->post('api/'.$this->admin->id.'/messages', $data);
+        $response = $this->post('api/users/'.$this->admin->id.'/messages', $data);
 
         $response->assertStatus(400)
         ->assertJsonFragment([
@@ -143,11 +143,17 @@ class MessageHistoryTest extends TestCase
         // メッセージ作成(成功例)
         $data['content'] = $this->content[array_rand($this->content)];
 
-        $response = $this->post('api/'.$this->admin->id.'/messages', $data);
+        $response = $this->post('api/users/'.$this->admin->id.'/messages', $data);
 
         $response->assertOk()
         ->assertJsonFragment([
             'content'           => $data['content'],
+            'own' => [
+                'id'            => $this->admin->id,
+                'image_file'    => $this->admin->image_file,
+                'image_url'     => $this->admin->image_url,
+                'name'          => $this->admin->name
+            ],
             'own_id'            => $this->admin->id,
             'user_id'           => $this->user->id,
             'update_user_id'    => $this->admin->id
@@ -155,14 +161,14 @@ class MessageHistoryTest extends TestCase
 
         // イベントのdispatchを確認し、受け取った値の内容が上記で作成したメッセージと一致するかどうかを確認
         Event::assertDispatched(function (MessageCreated $event) use ($response) {
-            return $event->message->content === $response->json()['content'];
+            return $event->message->content === $response->json()['talk']['content'];
         });
 
         // ユーザを認証済みに書き換え
         $this->getActingAs($this->user);
 
         // adminとのメッセージを取得
-        $response = $this->get('api/'.$this->user->id.'/messages?user_id='.$this->admin->id);
+        $response = $this->get('api/users/'.$this->user->id.'/messages?user_id='.$this->admin->id);
 
         // 先ほど保存されたメッセージが確認できることを確認
         $response->assertOk()
@@ -191,7 +197,7 @@ class MessageHistoryTest extends TestCase
         $this->getActingAs($this->admin);
 
         // 自身以外のメッセージを削除する場合はエラーを返す
-        $response = $this->delete('api/'.$this->admin->id.'/messages/'.$this->message2->id);
+        $response = $this->delete('api/users/'.$this->admin->id.'/messages/'.$this->message2->id);
 
         $response->assertStatus(500)
         ->assertJsonFragment([
@@ -208,7 +214,7 @@ class MessageHistoryTest extends TestCase
         ]);
 
         // 自身のメッセージを削除する場合は正常動作を実行
-        $response = $this->delete('api/'.$this->admin->id.'/messages/'.$this->message1->id);
+        $response = $this->delete('api/users/'.$this->admin->id.'/messages/'.$this->message1->id);
 
         $response->assertOk()
         ->assertJsonFragment([
