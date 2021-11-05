@@ -23,7 +23,7 @@ class NewsTest extends TestCase
     private const TITLE = 'うれしいニュースです！';
     private const CONTENT = 'グループ登録数が100を超えました！いつもご利用ありがとうございます。';
     private const ERRMESSAGE1 = 'ニュースを作成するには管理者権限が必要です';
-    private const ERRMESSAGE2 = 'onetime password は必須です';
+    private const ERRMESSAGE2 = 'ワンタイムパスワードは必須です';
     private const ERRMESSAGE3 = 'ワンタイムパスワードが一致しません';
 
     /**
@@ -141,7 +141,7 @@ class NewsTest extends TestCase
         // 存在しないニュースを検索
         $response = $this->get('api/news/100');
         
-        $response->assertStatus(404)
+        $response->assertStatus(400)
         ->assertJsonFragment([
             'error_message' => config('const.News.SEARCH_ERR')
         ]);
@@ -174,7 +174,7 @@ class NewsTest extends TestCase
         ->assertJsonFragment([
             'errors' => [
                 'onetime_password' => [self::ERRMESSAGE2],
-                'update_user_id'   => [self::ERRMESSAGE1]
+                'update_user_id'   => [self::ERRMESSAGE1],
         ]]);
 
         // ニュースを作成(管理者権限のある認証済みユーザの場合)

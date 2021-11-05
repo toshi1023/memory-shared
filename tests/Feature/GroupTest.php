@@ -135,7 +135,7 @@ class GroupTest extends TestCase
         // 存在しないグループを検索
         $response = $this->get('api/groups/test');
         
-        $response->assertStatus(404)
+        $response->assertStatus(400)
         ->assertJsonFragment([
             'error_message' => config('const.Group.SEARCH_ERR')
         ]);

@@ -61,7 +61,6 @@ class ImageDelete extends Command
             $directory = Storage::disk('s3')->directories(config('const.Aws.USER').'/');
             // DBに存在しないユーザのディレクトリを削除
             foreach ($directory as $key => $value) {
-                $this->info($value);
                 if (!DB::table('users')->where('id', substr($value, 5))->exists()) {
                     Storage::disk('s3')->deleteDirectory($value);
                     // 削除内容をログとターミナルに出力する

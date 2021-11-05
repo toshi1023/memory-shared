@@ -166,7 +166,7 @@ class UserTest extends TestCase
         // 存在しないユーザをリクエスト
         $response = $this->get('api/users/test');
         
-        $response->assertStatus(404)
+        $response->assertStatus(400)
         ->assertJsonFragment([
             'error_message' => config('const.User.SEARCH_ERR')
         ]);
