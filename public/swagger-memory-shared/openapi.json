@@ -437,7 +437,7 @@
                         }
                     },
                     "400": {
-                        "description": "Server error / バリデーションエラーのメッセージを表示",
+                        "description": "Bad Request error / バリデーションエラーのメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -894,7 +894,7 @@
                         }
                     },
                     "400": {
-                        "description": "Server error / バリデーションエラーのメッセージを表示",
+                        "description": "Bad Request error / バリデーションエラーのメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1021,6 +1021,67 @@
                 "produces": [
                     "application/json"
                 ]
+            },
+            "post": {
+                "tags": [
+                    "news"
+                ],
+                "description": "アルバムデータを保存する",
+                "operationId": "App\\Http\\Controllers\\Api\\NewsController::store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "request": {
+                                        "$ref": "#/components/schemas/news_register"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success / 保存成功のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "info_message": {
+                                            "description": "保存成功のメッセージを表示",
+                                            "type": "string",
+                                            "example": "ニュースを登録しました"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "ニュースの登録に失敗しました"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
             }
         },
         "api/news/{news}": {
@@ -1089,6 +1150,199 @@
                                             "description": "サーバエラー用のメッセージを表示",
                                             "type": "string",
                                             "example": "ニュースを取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            },
+            "put": {
+                "tags": [
+                    "news"
+                ],
+                "description": "ニュースデータを更新保存する",
+                "operationId": "App\\Http\\Controllers\\Api\\NewsController::update",
+                "parameters": [
+                    {
+                        "name": "news",
+                        "in": "path",
+                        "description": "ニュースID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "request": {
+                                        "$ref": "#/components/schemas/news_update"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success / 保存成功のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "info_message": {
+                                            "description": "保存成功のメッセージを表示",
+                                            "type": "string",
+                                            "example": "ニュースを登録しました"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "ニュースの登録に失敗しました"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "news"
+                ],
+                "description": "ニュースデータを論理削除する",
+                "operationId": "App\\Http\\Controllers\\Api\\NewsController::destroy",
+                "parameters": [
+                    {
+                        "name": "news",
+                        "in": "path",
+                        "description": "ニュースID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "削除対象のニュースに紐づくユーザID",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / 物理削除成功のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "info_message": {
+                                            "description": "物理削除成功のメッセージを表示",
+                                            "type": "string",
+                                            "example": "ニュースの削除が完了しました"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "サーバーエラーによりニュースの削除に失敗しました。管理者にお問い合わせください"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "api/news/validate": {
+            "post": {
+                "tags": [
+                    "news"
+                ],
+                "description": "ニュース登録・更新時のバリデーションを実行する",
+                "operationId": "App\\Http\\Controllers\\Api\\NewsController::newsValidate",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "request": {
+                                        "$ref": "#/components/schemas/news_register"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success / バリデーションチェック通過のメッセージをリターン",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "validate_status": {
+                                            "description": "バリデーションチェック通過のメッセージをリターン",
+                                            "type": "string",
+                                            "example": "OK"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request error / バリデーションエラーのメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "$ref": "#/components/schemas/news_errors"
                                         }
                                     },
                                     "type": "object"
@@ -1532,7 +1786,7 @@
                         }
                     },
                     "400": {
-                        "description": "Server error / バリデーションエラーのメッセージを表示",
+                        "description": "Bad Request error / バリデーションエラーのメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1593,7 +1847,7 @@
                         }
                     },
                     "400": {
-                        "description": "Server error / バリデーションエラーのメッセージを表示",
+                        "description": "Bad Request error / バリデーションエラーのメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2222,10 +2476,15 @@
                 "properties": {
                     "name": {
                         "required": [
+                            "required",
                             "unique",
                             "name.max"
                         ],
                         "properties": {
+                            "required": {
+                                "type": "string",
+                                "example": "アルバム名は必須です"
+                            },
                             "name.max": {
                                 "type": "string",
                                 "example": "アルバム名は50文字以内で入力してください"
@@ -2252,10 +2511,15 @@
                     },
                     "host_user_id": {
                         "required": [
-                            "mimes",
-                            "image_file.max"
+                            "required",
+                            "GroupMemberRule",
+                            "AlbumUpdateRule"
                         ],
                         "properties": {
+                            "required": {
+                                "type": "string",
+                                "example": "ホストユーザのIDは必須です"
+                            },
                             "GroupMemberRule": {
                                 "description": "アルバムに紐づくグループに加盟しているかどうか確認",
                                 "type": "string",
@@ -2599,10 +2863,15 @@
                 "properties": {
                     "name": {
                         "required": [
+                            "required",
                             "name.max",
                             "GroupNameRule"
                         ],
                         "properties": {
+                            "required": {
+                                "type": "string",
+                                "example": "グループ名は必須です"
+                            },
                             "name.max": {
                                 "type": "string",
                                 "example": "グループ名は50文字以内で入力してください"
@@ -2634,9 +2903,14 @@
                     },
                     "host_user_id": {
                         "required": [
+                            "required",
                             "GroupUpdateRule"
                         ],
                         "properties": {
+                            "required": {
+                                "type": "string",
+                                "example": "ホストユーザのIDは必須です"
+                            },
                             "GroupUpdateRule": {
                                 "description": "独自ルールを作成。グループの作成者以外、グループデータの更新を許さない",
                                 "type": "string",
@@ -2713,6 +2987,121 @@
                     "read_user_id": {
                         "type": "integer",
                         "example": 2
+                    }
+                },
+                "type": "object"
+            },
+            "news_errors": {
+                "required": [
+                    "title",
+                    "content",
+                    "update_user_id",
+                    "onetime_password"
+                ],
+                "properties": {
+                    "title": {
+                        "required": [
+                            "name.max"
+                        ],
+                        "properties": {
+                            "name.max": {
+                                "type": "string",
+                                "example": "タイトルは100文字以内で入力してください"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "content": {
+                        "required": [
+                            "required"
+                        ],
+                        "properties": {
+                            "required": {
+                                "type": "string",
+                                "example": "内容は必須です"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "update_user_id": {
+                        "required": [
+                            "NewsRegisterRule"
+                        ],
+                        "properties": {
+                            "NewsRegisterRule": {
+                                "description": "ログインユーザに管理者権限があるかどうかを確認",
+                                "type": "string",
+                                "example": "ニュースを作成するには管理者権限が必要です"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "onetime_password": {
+                        "required": [
+                            "required",
+                            "ConfirmOnetimePasswordRule"
+                        ],
+                        "properties": {
+                            "required": {
+                                "type": "string",
+                                "example": "ワンタイムパスワードは必須です"
+                            },
+                            "ConfirmOnetimePasswordRule": {
+                                "description": "管理者権限が必要な処理をする際に、入力されたワンタイムパスワードが一致するか確認",
+                                "type": "string",
+                                "example": "ワンタイムパスワードが一致しません"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "news_register": {
+                "required": [
+                    "user_id",
+                    "title",
+                    "content"
+                ],
+                "properties": {
+                    "user_id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "不具合を解消しました"
+                    },
+                    "content": {
+                        "type": "string",
+                        "example": "ログインが出来ない不具合を解消しました"
+                    }
+                },
+                "type": "object"
+            },
+            "news_update": {
+                "required": [
+                    "user_id",
+                    "news_id",
+                    "title",
+                    "content"
+                ],
+                "properties": {
+                    "user_id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "news_id": {
+                        "type": "integer",
+                        "example": "3"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "不具合を解消しました"
+                    },
+                    "content": {
+                        "type": "string",
+                        "example": "ログインが出来ない不具合を解消しました"
                     }
                 },
                 "type": "object"
@@ -2911,10 +3300,15 @@
                 "properties": {
                     "name": {
                         "required": [
+                            "required",
                             "unique",
                             "name.max"
                         ],
                         "properties": {
+                            "required": {
+                                "type": "string",
+                                "example": "ユーザ名は必須です"
+                            },
                             "unique": {
                                 "type": "string",
                                 "example": "このユーザ名はすでに使用されています"
@@ -2928,10 +3322,16 @@
                     },
                     "email": {
                         "required": [
+                            "required",
                             "email",
-                            "email.regex"
+                            "email.regex",
+                            "max"
                         ],
                         "properties": {
+                            "required": {
+                                "type": "string",
+                                "example": "メールアドレスは必須です"
+                            },
                             "email": {
                                 "type": "string",
                                 "example": "メールアドレスの書式のみ有効です"
@@ -2939,16 +3339,31 @@
                             "email.regex": {
                                 "type": "string",
                                 "example": "@以前は半角英数字で入力してください"
+                            },
+                            "email.max": {
+                                "type": "string",
+                                "example": "メールアドレスは50文字以内で入力してください"
                             }
                         },
                         "type": "object"
                     },
                     "password": {
                         "required": [
+                            "required",
+                            "min",
                             "confirmed",
                             "password.regex"
                         ],
                         "properties": {
+                            "required": {
+                                "description": "ユーザの新規登録時のみ適用",
+                                "type": "string",
+                                "example": "パスワードは必須です"
+                            },
+                            "password.min": {
+                                "type": "string",
+                                "example": "パスワードは6文字以上で入力してください"
+                            },
                             "confirmed": {
                                 "type": "string",
                                 "example": "パスワードを確認用と一致させてください"
@@ -2962,9 +3377,20 @@
                     },
                     "password_confirmation": {
                         "required": [
+                            "required",
+                            "min",
                             "password_confirmation.regex"
                         ],
                         "properties": {
+                            "required": {
+                                "description": "ユーザの新規登録時のみ適用",
+                                "type": "string",
+                                "example": "パスワード(確認用)は必須です"
+                            },
+                            "password_confirmation.min": {
+                                "type": "string",
+                                "example": "パスワード（確認用）は6文字以上で入力してください"
+                            },
                             "password_confirmation.regex": {
                                 "type": "string",
                                 "example": "パスワード（確認）は半角英数字及び「_@!?#%&」の記号のみで入力してください"

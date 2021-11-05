@@ -28,7 +28,7 @@ class NewsRegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'             => ['required', 'max:50'],
+            'title'             => ['required', 'max:100'],
             'content'           => ['required'],
             'update_user_id'    => [new NewsRegisterRule],
             'onetime_password'  => ['required', new ConfirmOnetimePasswordRule],
@@ -41,7 +41,7 @@ class NewsRegisterRequest extends FormRequest
     public function messages()
     {
         return [
-            "title.max"                      => "タイトルは50文字以内で入力してください",
+            "title.max"                      => "タイトルは100文字以内で入力してください",
         ];
     }
 
