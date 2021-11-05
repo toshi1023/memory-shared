@@ -57,12 +57,8 @@ class ImageDelete extends Command
 
             $users = User::all();
 
-            foreach($users as $value) {
-                // ユーザIDをキーにして、画像名を2次元配列で取得
-                $user_images[$value->id] = Storage::disk('s3')->files(config('const.Aws.USER').'/'.$value->id.'/');
-                // Userディレクトリ内のディレクトリ名を取得
-                $directory = Storage::disk('s3')->directories(config('const.Aws.USER').'/');
-            }
+            // Userディレクトリ内のディレクトリ名を取得
+            $directory = Storage::disk('s3')->directories(config('const.Aws.USER').'/');
             // DBに存在しないユーザのディレクトリを削除
             foreach ($directory as $key => $value) {
                 $this->info($value);
@@ -72,6 +68,11 @@ class ImageDelete extends Command
                     logger()->info("\"".$value."\" is deleted");
                     $this->info("\"".$value."\" is deleted");
                 }
+            }
+
+            foreach($users as $value) {
+                // ユーザIDをキーにして、画像名を2次元配列で取得
+                $user_images[$value->id] = Storage::disk('s3')->files(config('const.Aws.USER').'/'.$value->id.'/');
             }
             // プロフィール画像用配列をユーザIDと画像名で分別
             foreach ($user_images as $key => $value) {
@@ -98,12 +99,23 @@ class ImageDelete extends Command
 
             $groups = Group::all();
 
+            // Groupディレクトリ内のディレクトリ名を取得
+            $directory = Storage::disk('s3')->directories(config('const.Aws.GROUP').'/');
+            // DBに存在しないグループのディレクトリを削除
+            foreach ($directory as $key => $value) {
+                if (!DB::table('groups')->where('id', substr($value, 7))->exists()) {
+                    Storage::disk('s3')->deleteDirectory($value);
+                    // 削除内容をログとターミナルに出力する
+                    logger()->info("\"".$value."\" is deleted");
+                    $this->info("\"".$value."\" is deleted");
+                }
+            }
+
             foreach($groups as $value) {
                 // グループIDをキーにして、画像名を2次元配列で取得
                 $group_images[$value->id] = Storage::disk('s3')->files(config('const.Aws.GROUP').'/'.$value->id.'/');
-                // Groupディレクトリ内のディレクトリ名を取得
-                $directory = Storage::disk('s3')->directories(config('const.Aws.GROUP').'/');
             }
+            
             // グループの画像用配列をグループIDと画像名で分別
             foreach ($group_images as $key => $value) {
                 // S3のストレージに保存されている画像名がDBに存在するか確認
@@ -129,12 +141,23 @@ class ImageDelete extends Command
 
             $albums = Album::all();
 
+            // Albumディレクトリ内のディレクトリ名を取得
+            $directory = Storage::disk('s3')->directories(config('const.Aws.ALBUM').'/');
+            // DBに存在しないアルバムのディレクトリを削除
+            foreach ($directory as $key => $value) {
+                if (!DB::table('albums')->where('id', substr($value, 7))->exists()) {
+                    Storage::disk('s3')->deleteDirectory($value);
+                    // 削除内容をログとターミナルに出力する
+                    logger()->info("\"".$value."\" is deleted");
+                    $this->info("\"".$value."\" is deleted");
+                }
+            }
+
             foreach($albums as $value) {
                 // アルバムIDをキーにして、画像名を2次元配列で取得
                 $album_images[$value->id] = Storage::disk('s3')->files(config('const.Aws.ALBUM').'/'.$value->id.'/');
-                // Albumディレクトリ内のディレクトリ名を取得
-                $directory = Storage::disk('s3')->directories(config('const.Aws.ALBUM').'/');
             }
+            
             // アルバムの画像用配列をアルバムIDと画像名で分別
             foreach ($album_images as $key => $value) {
                 // S3のストレージに保存されている画像名がDBに存在するか確認
@@ -161,12 +184,24 @@ class ImageDelete extends Command
             $uimages = UserImage::all();
             $delete_flg = [];
 
+            // Mainディレクトリ内のディレクトリ名を取得
+            $directory = Storage::disk('s3')->directories(config('const.Aws.MAIN').'/');
+            // DBに存在しないMainのディレクトリを削除
+            foreach ($directory as $key => $value) {
+                if (!DB::table('albums')->where('id', substr($value, 5))->exists()) {
+                    Storage::disk('s3')->deleteDirectory($value);
+                    // 削除内容をログとターミナルに出力する
+                    logger()->info("\"".$value."\" is deleted");
+                    $this->info("\"".$value."\" is deleted");
+                }
+            }
+
             foreach($uimages as $value) {
                 // アルバムIDをキーにして、画像名を2次元配列で取得
                 $main_images[$value->album_id] = Storage::disk('s3')->files(config('const.Aws.MAIN').'/'.$value->album_id.'/');
-                // Mainディレクトリ内のディレクトリ名を取得
-                $directory = Storage::disk('s3')->directories(config('const.Aws.MAIN').'/');
+                
             }
+            
             // user_imagesの画像用配列をアルバムIDと画像名で分別
             foreach ($main_images as $key => $value) {
                 // S3のストレージに保存されている画像名がDBに存在するか確認
@@ -189,11 +224,12 @@ class ImageDelete extends Command
 
             $uvideos = UserVideo::all();
 
+            // Mainディレクトリ内のディレクトリ名を取得
+            $directory = Storage::disk('s3')->directories(config('const.Aws.MAIN').'/');
+
             foreach($uvideos as $value) {
                 // アルバムIDをキーにして、動画名を2次元配列で取得
                 $main_videos[$value->album_id] = Storage::disk('s3')->files(config('const.Aws.MAIN').'/'.$value->album_id.'/');
-                // Mainディレクトリ内のディレクトリ名を取得
-                $directory = Storage::disk('s3')->directories(config('const.Aws.MAIN').'/');
             }
             // user_videosの動画用配列をアルバムIDと動画名で分別
             foreach ($main_videos as $key => $value) {
