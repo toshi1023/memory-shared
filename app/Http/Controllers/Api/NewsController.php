@@ -22,7 +22,56 @@ class NewsController extends Controller
     }
 
     /**
-     * 【ハンバーガーメニュー】
+     * @OA\Schema(
+     *     schema="news_list",
+     *     required={"user_id", "news_id", "title", "content", "update_user_id", "created_at", "updated_at", "read_user_id"},
+     *     @OA\Property(property="user_id", type="integer", example=2),
+     *     @OA\Property(property="news_id", type="integer", example="1"),
+     *     @OA\Property(property="title", type="string", example="MemoryShareAppへようこそ"),
+     *     @OA\Property(property="content", type="string", example="たくさん思い出を共有してください"),
+     *     @OA\Property(property="update_user_id", type="integer", example="2"),
+     *     @OA\Property(property="created_at", type="string", example="2021-07-25 12:02:55"),
+     *     @OA\Property(property="updated_at", type="string", example="2021-08-28 14:13:00"),
+     *     @OA\Property(property="read_user_id", type="integer", example=2),
+     * )
+     */
+
+    /**
+     * @OA\Get(
+     *     path="api/news",
+     *     description="user_idカラムがログインしているユーザもしくは運営ナンバー(0)に紐づく、ニュースデータをページネーション形式で取得する(件数：15件)",
+     *     produces={"application/json"},
+     *     tags={"news"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / ニュースデータを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 description="ニュースデータを表示",
+     *                 @OA\Items(
+     *                      ref="#/components/schemas/news_list"
+     *                 ),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="ニュースを取得出来ませんでした"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * ニュース一覧の表示用アクション
      */
     public function index(Request $request)
@@ -51,7 +100,67 @@ class NewsController extends Controller
     }
 
     /**
-     * 【ハンバーガーメニュー】
+     * @OA\Get(
+     *     path="api/news/{news}",
+     *     description="指定したニュースデータを取得する",
+     *     produces={"application/json"},
+     *     tags={"news"},
+     *     @OA\Parameter(
+     *         name="news",
+     *         description="ニュースID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Parameter(
+     *         name="user_id",
+     *         description="ユーザID",
+     *         in="query",
+     *         required=false,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / 指定したニュースデータを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="news",
+     *                 type="object",
+     *                 description="指定したニュースデータを表示",
+     *                 ref="#/components/schemas/news_list"
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request error / 存在しないニュースをリクエストした場合、エラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="エラー用のメッセージを表示",
+     *                 example="指定したニュースは存在しません"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="ニュースを取得出来ませんでした"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
+     * 
      * ニュース詳細の表示用アクション
      */
     public function show(Request $request, $news)
@@ -63,19 +172,19 @@ class NewsController extends Controller
             
             // 検索条件の設定
             $conditions = [
-                'user_id'       => $user_id,
-                'news_id'       => $news,
-                '@>created_at'  => Auth::user()->created_at
+                'news.user_id'            => $user_id,
+                'news.news_id'            => $news,
+                '@>equalnews.created_at'  => Auth::user()->created_at
             ];
             
             $data = $this->db->baseSearchFirst($conditions);
             
             // ニュースが存在しない場合
             if(empty($data)) {
-                return response()->json(['error_message' => config('const.News.SEARCH_ERR')], 404, [], JSON_UNESCAPED_UNICODE);    
+                return response()->json(['error_message' => config('const.News.SEARCH_ERR')], 400, [], JSON_UNESCAPED_UNICODE);    
             }
             
-            return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['news' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 

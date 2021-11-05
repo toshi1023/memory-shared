@@ -250,8 +250,8 @@ class UserController extends Controller
      *         )
      *     ),
      *     @OA\Response(
-     *         response=404,
-     *         description="存在しないユーザのページをリクエストした場合、検索結果が0件であることを表すメッセージを表示",
+     *         response=400,
+     *         description="Bad Request error / 存在しないユーザのページをリクエストした場合、検索結果が0件であることを表すメッセージを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
@@ -293,7 +293,7 @@ class UserController extends Controller
 
             // ユーザが存在しない場合
             if(empty($profile)) {
-                return response()->json(['error_message' => config('const.User.SEARCH_ERR')], 404, [], JSON_UNESCAPED_UNICODE);    
+                return response()->json(['error_message' => config('const.User.SEARCH_ERR')], 400, [], JSON_UNESCAPED_UNICODE);    
             }
             
             return response()->json([

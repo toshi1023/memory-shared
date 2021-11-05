@@ -685,8 +685,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "存在しないグループのページをリクエストした場合、検索結果が0件であることを表すメッセージを表示",
+                    "400": {
+                        "description": "Bad Request error / 存在しないグループのページをリクエストした場合、検索結果が0件であることを表すメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -973,6 +973,135 @@
                 ]
             }
         },
+        "api/news": {
+            "get": {
+                "tags": [
+                    "news"
+                ],
+                "description": "user_idカラムがログインしているユーザもしくは運営ナンバー(0)に紐づく、ニュースデータをページネーション形式で取得する(件数：15件)",
+                "operationId": "App\\Http\\Controllers\\Api\\NewsController::index",
+                "responses": {
+                    "200": {
+                        "description": "Success / ニュースデータを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "ニュースデータを表示",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/news_list"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "ニュースを取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "api/news/{news}": {
+            "get": {
+                "tags": [
+                    "news"
+                ],
+                "description": "指定したニュースデータを取得する",
+                "operationId": "App\\Http\\Controllers\\Api\\NewsController::show",
+                "parameters": [
+                    {
+                        "name": "news",
+                        "in": "path",
+                        "description": "ニュースID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "ユーザID",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / 指定したニュースデータを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "news": {
+                                            "$ref": "#/components/schemas/news_list"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request error / 存在しないニュースをリクエストした場合、エラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "エラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "指定したニュースは存在しません"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "ニュースを取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
         "/api/users": {
             "get": {
                 "tags": [
@@ -1139,8 +1268,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "存在しないユーザのページをリクエストした場合、検索結果が0件であることを表すメッセージを表示",
+                    "400": {
+                        "description": "Bad Request error / 存在しないユーザのページをリクエストした場合、検索結果が0件であることを表すメッセージを表示",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1875,7 +2004,7 @@
                                 "schema": {
                                     "properties": {
                                         "data": {
-                                            "description": "\n     *                      ログインしているユーザが作成した、groupsテーブルのhost_user_idが自身のIDであるグループ情報を表示。\n     *                      また、すでに招待するユーザが参加しているグループ情報は省いて表示する\n     *                 ",
+                                            "description": "\r\n     *                      ログインしているユーザが作成した、groupsテーブルのhost_user_idが自身のIDであるグループ情報を表示。\r\n     *                      また、すでに招待するユーザが参加しているグループ情報は省いて表示する\r\n     *                 ",
                                             "type": "array",
                                             "items": {
                                                 "$ref": "#/components/schemas/user_groups_info"
@@ -2537,6 +2666,53 @@
                     "image_file": {
                         "type": "string",
                         "example": "xxxxoooo.png"
+                    }
+                },
+                "type": "object"
+            },
+            "news_list": {
+                "required": [
+                    "user_id",
+                    "news_id",
+                    "title",
+                    "content",
+                    "update_user_id",
+                    "created_at",
+                    "updated_at",
+                    "read_user_id"
+                ],
+                "properties": {
+                    "user_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "news_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "MemoryShareAppへようこそ"
+                    },
+                    "content": {
+                        "type": "string",
+                        "example": "たくさん思い出を共有してください"
+                    },
+                    "update_user_id": {
+                        "type": "integer",
+                        "example": "2"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2021-07-25 12:02:55"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2021-08-28 14:13:00"
+                    },
+                    "read_user_id": {
+                        "type": "integer",
+                        "example": 2
                     }
                 },
                 "type": "object"
