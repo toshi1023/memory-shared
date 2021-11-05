@@ -73,14 +73,16 @@ class AlbumController extends Controller
      * @OA\Schema(
      *     schema="album_errors",
      *     required={"name", "image_file", "host_user_id"},
-     *     @OA\Property(property="name", type="object", required={"unique", "name.max"},
+     *     @OA\Property(property="name", type="object", required={"required", "unique", "name.max"},
+     *          @OA\Property(property="required", type="string", example="アルバム名は必須です"),
      *          @OA\Property(property="name.max", type="string", example="アルバム名は50文字以内で入力してください"),
      *     ),
      *     @OA\Property(property="image_file", type="object", required={"mimes", "image_file.max"},
      *          @OA\Property(property="mimes", type="string", example="アップロードファイルはjpeg,png,jpg,gifタイプのみ有効です"),
      *          @OA\Property(property="image_file.max", type="string", example="1Mを超えています。"),
      *     ),
-     *     @OA\Property(property="host_user_id", type="object", required={"mimes", "image_file.max"},
+     *     @OA\Property(property="host_user_id", type="object", required={"required", "GroupMemberRule", "AlbumUpdateRule"},
+     *          @OA\Property(property="required", type="string", example="ホストユーザのIDは必須です"),
      *          @OA\Property(property="GroupMemberRule", type="string", description="アルバムに紐づくグループに加盟しているかどうか確認", example="このグループでアルバムを作成する権限がありません"),
      *          @OA\Property(property="AlbumUpdateRule", type="string", description="アルバム作成者と一致するかどうか確認", example="アルバム作成者以外はアルバム情報を更新できません"),
      *     ),
@@ -370,7 +372,7 @@ class AlbumController extends Controller
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Server error / バリデーションエラーのメッセージを表示",
+     *         description="Bad Request error / バリデーションエラーのメッセージを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(

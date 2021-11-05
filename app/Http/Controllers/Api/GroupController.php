@@ -100,7 +100,8 @@ class GroupController extends Controller
      * @OA\Schema(
      *     schema="group_errors",
      *     required={"name", "image_file", "host_user_id"},
-     *     @OA\Property(property="name", type="object", required={"name.max", "GroupNameRule"},
+     *     @OA\Property(property="name", type="object", required={"required", "name.max", "GroupNameRule"},
+     *          @OA\Property(property="required", type="string", example="グループ名は必須です"),
      *          @OA\Property(property="name.max", type="string", example="グループ名は50文字以内で入力してください"),
      *          @OA\Property(property="GroupNameRule", type="string", description="独自ルールを作成。private_flgが0(公開)の場合のみ、グループ名の重複を許さない", example="公開する場合には重複したグループ名を使用できません。非公開にするか、グループ名を変更してください"),
      *     ),
@@ -108,7 +109,8 @@ class GroupController extends Controller
      *          @OA\Property(property="mimes", type="string", example="アップロードファイルはjpeg,png,jpg,gifタイプのみ有効です"),
      *          @OA\Property(property="image_file.max", type="string", example="1Mを超えています。"),
      *     ),
-     *     @OA\Property(property="host_user_id", type="object", required={"GroupUpdateRule"},
+     *     @OA\Property(property="host_user_id", type="object", required={"required", "GroupUpdateRule"},
+     *          @OA\Property(property="required", type="string", example="ホストユーザのIDは必須です"),
      *          @OA\Property(property="GroupUpdateRule", type="string", description="独自ルールを作成。グループの作成者以外、グループデータの更新を許さない", example="グループ作成者以外はグループ情報を更新できません")
      *     ),
      * )
@@ -319,7 +321,7 @@ class GroupController extends Controller
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Server error / バリデーションエラーのメッセージを表示",
+     *         description="Bad Request error / バリデーションエラーのメッセージを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(

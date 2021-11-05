@@ -41,6 +41,7 @@ class AlbumRegisterRequest extends FormRequest
     public function messages()
     {
         return [
+            "name.required"         => "アルバム名は必須です",
             "name.max"              => "アルバム名は50文字以内で入力してください",
             "mines"                 => "指定された拡張子（PNG/JPG/GIF）ではありません。",
             "image_file.max"        => "1Mを超えています。",

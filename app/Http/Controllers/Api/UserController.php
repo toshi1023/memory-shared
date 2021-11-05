@@ -81,19 +81,26 @@ class UserController extends Controller
      * @OA\Schema(
      *     schema="user_errors",
      *     required={"name", "email", "password", "password_confirmation", "image_file"},
-     *     @OA\Property(property="name", type="object", required={"unique", "name.max"},
+     *     @OA\Property(property="name", type="object", required={"required", "unique", "name.max"},
+     *          @OA\Property(property="required", type="string", example="ユーザ名は必須です"),
      *          @OA\Property(property="unique", type="string", example="このユーザ名はすでに使用されています"),
      *          @OA\Property(property="name.max", type="string", example="ユーザ名は15文字以内で入力してください"),
      *     ),
-     *     @OA\Property(property="email", type="object", required={"email", "email.regex"},
+     *     @OA\Property(property="email", type="object", required={"required", "email", "email.regex", "max"},
+     *          @OA\Property(property="required", type="string", example="メールアドレスは必須です"),
      *          @OA\Property(property="email", type="string", example="メールアドレスの書式のみ有効です"),
      *          @OA\Property(property="email.regex", type="string", example="@以前は半角英数字で入力してください"),
+     *          @OA\Property(property="email.max", type="string", example="メールアドレスは50文字以内で入力してください"),
      *     ),
-     *     @OA\Property(property="password", type="object", required={"confirmed", "password.regex"},
+     *     @OA\Property(property="password", type="object", required={"required", "min", "confirmed", "password.regex"},
+     *          @OA\Property(property="required", type="string", description="ユーザの新規登録時のみ適用", example="パスワードは必須です"),
+     *          @OA\Property(property="password.min", type="string", example="パスワードは6文字以上で入力してください"),
      *          @OA\Property(property="confirmed", type="string", example="パスワードを確認用と一致させてください"),
      *          @OA\Property(property="password.regex", type="string", example="パスワードは半角英数字及び「_@!?#%&」の記号のみで入力してください"),
      *     ),
-     *     @OA\Property(property="password_confirmation", type="object", required={"password_confirmation.regex"},
+     *     @OA\Property(property="password_confirmation", type="object", required={"required", "min", "password_confirmation.regex"},
+     *          @OA\Property(property="required", type="string", description="ユーザの新規登録時のみ適用", example="パスワード(確認用)は必須です"),
+     *          @OA\Property(property="password_confirmation.min", type="string", example="パスワード（確認用）は6文字以上で入力してください"),
      *          @OA\Property(property="password_confirmation.regex", type="string", example="パスワード（確認）は半角英数字及び「_@!?#%&」の記号のみで入力してください"),
      *     ),
      *     @OA\Property(property="image_file", type="object", required={"mimes", "image_file.max"},
@@ -415,7 +422,7 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Server error / バリデーションエラーのメッセージを表示",
+     *         description="Bad Request error / バリデーションエラーのメッセージを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(
@@ -471,7 +478,7 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Server error / バリデーションエラーのメッセージを表示",
+     *         description="Bad Request error / バリデーションエラーのメッセージを表示",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(

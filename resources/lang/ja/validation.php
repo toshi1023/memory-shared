@@ -167,6 +167,8 @@ return [
         'video_file'                => 'アップロード動画',
         'title'                     => 'タイトル',
         'content'                   => '内容',
+        'onetime_password'          => 'ワンタイムパスワード',
+        'host_user_id'              => 'ホストユーザのID'
     ],
 
 ];
