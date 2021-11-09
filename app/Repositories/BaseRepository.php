@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +18,7 @@ abstract class  BaseRepository
      */
     protected function baseGetModel($model): Model
     {
-        // 指定したテーブルをインスタンス化して返す
+        // 指定したモデルをインスタンス化して返す
         return $this->model = app()->make($model);
     }
 
@@ -29,7 +28,7 @@ abstract class  BaseRepository
      */
     protected function baseGetRepository($repositoryInterface)
     {
-        // 指定したテーブルをインスタンス化して返す
+        // 指定したリポジトリをインスタンス化して返す
         return app()->make($repositoryInterface);
     }
 
