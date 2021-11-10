@@ -33,7 +33,7 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
      * トーク履歴の取得
      * 引数1: 検索条件, 引数2: 削除済みデータの取得フラグ, 引数3: ページネーション件数
      */
-    public function getMessages($conditions=[], bool $softDelete=false, $paginate=15)
+    public function getMessages($conditions=[], bool $softDelete=false, $paginate=20)
     {
         // own_idがログインユーザのデータを取得
         $anotherQuery = $this->baseSearchQuery($conditions, [], $softDelete)->whereNull('deleted_at');

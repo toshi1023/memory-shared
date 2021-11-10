@@ -10,7 +10,7 @@ interface MessageHistoryRepositoryInterface
     public function baseSearchQueryPaginate($conditions=[], $order=[], int $paginate=10);
     public function baseDelete($id);
     public function baseForceDelete($id);
-    public function getMessages($conditions=[], bool $softDelete=false, $paginate=15);
+    public function getMessages($conditions=[], bool $softDelete=false, $paginate=20);
     public function getMessage($conditions=[], bool $softDelete=false);
     public function getMessageList($user_id, int $paginate=15);
     public function getUser($conditions=[], bool $softDelete=false);
