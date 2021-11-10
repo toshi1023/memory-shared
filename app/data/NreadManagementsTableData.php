@@ -11,6 +11,7 @@ class NreadManagementsTableData
     public static function run(Faker $faker)
     {
         $dt = new Carbon('now');
+        $now = new Carbon('now');
 
         NreadManagement::create([
             'news_user_id'      => 1,
@@ -58,13 +59,90 @@ class NreadManagementsTableData
             'news_user_id'      => 0,
             'news_id'           => 3,
             'user_id'           => 1,
-            'created_at'        => $dt->addHour(),
-            'updated_at'        => $dt->addHour()
+            'created_at'        => $now,
+            'updated_at'        => $now
         ]);
         NreadManagement::create([
             'news_user_id'      => 0,
             'news_id'           => 3,
             'user_id'           => 2,
+            'created_at'        => $now,
+            'updated_at'        => $now
+        ]);
+        NreadManagement::create([
+            'news_user_id'      => 0,
+            'news_id'           => 3,
+            'user_id'           => 3,
+            'created_at'        => $now,
+            'updated_at'        => $now
+        ]);
+        NreadManagement::create([
+            'news_user_id'      => 0,
+            'news_id'           => 3,
+            'user_id'           => 4,
+            'created_at'        => $now,
+            'updated_at'        => $now
+        ]);
+        NreadManagement::create([
+            'news_user_id'      => 0,
+            'news_id'           => 3,
+            'user_id'           => 5,
+            'created_at'        => $now,
+            'updated_at'        => $now
+        ]);
+        NreadManagement::create([
+            'news_user_id'      => 0,
+            'news_id'           => 3,
+            'user_id'           => 6,
+            'created_at'        => $now,
+            'updated_at'        => $now
+        ]);
+        NreadManagement::create([
+            'news_user_id'      => 0,
+            'news_id'           => 3,
+            'user_id'           => 7,
+            'created_at'        => $now,
+            'updated_at'        => $now
+        ]);
+        NreadManagement::create([
+            'news_user_id'      => 0,
+            'news_id'           => 3,
+            'user_id'           => 8,
+            'created_at'        => $now,
+            'updated_at'        => $now
+        ]);
+        NreadManagement::create([
+            'news_user_id'      => 0,
+            'news_id'           => 3,
+            'user_id'           => 9,
+            'created_at'        => $now,
+            'updated_at'        => $now
+        ]);
+        NreadManagement::create([
+            'news_user_id'      => 0,
+            'news_id'           => 3,
+            'user_id'           => 10,
+            'created_at'        => $now,
+            'updated_at'        => $now
+        ]);
+        NreadManagement::create([
+            'news_user_id'      => 4,
+            'news_id'           => 1,
+            'user_id'           => 4,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        NreadManagement::create([
+            'news_user_id'      => 9,
+            'news_id'           => 1,
+            'user_id'           => 9,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        NreadManagement::create([
+            'news_user_id'      => 10,
+            'news_id'           => 1,
+            'user_id'           => 10,
             'created_at'        => $dt->addHour(),
             'updated_at'        => $dt->addHour()
         ]);

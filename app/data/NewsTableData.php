@@ -11,6 +11,7 @@ class NewsTableData
     public static function run(Faker $faker)
     {
         $dt = new Carbon('now');
+        $now = new Carbon('now');
 
         News::create([
             'user_id'           => 0,
@@ -144,6 +145,60 @@ class NewsTableData
             'title'             => 'うれしいニュースです！',
             'content'           => '当サイトの登録者が1000人突破しました！これからもよろしくお願いいたします。',
             'update_user_id'    => 1,
+            'created_at'        => $now,
+            'updated_at'        => $now
+        ]);
+        News::create([
+            'user_id'           => 5,
+            'news_id'           => 1,
+            'title'             => 'MemoryShareAppへようこそ',
+            'content'           => 'MemoryShareAppの会員登録が完了しました。素敵な仲間と一緒に写真や動画を投稿し合って、思い出を共有しましょう！',
+            'update_user_id'    => 5,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        News::create([
+            'user_id'           => 6,
+            'news_id'           => 1,
+            'title'             => 'MemoryShareAppへようこそ',
+            'content'           => 'MemoryShareAppの会員登録が完了しました。素敵な仲間と一緒に写真や動画を投稿し合って、思い出を共有しましょう！',
+            'update_user_id'    => 6,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        News::create([
+            'user_id'           => 7,
+            'news_id'           => 1,
+            'title'             => 'MemoryShareAppへようこそ',
+            'content'           => 'MemoryShareAppの会員登録が完了しました。素敵な仲間と一緒に写真や動画を投稿し合って、思い出を共有しましょう！',
+            'update_user_id'    => 7,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        News::create([
+            'user_id'           => 8,
+            'news_id'           => 1,
+            'title'             => 'MemoryShareAppへようこそ',
+            'content'           => 'MemoryShareAppの会員登録が完了しました。素敵な仲間と一緒に写真や動画を投稿し合って、思い出を共有しましょう！',
+            'update_user_id'    => 8,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        News::create([
+            'user_id'           => 9,
+            'news_id'           => 1,
+            'title'             => 'MemoryShareAppへようこそ',
+            'content'           => 'MemoryShareAppの会員登録が完了しました。素敵な仲間と一緒に写真や動画を投稿し合って、思い出を共有しましょう！',
+            'update_user_id'    => 9,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        News::create([
+            'user_id'           => 10,
+            'news_id'           => 1,
+            'title'             => 'MemoryShareAppへようこそ',
+            'content'           => 'MemoryShareAppの会員登録が完了しました。素敵な仲間と一緒に写真や動画を投稿し合って、思い出を共有しましょう！',
+            'update_user_id'    => 10,
             'created_at'        => $dt->addHour(),
             'updated_at'        => $dt->addHour()
         ]);

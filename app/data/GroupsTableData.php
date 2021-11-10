@@ -123,6 +123,45 @@ class GroupsTableData
             'created_at'        => $dt->addDay(1),
             'updated_at'        => $dt->addDay(1)
         ]);
-
+        Group::create([
+            'name'              => 'sunshine community',
+            'description'       => 'ピクニックを楽しむコミュニティです',
+            'private_flg'       => 0,
+            'welcome_flg'       => 1,
+            'host_user_id'      => 5,
+            'update_user_id'    => 5,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
+        Group::create([
+            'name'              => 'nfl watchers',
+            'description'       => 'スポーツバーでNFLの観戦を企画しています！気軽に参加してください',
+            'private_flg'       => 0,
+            'welcome_flg'       => 1,
+            'host_user_id'      => 42,
+            'update_user_id'    => 42,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
+        Group::create([
+            'name'              => 'nba watchers',
+            'description'       => 'スポーツバーでNBAの観戦を企画しています！気軽に参加してください',
+            'private_flg'       => 0,
+            'welcome_flg'       => 1,
+            'host_user_id'      => 34,
+            'update_user_id'    => 34,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
+        Group::create([
+            'name'              => 'mlb watchers',
+            'description'       => 'スポーツバーでMLBの観戦を企画しています！気軽に参加してください',
+            'private_flg'       => 0,
+            'welcome_flg'       => 1,
+            'host_user_id'      => 28,
+            'update_user_id'    => 28,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
     }
 }
