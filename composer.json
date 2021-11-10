@@ -14,6 +14,7 @@
         "laravel/tinker": "^2.5",
         "league/flysystem-aws-s3-v3": "^1.0",
         "nesbot/carbon": "^2.46",
+        "pusher/pusher-php-server": "^7.0",
         "zircote/swagger-php": "^3.1"
     },
     "require-dev": {

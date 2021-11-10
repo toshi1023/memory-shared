@@ -64,9 +64,6 @@ class MessageHistoryController extends Controller
 
             // 未読管理テーブルに保存
             $this->db->saveMread($data);
-    
-            // Pusherにデータを送信(リアルタイム通信を実行)
-            event(new MessageCreated($data));
 
             // 検索条件
             $conditions = [];
@@ -74,6 +71,9 @@ class MessageHistoryController extends Controller
     
             // データ
             $talk = $this->db->getMessage($conditions);
+
+            // Pusherにデータを送信(リアルタイム通信を実行)
+            event(new MessageCreated($talk));
 
             DB::commit();
             return response()->json(['talk' => $talk], 200, [], JSON_UNESCAPED_UNICODE);
