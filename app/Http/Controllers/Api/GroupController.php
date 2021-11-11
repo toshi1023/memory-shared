@@ -67,7 +67,7 @@ class GroupController extends Controller
      *         @OA\Property(property="id", type="integer", example="11"),
      *         @OA\Property(property="group_id", type="integer", example="2"),
      *         @OA\Property(property="user_id", type="integer", example="4"),
-     *         @OA\Property(property="gender", type="integer", example="2"),
+     *         @OA\Property(property="status", type="integer", example="2"),
      *     )
      * )
      */
