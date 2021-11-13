@@ -97,6 +97,7 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
         $subQuery = $this->model->selectRaw('count(mread_managements.own_id) AS mcount')
                                 ->addSelect('mread_managements.own_id')
                                 ->from('mread_managements')
+                                ->where('mread_managements.user_id', '=', $user_id)
                                 ->groupByRaw('mread_managements.own_id');
                              
         // messagesテーブルとusersテーブルの内容を結合してログインユーザのメッセージ一覧情報を取得
