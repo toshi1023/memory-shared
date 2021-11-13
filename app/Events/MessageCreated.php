@@ -14,17 +14,17 @@ class MessageCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $message;
+    public $talk;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($message)
+    public function __construct($talk)
     {
         // 登録されたデータをメンバ変数に格納
-        $this->message = $message;
+        $this->talk = $talk;
     }
 
     /**

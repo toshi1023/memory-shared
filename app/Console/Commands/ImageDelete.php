@@ -61,12 +61,13 @@ class ImageDelete extends Command
             $directory = Storage::disk('s3')->directories(config('const.Aws.USER').'/');
             // DBに存在しないユーザのディレクトリを削除
             foreach ($directory as $key => $value) {
-                if (!DB::table('users')->where('id', substr($value, 5))->exists()) {
+                if (!DB::table('users')->where('id', substr($value, 5))->whereNull('deleted_at')->exists()) {
                     Storage::disk('s3')->deleteDirectory($value);
                     // 削除内容をログとターミナルに出力する
                     logger()->info("\"".$value."\" is deleted");
                     $this->info("\"".$value."\" is deleted");
                 }
+                // $this->info(DB::table('users')->where('id', substr($value, 5))->exists());
             }
 
             foreach($users as $value) {
@@ -75,22 +76,17 @@ class ImageDelete extends Command
             }
             // プロフィール画像用配列をユーザIDと画像名で分別
             foreach ($user_images as $key => $value) {
+                // 画像が1件も存在しない場合はスキップ
+                if(!$value) continue;
                 // S3のストレージに保存されている画像名がDBに存在するか確認
                 foreach ($value as $image) {
-                    if (!DB::table('users')->where('image_file', basename($image))->exists()) {
+                    if (!DB::table('users')->where('image_file', basename($image))->whereNull('deleted_at')->exists()) {
                         // 存在しない場合は画像を削除する
                         Storage::disk('s3')->delete($image);
                         // 削除内容をログとターミナルに出力する
                         logger()->info("\"".$image."\" is deleted");
                         $this->info("\"".$image."\" is deleted");
                     }
-                }
-                // 画像が1件も存在しない場合は対象ユーザのフォルダを削除する
-                if(!$value) {
-                    Storage::disk('s3')->deleteDirectory(config('const.Aws.USER').'/'.$key.'/');
-                    // 削除内容をログとターミナルに出力する
-                    logger()->info("\"".config('const.Aws.USER').'/'.$key."\" is deleted");
-                    $this->info("\"".config('const.Aws.USER').'/'.$key."\" is deleted");
                 }
             }
 
@@ -102,7 +98,7 @@ class ImageDelete extends Command
             $directory = Storage::disk('s3')->directories(config('const.Aws.GROUP').'/');
             // DBに存在しないグループのディレクトリを削除
             foreach ($directory as $key => $value) {
-                if (!DB::table('groups')->where('id', substr($value, 7))->exists()) {
+                if (!DB::table('groups')->where('id', substr($value, 6))->whereNull('deleted_at')->exists()) {
                     Storage::disk('s3')->deleteDirectory($value);
                     // 削除内容をログとターミナルに出力する
                     logger()->info("\"".$value."\" is deleted");
@@ -117,22 +113,17 @@ class ImageDelete extends Command
             
             // グループの画像用配列をグループIDと画像名で分別
             foreach ($group_images as $key => $value) {
+                // 画像が1件も存在しない場合はスキップ
+                if(!$value) continue;
                 // S3のストレージに保存されている画像名がDBに存在するか確認
                 foreach ($value as $image) {
-                    if (!DB::table('groups')->where('image_file', basename($image))->exists()) {
+                    if (!DB::table('groups')->where('image_file', basename($image))->whereNull('deleted_at')->exists()) {
                         // 存在しない場合は画像を削除する
                         Storage::disk('s3')->delete(config('const.Aws.GROUP').'/'.$key.'/'.basename($image));
                         // 削除内容をログとターミナルに出力する
                         logger()->info("\"".config('const.Aws.GROUP').'/'.$key.'/'.basename($image)."\" is deleted");
                         $this->info("\"".config('const.Aws.GROUP').'/'.$key.'/'.basename($image)."\" is deleted");
                     }
-                }
-                // 画像が1件も存在しない場合は対象グループのフォルダを削除する
-                if(!$value) {
-                    Storage::disk('s3')->deleteDirectory(config('const.Aws.GROUP').'/'.$key.'/');
-                    // 削除内容をログとターミナルに出力する
-                    logger()->info("\"".config('const.Aws.GROUP').'/'.$key."\" is deleted");
-                    $this->info("\"".config('const.Aws.GROUP').'/'.$key."\" is deleted");
                 }
             }
 
@@ -144,7 +135,7 @@ class ImageDelete extends Command
             $directory = Storage::disk('s3')->directories(config('const.Aws.ALBUM').'/');
             // DBに存在しないアルバムのディレクトリを削除
             foreach ($directory as $key => $value) {
-                if (!DB::table('albums')->where('id', substr($value, 7))->exists()) {
+                if (!DB::table('albums')->where('id', substr($value, 6))->whereNull('deleted_at')->exists()) {
                     Storage::disk('s3')->deleteDirectory($value);
                     // 削除内容をログとターミナルに出力する
                     logger()->info("\"".$value."\" is deleted");
@@ -159,22 +150,17 @@ class ImageDelete extends Command
             
             // アルバムの画像用配列をアルバムIDと画像名で分別
             foreach ($album_images as $key => $value) {
+                // 画像が1件も存在しない場合はスキップ
+                if(!$value) continue;
                 // S3のストレージに保存されている画像名がDBに存在するか確認
                 foreach ($value as $image) {
-                    if (!DB::table('albums')->where('image_file', basename($image))->exists()) {
+                    if (!DB::table('albums')->where('image_file', basename($image))->whereNull('deleted_at')->exists()) {
                         // 存在しない場合は画像を削除する
                         Storage::disk('s3')->delete(config('const.Aws.ALBUM').'/'.$key.'/'.basename($image));
                         // 削除内容をログとターミナルに出力する
                         logger()->info("\"".config('const.Aws.ALBUM').'/'.$key.'/'.basename($image)."\" is deleted");
                         $this->info("\"".config('const.Aws.ALBUM').'/'.$key.'/'.basename($image)."\" is deleted");
                     }
-                }
-                // 画像が1件も存在しない場合は対象アルバムのフォルダを削除する
-                if(!$value) {
-                    Storage::disk('s3')->deleteDirectory(config('const.Aws.ALBUM').'/'.$key.'/');
-                    // 削除内容をログとターミナルに出力する
-                    logger()->info("\"".config('const.Aws.ALBUM').'/'.$key."\" is deleted");
-                    $this->info("\"".config('const.Aws.ALBUM').'/'.$key."\" is deleted");
                 }
             }
 
@@ -187,7 +173,7 @@ class ImageDelete extends Command
             $directory = Storage::disk('s3')->directories(config('const.Aws.MAIN').'/');
             // DBに存在しないMainのディレクトリを削除
             foreach ($directory as $key => $value) {
-                if (!DB::table('albums')->where('id', substr($value, 5))->exists()) {
+                if (!DB::table('albums')->where('id', substr($value, 5))->whereNull('deleted_at')->exists()) {
                     Storage::disk('s3')->deleteDirectory($value);
                     // 削除内容をログとターミナルに出力する
                     logger()->info("\"".$value."\" is deleted");
@@ -205,7 +191,7 @@ class ImageDelete extends Command
             foreach ($main_images as $key => $value) {
                 // S3のストレージに保存されている画像名がDBに存在するか確認
                 foreach ($value as $image) {
-                    if (!DB::table('user_images')->where('image_file', basename($image))->exists()) {
+                    if (!DB::table('user_images')->where('image_file', basename($image))->whereNull('deleted_at')->exists()) {
                         // 存在しない場合は画像を削除する
                         Storage::disk('s3')->delete(config('const.Aws.MAIN').'/'.$key.'/'.basename($image));
                         // 削除内容をログとターミナルに出力する
@@ -234,7 +220,7 @@ class ImageDelete extends Command
             foreach ($main_videos as $key => $value) {
                 // S3のストレージに保存されている動画名がDBに存在するか確認
                 foreach ($value as $video) {
-                    if (!DB::table('user_videos')->where('image_file', basename($video))->exists()) {
+                    if (!DB::table('user_videos')->where('image_file', basename($video))->whereNull('deleted_at')->exists()) {
                         // 存在しない場合は動画を削除する
                         Storage::disk('s3')->delete(config('const.Aws.MAIN').'/'.$key.'/'.basename($video));
                         // 削除内容をログとターミナルに出力する
@@ -243,12 +229,12 @@ class ImageDelete extends Command
                     }
                 }
                 // 動画が1件も存在しない、かつ画像も1件も存在しない場合は対象のフォルダを削除する
-                if(!$value && $delete_flg[$key]) {
-                    Storage::disk('s3')->deleteDirectory(config('const.Aws.MAIN').'/'.$key.'/');
-                    // 削除内容をログとターミナルに出力する
-                    logger()->info("\"".config('const.Aws.MAIN').'/'.$key."\" is deleted");
-                    $this->info("\"".config('const.Aws.MAIN').'/'.$key."\" is deleted");
-                }
+                // if(!$value && $delete_flg[$key]) {
+                //     Storage::disk('s3')->deleteDirectory(config('const.Aws.MAIN').'/'.$key.'/');
+                //     // 削除内容をログとターミナルに出力する
+                //     logger()->info("\"".config('const.Aws.MAIN').'/'.$key."\" is deleted");
+                //     $this->info("\"".config('const.Aws.MAIN').'/'.$key."\" is deleted");
+                // }
             }
 
             // Logにメッセージを出力
