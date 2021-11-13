@@ -161,7 +161,7 @@ class MessageHistoryTest extends TestCase
 
         // イベントのdispatchを確認し、受け取った値の内容が上記で作成したメッセージと一致するかどうかを確認
         Event::assertDispatched(function (MessageCreated $event) use ($response) {
-            return $event->message->content === $response->json()['talk']['content'];
+            return $event->talk->content === $response->json()['talk']['content'];
         });
 
         // ユーザを認証済みに書き換え
