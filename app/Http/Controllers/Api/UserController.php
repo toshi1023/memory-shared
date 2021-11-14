@@ -829,7 +829,7 @@ class UserController extends Controller
             if($request->sort_name || $request->sort_id) $order = Common::setOrder($request);
             
             // ファミリー情報取得
-            $data = $this->db->getFamilies($families_conditions, $order);
+            $data = $this->db->getFamilies($families_conditions, $order, 30);
             
             return response()->json(['families' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
