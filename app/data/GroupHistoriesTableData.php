@@ -492,5 +492,125 @@ class GroupHistoriesTableData
             'created_at'        => $dt->addHour(),
             'updated_at'        => $dt->addHour()
         ]);
+        GroupHistory::create([
+            'user_id'           => 50,
+            'group_id'          => 15,
+            'status'            => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'    => 50,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        GroupHistory::create([
+            'user_id'           => 1,
+            'group_id'          => 15,
+            'status'            => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'    => 50,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        GroupHistory::create([
+            'user_id'           => 2,
+            'group_id'          => 15,
+            'status'            => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'    => 50,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        GroupHistory::create([
+            'user_id'           => 8,
+            'group_id'          => 15,
+            'status'            => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'    => 50,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        GroupHistory::create([
+            'user_id'           => 37,
+            'group_id'          => 15,
+            'status'            => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'    => 50,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        GroupHistory::create([
+            'user_id'           => 36,
+            'group_id'          => 15,
+            'status'            => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'    => 50,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        GroupHistory::create([
+            'user_id'           => 14,
+            'group_id'          => 15,
+            'status'            => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'    => 50,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        GroupHistory::create([
+            'user_id'           => 17,
+            'group_id'          => 15,
+            'status'            => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'    => 50,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        GroupHistory::create([
+            'user_id'           => 47,
+            'group_id'          => 15,
+            'status'            => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'    => 50,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        GroupHistory::create([
+            'user_id'           => 41,
+            'group_id'          => 16,
+            'status'            => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'    => 41,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        GroupHistory::create([
+            'user_id'           => 1,
+            'group_id'          => 16,
+            'status'            => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'    => 41,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        GroupHistory::create([
+            'user_id'           => 2,
+            'group_id'          => 16,
+            'status'            => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'    => 41,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        GroupHistory::create([
+            'user_id'           => 5,
+            'group_id'          => 16,
+            'status'            => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'    => 41,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        GroupHistory::create([
+            'user_id'           => 23,
+            'group_id'          => 16,
+            'status'            => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'    => 41,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
+        GroupHistory::create([
+            'user_id'           => 54,
+            'group_id'          => 16,
+            'status'            => config('const.GroupHistory.APPROVAL'),
+            'update_user_id'    => 41,
+            'created_at'        => $dt->addHour(),
+            'updated_at'        => $dt->addHour()
+        ]);
     }
 }

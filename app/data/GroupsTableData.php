@@ -163,5 +163,25 @@ class GroupsTableData
             'created_at'        => $dt->addDay(1),
             'updated_at'        => $dt->addDay(1)
         ]);
+        Group::create([
+            'name'              => 'premier league watchers',
+            'description'       => 'スポーツバーでプレミアリーグの観戦を企画しています！気軽に参加してください',
+            'private_flg'       => 0,
+            'welcome_flg'       => 1,
+            'host_user_id'      => 50,
+            'update_user_id'    => 50,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
+        Group::create([
+            'name'              => 'lega watchers',
+            'description'       => 'スポーツバーでリーガの観戦を企画しています！気軽に参加してください',
+            'private_flg'       => 0,
+            'welcome_flg'       => 1,
+            'host_user_id'      => 48,
+            'update_user_id'    => 48,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
     }
 }

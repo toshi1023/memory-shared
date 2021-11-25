@@ -829,5 +829,110 @@ class UsersTableData
             'created_at'        => $dt->addDay(1),
             'updated_at'        => $dt->addDay(1)
         ]);
+        User::create([
+            'name'              => 'chin',
+            'email'             => 'chin@xxx.co.jp',
+            'email_verified_at' => $dt->addDay(1),
+            'password'          => Hash::make('test1234'),
+            'gender'            => config('const.User.MAN'),
+            'hobby'             => $hobby[$faker->numberBetween(0, 9)],
+            'description'       => $description[$faker->numberBetween(0, 19)],
+            'status'            => config('const.User.MEMBER'),
+            'user_agent'        => $faker->userAgent,
+            'remember_token'    => Str::random(10),
+            'update_user_id'    => 53,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
+        User::create([
+            'name'              => 'yayoi',
+            'email'             => 'yayoi@xxx.co.jp',
+            'email_verified_at' => $dt->addDay(1),
+            'password'          => Hash::make('test1234'),
+            'gender'            => config('const.User.WOMAN'),
+            'hobby'             => $hobby[$faker->numberBetween(0, 9)],
+            'description'       => $description[$faker->numberBetween(0, 19)],
+            'status'            => config('const.User.MEMBER'),
+            'user_agent'        => $faker->userAgent,
+            'remember_token'    => Str::random(10),
+            'update_user_id'    => 54,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
+        User::create([
+            'name'              => 'josh allen',
+            'email'             => 'josh@xxx.co.jp',
+            'email_verified_at' => $dt->addDay(1),
+            'password'          => Hash::make('test1234'),
+            'gender'            => config('const.User.MAN'),
+            'hobby'             => $hobby[$faker->numberBetween(0, 9)],
+            'description'       => $description[$faker->numberBetween(0, 19)],
+            'status'            => config('const.User.MEMBER'),
+            'user_agent'        => $faker->userAgent,
+            'remember_token'    => Str::random(10),
+            'update_user_id'    => 55,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
+        User::create([
+            'name'              => 'geoge kittle',
+            'email'             => 'geoge@xxx.co.jp',
+            'email_verified_at' => $dt->addDay(1),
+            'password'          => Hash::make('test1234'),
+            'gender'            => config('const.User.MAN'),
+            'hobby'             => $hobby[$faker->numberBetween(0, 9)],
+            'description'       => $description[$faker->numberBetween(0, 19)],
+            'status'            => config('const.User.MEMBER'),
+            'user_agent'        => $faker->userAgent,
+            'remember_token'    => Str::random(10),
+            'update_user_id'    => 55,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
+        User::create([
+            'name'              => 'shohei otani',
+            'email'             => 'shohei@xxx.co.jp',
+            'email_verified_at' => $dt->addDay(1),
+            'password'          => Hash::make('test1234'),
+            'gender'            => config('const.User.MAN'),
+            'hobby'             => $hobby[$faker->numberBetween(0, 9)],
+            'description'       => $description[$faker->numberBetween(0, 19)],
+            'status'            => config('const.User.MEMBER'),
+            'user_agent'        => $faker->userAgent,
+            'remember_token'    => Str::random(10),
+            'update_user_id'    => 56,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
+        User::create([
+            'name'              => 'yanagi',
+            'email'             => 'yanagi@xxx.co.jp',
+            'email_verified_at' => $dt->addDay(1),
+            'password'          => Hash::make('test1234'),
+            'gender'            => config('const.User.WOMAN'),
+            'hobby'             => $hobby[$faker->numberBetween(0, 9)],
+            'description'       => $description[$faker->numberBetween(0, 19)],
+            'status'            => config('const.User.MEMBER'),
+            'user_agent'        => $faker->userAgent,
+            'remember_token'    => Str::random(10),
+            'update_user_id'    => 57,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
+        User::create([
+            'name'              => 'kecy',
+            'email'             => 'kecy@xxx.co.jp',
+            'email_verified_at' => $dt->addDay(1),
+            'password'          => Hash::make('test1234'),
+            'gender'            => config('const.User.WOMAN'),
+            'hobby'             => $hobby[$faker->numberBetween(0, 9)],
+            'description'       => $description[$faker->numberBetween(0, 19)],
+            'status'            => config('const.User.MEMBER'),
+            'user_agent'        => $faker->userAgent,
+            'remember_token'    => Str::random(10),
+            'update_user_id'    => 58,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
     }
 }

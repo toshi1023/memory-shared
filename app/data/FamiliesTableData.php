@@ -43,6 +43,12 @@ class FamiliesTableData
             'updated_at'        => $dt->addDay(1)
         ]);
         Family::create([
+            'user_id1'          => 1,
+            'user_id2'          => 50,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
+        Family::create([
             'user_id1'          => 2,
             'user_id2'          => 4,
             'created_at'        => $dt->addSecond(),
@@ -69,6 +75,12 @@ class FamiliesTableData
         Family::create([
             'user_id1'          => 2,
             'user_id2'          => 34,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 2,
+            'user_id2'          => 50,
             'created_at'        => $dt->addSecond(),
             'updated_at'        => $dt->addSecond()
         ]);
@@ -103,6 +115,24 @@ class FamiliesTableData
             'updated_at'        => $dt->addDay(1)
         ]);
         Family::create([
+            'user_id1'          => 5,
+            'user_id2'          => 1,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
+        Family::create([
+            'user_id1'          => 5,
+            'user_id2'          => 2,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
+        Family::create([
+            'user_id1'          => 5,
+            'user_id2'          => 46,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
+        Family::create([
             'user_id1'          => 7,
             'user_id2'          => 1,
             'created_at'        => $dt->addSecond(),
@@ -125,6 +155,24 @@ class FamiliesTableData
             'user_id2'          => 5,
             'created_at'        => $dt->addSecond(),
             'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 8,
+            'user_id2'          => 1,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 8,
+            'user_id2'          => 2,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
+        Family::create([
+            'user_id1'          => 8,
+            'user_id2'          => 50,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
         ]);
         Family::create([
             'user_id1'          => 9,
@@ -211,6 +259,42 @@ class FamiliesTableData
             'updated_at'        => $dt->addSecond()
         ]);
         Family::create([
+            'user_id1'          => 14,
+            'user_id2'          => 1,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 14,
+            'user_id2'          => 2,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 14,
+            'user_id2'          => 8,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 14,
+            'user_id2'          => 36,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 14,
+            'user_id2'          => 37,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 14,
+            'user_id2'          => 50,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
             'user_id1'          => 16,
             'user_id2'          => 1,
             'created_at'        => $dt->addSecond(),
@@ -237,6 +321,48 @@ class FamiliesTableData
         Family::create([
             'user_id1'          => 16,
             'user_id2'          => 34,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 17,
+            'user_id2'          => 1,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 17,
+            'user_id2'          => 2,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 17,
+            'user_id2'          => 8,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 17,
+            'user_id2'          => 14,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 17,
+            'user_id2'          => 36,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 17,
+            'user_id2'          => 37,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 17,
+            'user_id2'          => 50,
             'created_at'        => $dt->addSecond(),
             'updated_at'        => $dt->addSecond()
         ]);
@@ -285,6 +411,30 @@ class FamiliesTableData
         Family::create([
             'user_id1'          => 22,
             'user_id2'          => 7,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 23,
+            'user_id2'          => 1,
+            'created_at'        => $dt->addDay(1),
+            'updated_at'        => $dt->addDay(1)
+        ]);
+        Family::create([
+            'user_id1'          => 23,
+            'user_id2'          => 2,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 23,
+            'user_id2'          => 5,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 23,
+            'user_id2'          => 41,
             'created_at'        => $dt->addSecond(),
             'updated_at'        => $dt->addSecond()
         ]);
@@ -337,6 +487,60 @@ class FamiliesTableData
             'updated_at'        => $dt->addDay(1)
         ]);
         Family::create([
+            'user_id1'          => 36,
+            'user_id2'          => 1,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 36,
+            'user_id2'          => 2,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 36,
+            'user_id2'          => 8,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 36,
+            'user_id2'          => 37,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 36,
+            'user_id2'          => 50,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 37,
+            'user_id2'          => 1,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 37,
+            'user_id2'          => 2,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 37,
+            'user_id2'          => 8,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 37,
+            'user_id2'          => 50,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
             'user_id1'          => 40,
             'user_id2'          => 1,
             'created_at'        => $dt->addSecond(),
@@ -351,6 +555,12 @@ class FamiliesTableData
         Family::create([
             'user_id1'          => 40,
             'user_id2'          => 7,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 41,
+            'user_id2'          => 1,
             'created_at'        => $dt->addSecond(),
             'updated_at'        => $dt->addSecond()
         ]);
@@ -375,6 +585,54 @@ class FamiliesTableData
         Family::create([
             'user_id1'          => 41,
             'user_id2'          => 29,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 47,
+            'user_id2'          => 1,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 47,
+            'user_id2'          => 2,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 47,
+            'user_id2'          => 8,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 47,
+            'user_id2'          => 14,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 47,
+            'user_id2'          => 17,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 47,
+            'user_id2'          => 36,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 47,
+            'user_id2'          => 37,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 47,
+            'user_id2'          => 50,
             'created_at'        => $dt->addSecond(),
             'updated_at'        => $dt->addSecond()
         ]);
@@ -405,6 +663,36 @@ class FamiliesTableData
         Family::create([
             'user_id1'          => 48,
             'user_id2'          => 34,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 54,
+            'user_id2'          => 1,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 54,
+            'user_id2'          => 2,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 54,
+            'user_id2'          => 5,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 54,
+            'user_id2'          => 23,
+            'created_at'        => $dt->addSecond(),
+            'updated_at'        => $dt->addSecond()
+        ]);
+        Family::create([
+            'user_id1'          => 54,
+            'user_id2'          => 41,
             'created_at'        => $dt->addSecond(),
             'updated_at'        => $dt->addSecond()
         ]);
