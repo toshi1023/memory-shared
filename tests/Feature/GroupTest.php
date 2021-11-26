@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Group;
 use App\Models\GroupHistory;
-use Illuminate\Support\Facades\DB;
 use Exception;
 
 class GroupTest extends TestCase

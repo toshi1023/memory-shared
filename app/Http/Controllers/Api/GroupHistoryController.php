@@ -289,11 +289,21 @@ class GroupHistoryController extends Controller
             $data = $request->all();
             $data['group_id'] = $group;
             $data['user_id'] = $request->input('user_id') ? $request->input('user_id') : Auth::user()->id;
-    
+
+            // 検索条件作成
+            $conditions = [
+                'group_id'  => $data['group_id'],
+                'user_id'   => $data['user_id']
+            ];
+            // 既存データが存在しないかどうか確認
+            if($this->db->searchExists($conditions)) {
+                throw new Exception('すでに履歴データが存在するユーザ・グループ間のデータ保存処理が実行されようとしました。 グループID：'.$data['group_id'].', ユーザID：'.$data['user_id']);
+            }
+            
             // データの保存処理
             $data = $this->db->save($data);
-
-            // 申請したグループ情報を取得
+            
+            // 招待したグループ情報を取得
             $groupInfo = $this->db->searchGroupFirst(['id' => $group]);
 
             // 申請状況のデータが承認済みの場合、familiesテーブルへの保存処理を実行
