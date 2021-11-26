@@ -13,6 +13,7 @@ use App\Models\Group;
 use App\Models\GroupHistory;
 use App\Models\Post;
 use App\Models\PostComment;
+use App\Models\News;
 
 class PostTest extends TestCase
 {
@@ -192,12 +193,26 @@ class PostTest extends TestCase
             'update_user_id'    => $this->admin->id,
         ]);
 
+        // 未読テーブルの保存確認
+        $news = News::where('user_id', $this->admin->id)->where('title', $title)->where('content', $content)->first();
+        $this->assertDatabaseHas('nread_managements', [
+            'news_user_id'      => $this->admin->id,
+            'news_id'           => $news->news_id,
+            'user_id'           => $this->admin->id,
+        ]);
+
         // 投稿後、グループに加盟しているユーザ宛にも投稿完了通知が保存されているかどうかを確認
         $this->assertDatabaseHas('news', [
             'user_id'           => $this->user->id,
             'title'             => $title,
             'content'           => $content,
             'update_user_id'    => $this->admin->id,
+        ]);
+        // 未読テーブルの保存確認
+        $this->assertDatabaseHas('nread_managements', [
+            'news_user_id'      => $this->user->id,
+            'news_id'           => $news->news_id,
+            'user_id'           => $this->user->id,
         ]);
     }
 
