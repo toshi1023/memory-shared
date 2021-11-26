@@ -181,6 +181,24 @@ class PostTest extends TestCase
             'content'      => 'グループ登録数が100を祝って、祝賀会やろう！',
             'user_id'      => $this->admin->id,
         ]);
+
+        // 投稿後、投稿ユーザ宛に投稿完了通知が保存されているかどうかを確認
+        $title = $this->group->name.'の掲示板が新規投稿されました';
+        $content = $this->admin->name.'さんが'.$this->group->name.'の掲示板に新たな投稿を追加しました。掲示板にて内容を確認することが出来ます';
+        $this->assertDatabaseHas('news', [
+            'user_id'           => $this->admin->id,
+            'title'             => $title,
+            'content'           => $content,
+            'update_user_id'    => $this->admin->id,
+        ]);
+
+        // 投稿後、グループに加盟しているユーザ宛にも投稿完了通知が保存されているかどうかを確認
+        $this->assertDatabaseHas('news', [
+            'user_id'           => $this->user->id,
+            'title'             => $title,
+            'content'           => $content,
+            'update_user_id'    => $this->admin->id,
+        ]);
     }
 
     /**
