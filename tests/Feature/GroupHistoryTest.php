@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Group;
 use App\Models\GroupHistory;
+use App\Models\News;
 
 class GroupHistoryTest extends TestCase
 {
@@ -19,6 +20,7 @@ class GroupHistoryTest extends TestCase
     protected $admin;
     protected $user;
     protected $group;
+    protected $history;
 
     private const DIS = 'グループ申請の動作を確認するテスト用グループです！';
 
@@ -59,7 +61,7 @@ class GroupHistoryTest extends TestCase
             'status'               => config('const.GroupHistory.APPROVAL'),
             'update_user_id'       => $this->admin->id
         ]);
-        GroupHistory::create([
+        $this->history = GroupHistory::create([
             'user_id'              => $this->user->id,
             'group_id'             => $this->group->id,
             'status'               => config('const.GroupHistory.APPLY'),
@@ -135,6 +137,10 @@ class GroupHistoryTest extends TestCase
             'update_user_id'       => $this->admin->id
         ]);
 
+
+        /***************************************
+         * 作成失敗時
+         ***************************************/
         // ユーザを認証済みに書き換え
         $this->getActingAs($this->admin);
 
@@ -163,6 +169,10 @@ class GroupHistoryTest extends TestCase
             'error_message' => config('const.GroupHistory.INVITE_ERR')
         ]);
 
+
+        /***************************************
+         * 作成成功時
+         ***************************************/
         // ユーザを認証済みに書き換え
         $this->getActingAs($this->user);
         // 申請時の履歴の作成(成功)
@@ -183,40 +193,116 @@ class GroupHistoryTest extends TestCase
             'user_id'      => $this->user->id
         ]);
 
-        // 招待時の履歴の作成(成功)
-        $user = User::factory()->create();
-        $data = [
-            'user_id'              => $user->id,
-            'group_id'             => $this->group->id,
-            'status'               => config('const.GroupHistory.APPROVAL'),
-        ];
-        
-        $response = $this->post('api/groups/'.$group->id.'/history', $data);
-
-        $response->assertStatus(200)
-        ->assertJsonFragment([
-            'info_message' => config('const.GroupHistory.INVITE_INFO'),
-            'id'           => $this->group->id,
-            'name'         => $this->group->name
+        // 参加申請後、ユーザ宛に申請完了通知が保存されているかどうかを確認
+        $title = $group->name.'の参加申請について';
+        $content = $group->name.'の参加申請が完了しました。申請の結果が出るまでお待ちください。';
+        $this->assertDatabaseHas('news', [
+            'user_id'           => $this->user->id,
+            'title'             => $title,
+            'content'           => $content,
+            'update_user_id'    => $this->user->id,
         ]);
-        // // グループ作成(成功例)
+        // 未読テーブルの保存確認
+        $news = News::where('user_id', $this->user->id)->where('title', $title)->where('content', $content)->first();
+        $this->assertDatabaseHas('nread_managements', [
+            'news_user_id'      => $this->user->id,
+            'news_id'           => $news->news_id,
+            'user_id'           => $this->user->id,
+        ]);
+
+        // // 招待時の履歴の作成(成功)
+        // $user = User::factory()->create();
         // $data = [
-        //     'name'              => 'Group1',
-        //     'description'       => 'まったり旅をするグループです',
-        //     'host_user_id'      => $this->admin->id,
-        //     'update_user_id'    => $this->admin->id,
+        //     'user_id'              => $user->id,
+        //     'group_id'             => $this->group->id,
+        //     'status'               => config('const.GroupHistory.APPROVAL'),
         // ];
+        
+        // $response = $this->post('api/groups/'.$group->id.'/history', $data);
 
-        // $response = $this->post('api/groups', $data);
-
-        // // レスポンスのチェック
-        // $response->assertOk()
-        //          ->assertJsonFragment([
-        //             'info_message' => config('const.Group.REGISTER_INFO')
-        //          ]);
-        // // グループ作成と同時にgroup_historiesテーブルにも作成者のデータが登録されているか確認
-        // $this->assertDatabaseHas('group_histories', [
-        //     'user_id' => $this->admin->id,
+        // $response->assertStatus(200)
+        // ->assertJsonFragment([
+        //     'info_message' => config('const.GroupHistory.INVITE_INFO'),
+        //     'id'           => $this->group->id,
+        //     'name'         => $this->group->name
         // ]);
+
+        // // 参加申請後、ユーザ宛に申請完了通知が保存されているかどうかを確認
+        // $title = $this->group->name.'の参加申請について';
+        // $content = $this->group->name.'の参加が承認されました。Home画面の参加グループ一覧よりご確認ください。';
+        // $this->assertDatabaseHas('news', [
+        //     'user_id'           => $user->id,
+        //     'title'             => $title,
+        //     'content'           => $content,
+        //     'update_user_id'    => $this->admin->id,
+        // ]);
+        // // 未読テーブルの保存確認
+        // $news = News::where('user_id', $user->id)->where('title', $title)->where('content', $content)->first();
+        // $this->assertDatabaseHas('nread_managements', [
+        //     'news_user_id'      => $user->id,
+        //     'news_id'           => $news->news_id,
+        //     'user_id'           => $user->id,
+        // ]);
+    }
+
+    /**
+     * @test
+     */
+    public function グループ履歴更新の動作を確認()
+    {
+        /***************************************
+         * 更新失敗時
+         ***************************************/
+        // ホストユーザではないユーザを認証済みに書き換え
+        $this->getActingAs($this->user);
+
+        // GroupHistoryモデルがPivotを継承しているため、createメソッドでデータを作成してもIDが発行されない → DBから取得する必要がある
+        $history = GroupHistory::where('user_id', $this->user->id)->where('group_id', $this->group->id)->first();
+        
+        $data = [
+            'id'        => $history->id,
+            'group_id'  => $this->group->id,
+            'user_id'   => $this->user->id,
+            'status'    => config('const.GroupHistory.APPROVAL')
+        ];
+
+        $response = $this->put('api/groups/'.$this->group->id.'/history/'.$history->id, $data);
+
+        // 承認用のエラーメッセージを返す
+        $response->assertStatus(500)
+        ->assertJsonFragment([
+            'error_message' => config('const.GroupHistory.APPROVAL_ERR')
+        ]);
+
+
+        /***************************************
+         * 更新成功時(承認)
+         ***************************************/
+        // ホストユーザを認証済みに書き換え
+        $this->getActingAs($this->admin);
+
+        $response = $this->put('api/groups/'.$this->group->id.'/history/'.$history->id, $data);
+
+        $response->assertOk()
+        ->assertJsonFragment([
+            'info_message' => config('const.GroupHistory.APPROVAL_INFO')
+        ]);
+
+        // 承認後、承認されたユーザ宛に承認通知が保存されているかどうかを確認
+        $title = $this->group->name.'の参加申請について';
+        $content = $this->group->name.'の参加が承認されました。Home画面の参加グループ一覧よりご確認ください。';
+        $this->assertDatabaseHas('news', [
+            'user_id'           => $this->user->id,
+            'title'             => $title,
+            'content'           => $content,
+            'update_user_id'    => $this->admin->id,
+        ]);
+        // 未読テーブルの保存確認
+        $news = News::where('user_id', $this->user->id)->where('title', $title)->where('content', $content)->first();
+        $this->assertDatabaseHas('nread_managements', [
+            'news_user_id'      => $this->user->id,
+            'news_id'           => $news->news_id,
+            'user_id'           => $this->user->id,
+        ]);
     }
 }

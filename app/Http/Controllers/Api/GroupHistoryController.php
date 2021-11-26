@@ -458,6 +458,11 @@ class GroupHistoryController extends Controller
         try {
             // データの配列化
             $data = $request->all();
+
+            // グループのホストであるかどうかを確認
+            if(!$this->db->confirmGroupHost(Auth::user()->id, $group)) {
+                throw new Exception('ホストでないユーザがグループの承認作業を実行されようとしました。 グループID：'.$group.', ユーザID：'.Auth::user()->id);
+            }
             
             // データの保存処理
             $this->db->save($data);

@@ -231,7 +231,7 @@ abstract class  BaseRepository
      * ログイン中ユーザーID取得
      * @return \Illuminate\Contracts\Auth\Authenticatable|int|null
      */
-    private function baseGetUserId() {
+    protected function baseGetUserId() {
         if(Auth::check()) {
             return Auth::user()->id;
         }

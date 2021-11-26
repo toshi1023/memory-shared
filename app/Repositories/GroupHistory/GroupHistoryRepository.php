@@ -94,6 +94,21 @@ class GroupHistoryRepository extends BaseRepository implements GroupHistoryRepos
     }
 
     /**
+     * グループのホストかどうかを確認
+     * 引数1: ユーザID, 引数2: グループID
+     */
+    public function confirmGroupHost($user_id, $group_id)
+    {
+        $groupRepository = $this->baseGetRepository(GroupRepositoryInterface::class);
+        
+        $conditions = [
+            'id'            => $group_id,
+            'host_user_id'  => $user_id
+        ];
+        return $groupRepository->baseSearchQuery($conditions)->exists();
+    }
+
+    /**
      * データ保存
      */
     public function save($data, $model=null)

@@ -125,11 +125,14 @@ class NewsRepository extends BaseRepository implements NewsRepositoryInterface
     {
         $title = $group_name.'の参加申請について';
         $content = '';
+        $update_user_id = $user_id;
 
         if($status === config('const.GroupHistory.APPLY')) {
             $content = $group_name.'の参加申請が完了しました。申請の結果が出るまでお待ちください。';
         } else {
             $content = $group_name.'の参加が承認されました。Home画面の参加グループ一覧よりご確認ください。';
+            // 承認の場合は承認者をupdate_user_idに保存
+            $update_user_id = $this->baseGetUserId();
         }
 
         $data = [
@@ -137,7 +140,7 @@ class NewsRepository extends BaseRepository implements NewsRepositoryInterface
             'news_id'           => $this->getNewsId($user_id),
             'title'             => $title,
             'content'           => $content,
-            'update_user_id'    => $user_id
+            'update_user_id'    => $update_user_id
         ];
         
         $data = $this->baseSave($data);

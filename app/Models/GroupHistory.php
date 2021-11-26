@@ -14,7 +14,7 @@ class GroupHistory extends Pivot
 
     protected $table = 'group_histories';
     protected $dates = ['deleted_at'];
-    protected $guarded = ['id', 'invite_flg'];
+    protected $guarded = ['id'];
 
     /**
      * statusの日本語名を取得
