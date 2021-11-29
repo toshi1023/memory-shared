@@ -33,19 +33,23 @@ class MessageHistoriesTableData
             'created_at'        => $dt->subDay(10),
             'updated_at'        => $dt->subDay(10)
         ]);
+        for($i = 0; $i < 30; $i++) {
+            $user_id = $faker->numberBetween(1, 2);
+            MessageHistory::create([
+                'content'           => $content[$faker->numberBetween(0, 9)],
+                'own_id'            => $user_id,
+                'user_id'           => $user_id == 1 ? 2 : 1,
+                'update_user_id'    => $user_id,
+                'created_at'        => $dt->addHour(),
+                'updated_at'        => $dt->addHour()
+            ]);
+        }
+        
         MessageHistory::create([
             'content'           => $content[$faker->numberBetween(0, 9)],
             'own_id'            => 4,
             'user_id'           => 6,
             'update_user_id'    => 4,
-            'created_at'        => $dt->addHour(),
-            'updated_at'        => $dt->addHour()
-        ]);
-        MessageHistory::create([
-            'content'           => $content[$faker->numberBetween(0, 9)],
-            'own_id'            => 1,
-            'user_id'           => 2,
-            'update_user_id'    => 1,
             'created_at'        => $dt->addHour(),
             'updated_at'        => $dt->addHour()
         ]);
@@ -86,14 +90,6 @@ class MessageHistoriesTableData
             'own_id'            => 6,
             'user_id'           => 4,
             'update_user_id'    => 6,
-            'created_at'        => $dt->addHour(),
-            'updated_at'        => $dt->addHour()
-        ]);
-        MessageHistory::create([
-            'content'           => $content[$faker->numberBetween(0, 9)],
-            'own_id'            => 1,
-            'user_id'           => 2,
-            'update_user_id'    => 1,
             'created_at'        => $dt->addHour(),
             'updated_at'        => $dt->addHour()
         ]);
