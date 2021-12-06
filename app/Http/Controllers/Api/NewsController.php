@@ -461,7 +461,7 @@ class NewsController extends Controller
     /**
      * @OA\Delete(
      *     path="api/news/{news}",
-     *     description="ニュースデータを論理削除する",
+     *     description="ニュースデータを物理削除する",
      *     produces={"application/json"},
      *     tags={"news"},
      *     @OA\Parameter(
