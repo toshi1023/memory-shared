@@ -23,6 +23,84 @@ class MessageHistoryController extends Controller
     }
 
     /**
+     * @OA\Schema(
+     *     schema="message_histories_list",
+     *     required={"id", "content", "own_id", "user_id", "update_user_id", "created_at", "updated_at", "deleted_at", "own"},
+     *     @OA\Property(property="id", type="integer", example=1),
+     *     @OA\Property(property="content", type="string", example="初メッセージです！"),
+     *     @OA\Property(property="own_id", type="integer", example=1),
+     *     @OA\Property(property="user_id", type="integer", example="2"),
+     *     @OA\Property(property="update_user_id", type="integer", example="1"),
+     *     @OA\Property(property="created_at", type="string", example="2021-04-25 12:02:55"),
+     *     @OA\Property(property="updated_at", type="string", example="2021-04-28 14:13:00"),
+     *     @OA\Property(property="deleted_at", type="string", example="null"),
+     *     @OA\Property(property="own", type="object", required={"id", "name", "image_file"},
+     *          @OA\Property(property="id", type="integer", example=2),
+     *          @OA\Property(property="name", type="string", example="test2"),
+     *          @OA\Property(property="image_file", type="string", example="xxxxoooo.jpg"),
+     *     ),
+     * )
+     */
+    /**
+     * @OA\Schema(
+     *     schema="message_histories_register",
+     *     required={"content", "own_id", "user_id"},
+     *     @OA\Property(property="content", type="string", example="メッセージを初めて投稿します"),
+     *     @OA\Property(property="own_id", type="integer", example=2),
+     *     @OA\Property(property="user_id", type="integer", example=1),
+     * )
+     */
+
+     /**
+     * @OA\Get(
+     *     path="api/users/{user}/messages",
+     *     description="クエリストリングによりリクエストしたパラメータと一致するトーク情報を20件取得する",
+     *     produces={"application/json"},
+     *     tags={"message_histories"},
+     *     @OA\Parameter(
+     *         name="user",
+     *         description="自身のユーザIDを設定",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Parameter(
+     *         name="user_id",
+     *         description="指定した相手側のユーザIDのデータを検索する",
+     *         in="query",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / 指定したユーザとのトークデータを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="talks",
+     *                 type="array",
+     *                 description="指定したユーザとのトークデータを表示",
+     *                 @OA\Items(
+     *                      ref="#/components/schemas/message_histories_list"
+     *                 ),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="メッセージ履歴を取得出来ませんでした"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * 特定ユーザとのメッセージ一覧
      */
     public function index(Request $request, $user)
@@ -52,6 +130,58 @@ class MessageHistoryController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *     path="api/users/{user}/messages",
+     *     description="メッセージデータを保存する",
+     *     produces={"application/json"},
+     *     tags={"message_histories"},
+     *     @OA\Parameter(
+     *         name="user",
+     *         description="自身のユーザIDを設定",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="request",
+     *                 type="object",
+     *                 description="リクエストボディのjsonのプロパティの例",
+     *                 ref="#/components/schemas/message_histories_register"
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / 保存したメッセージを返す",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="talk",
+     *                 type="object",
+     *                 description="保存したメッセージを返す",
+     *                 ref="#/components/schemas/message_histories_list"
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="メッセージの送信に失敗しました"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * メッセージの保存処理用アクション
      */
     public function store(MessageHistoryRequest $request)
@@ -90,6 +220,53 @@ class MessageHistoryController extends Controller
     }
 
     /**
+     * @OA\Delete(
+     *     path="api/users/{user}/messages/{message}",
+     *     description="メッセージデータを論理削除する",
+     *     produces={"application/json"},
+     *     tags={"message_histories"},
+     *     @OA\Parameter(
+     *         name="user",
+     *         description="ユーザID(自身) ※パラメータ値として活用することはない",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Parameter(
+     *         name="message",
+     *         description="メッセージID ※削除データの検索条件として活用する",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / 論理削除成功のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="info_message",
+     *                 type="string",
+     *                 description="論理削除成功のメッセージを表示",
+     *                 example="メッセージの削除が完了しました"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="サーバーエラーによりメッセージの削除に失敗しました。管理者にお問い合わせください"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * メッセージの削除用アクション
      */
     public function destroy(Request $request, $user, $message)

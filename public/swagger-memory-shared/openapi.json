@@ -1269,6 +1269,204 @@
                 ]
             }
         },
+        "api/users/{user}/messages": {
+            "get": {
+                "tags": [
+                    "message_histories"
+                ],
+                "description": "クエリストリングによりリクエストしたパラメータと一致するトーク情報を20件取得する",
+                "operationId": "App\\Http\\Controllers\\Api\\MessageHistoryController::index",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "自身のユーザIDを設定",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "指定した相手側のユーザIDのデータを検索する",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / 指定したユーザとのトークデータを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "talks": {
+                                            "description": "指定したユーザとのトークデータを表示",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/message_histories_list"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "メッセージ履歴を取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            },
+            "post": {
+                "tags": [
+                    "message_histories"
+                ],
+                "description": "メッセージデータを保存する",
+                "operationId": "App\\Http\\Controllers\\Api\\MessageHistoryController::store",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "自身のユーザIDを設定",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "request": {
+                                        "$ref": "#/components/schemas/message_histories_register"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success / 保存したメッセージを返す",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "talk": {
+                                            "$ref": "#/components/schemas/message_histories_list"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "メッセージの送信に失敗しました"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "api/users/{user}/messages/{message}": {
+            "delete": {
+                "tags": [
+                    "message_histories"
+                ],
+                "description": "メッセージデータを論理削除する",
+                "operationId": "App\\Http\\Controllers\\Api\\MessageHistoryController::destroy",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ユーザID(自身) ※パラメータ値として活用することはない",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "message",
+                        "in": "path",
+                        "description": "メッセージID ※削除データの検索条件として活用する",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / 論理削除成功のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "info_message": {
+                                            "description": "論理削除成功のメッセージを表示",
+                                            "type": "string",
+                                            "example": "メッセージの削除が完了しました"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "サーバーエラーによりメッセージの削除に失敗しました。管理者にお問い合わせください"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
         "api/news": {
             "get": {
                 "tags": [
@@ -1532,7 +1730,7 @@
                 "tags": [
                     "news"
                 ],
-                "description": "ニュースデータを論理削除する",
+                "description": "ニュースデータを物理削除する",
                 "operationId": "App\\Http\\Controllers\\Api\\NewsController::destroy",
                 "parameters": [
                     {
@@ -2251,137 +2449,6 @@
                                             "items": {
                                                 "$ref": "#/components/schemas/user_groups"
                                             }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Server error / サーバエラー用のメッセージを表示",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error_message": {
-                                            "description": "サーバエラー用のメッセージを表示",
-                                            "type": "string",
-                                            "example": "ユーザ情報を取得出来ませんでした"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "produces": [
-                    "application/json"
-                ]
-            }
-        },
-        "api/users/{user}/messages": {
-            "get": {
-                "tags": [
-                    "users"
-                ],
-                "description": "自身がトークでメッセージのやり取りをしているすべてのユーザの情報と、それらのユーザに紐づく最新メッセージをすべて取得する",
-                "operationId": "App\\Http\\Controllers\\Api\\UserController::messages",
-                "parameters": [
-                    {
-                        "name": "user",
-                        "in": "path",
-                        "description": "ユーザID",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success / メッセージのやり取りをしているすべてのユーザの情報と、それらのユーザに紐づく最新メッセージを表示",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "description": "メッセージのやり取りをしているすべてのユーザの情報と、それらのユーザに紐づく最新メッセージを表示",
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": 24
-                                                    },
-                                                    "content": {
-                                                        "type": "string",
-                                                        "example": "元気にしてたー？"
-                                                    },
-                                                    "own_id": {
-                                                        "type": "integer",
-                                                        "example": 2
-                                                    },
-                                                    "user_id": {
-                                                        "type": "integer",
-                                                        "example": 4
-                                                    },
-                                                    "update_user_id": {
-                                                        "type": "integer",
-                                                        "example": 2
-                                                    },
-                                                    "created_at": {
-                                                        "type": "string",
-                                                        "example": "2021-04-25 12:02:55"
-                                                    },
-                                                    "updated_at": {
-                                                        "type": "string",
-                                                        "example": "2021-04-28 14:13:00"
-                                                    },
-                                                    "otherid": {
-                                                        "type": "integer",
-                                                        "example": 4
-                                                    },
-                                                    "mcount": {
-                                                        "type": "integer",
-                                                        "example": 3
-                                                    },
-                                                    "other": {
-                                                        "description": "usersテーブルとのリレーションデータ",
-                                                        "required": [
-                                                            "id",
-                                                            "name",
-                                                            "image_file"
-                                                        ],
-                                                        "properties": {
-                                                            "id": {
-                                                                "type": "integer",
-                                                                "example": "6"
-                                                            },
-                                                            "name": {
-                                                                "type": "string",
-                                                                "example": "test user"
-                                                            },
-                                                            "image_file": {
-                                                                "type": "string",
-                                                                "example": "xxxxoooo.png"
-                                                            }
-                                                        },
-                                                        "type": "object"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            },
-                                            "require": [
-                                                "id",
-                                                "content",
-                                                "own_id",
-                                                "user_id",
-                                                "update_user_id",
-                                                "created_at",
-                                                "updated_at",
-                                                "otherid",
-                                                "mcount"
-                                            ]
                                         }
                                     },
                                     "type": "object"
@@ -3429,6 +3496,98 @@
                     "status": {
                         "type": "integer",
                         "example": "2"
+                    }
+                },
+                "type": "object"
+            },
+            "message_histories_list": {
+                "required": [
+                    "id",
+                    "content",
+                    "own_id",
+                    "user_id",
+                    "update_user_id",
+                    "created_at",
+                    "updated_at",
+                    "deleted_at",
+                    "own"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "content": {
+                        "type": "string",
+                        "example": "初メッセージです！"
+                    },
+                    "own_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": "2"
+                    },
+                    "update_user_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2021-04-25 12:02:55"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2021-04-28 14:13:00"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "example": "null"
+                    },
+                    "own": {
+                        "required": [
+                            "id",
+                            "name",
+                            "image_file"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 2
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "test2"
+                            },
+                            "image_file": {
+                                "type": "string",
+                                "example": "xxxxoooo.jpg"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "message_histories_register": {
+                "required": [
+                    "content",
+                    "own_id",
+                    "user_id"
+                ],
+                "properties": {
+                    "content": {
+                        "type": "string",
+                        "example": "メッセージを初めて投稿します"
+                    },
+                    "own_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
                     }
                 },
                 "type": "object"
