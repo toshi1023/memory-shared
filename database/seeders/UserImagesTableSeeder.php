@@ -18,21 +18,25 @@ class UserImagesTableSeeder extends Seeder
             'image_file'        => 'furano.jpg',
             'user_id'           => 2,
             'album_id'          => 1,
+            'type'              => 1
         ]);
         UserImage::create([
             'image_file'        => 'garo_green.jpg',
             'user_id'           => 2,
             'album_id'          => 1,
+            'type'              => 2
         ]);
         UserImage::create([
             'image_file'        => 'sappolo.jpg',
             'user_id'           => 2,
             'album_id'          => 1,
+            'type'              => 1
         ]);
         UserImage::create([
             'image_file'        => 'クアラルンプール.jpg',
             'user_id'           => 2,
             'album_id'          => 1,
+            'type'              => 3
         ]);
         \App\Models\UserImage::factory(20)->create();
     }
