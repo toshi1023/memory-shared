@@ -20,6 +20,39 @@ class NreadManagementController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="api/nread",
+     *     description="ログインユーザのニュース未読件数を取得する",
+     *     produces={"application/json"},
+     *     tags={"read_managements"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / ログインユーザのニュース未読件数を表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="nread_count",
+     *                 type="integer",
+     *                 description="ログインユーザのニュース未読件数を表示",
+     *                 example=5
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="予期しないエラーが発生しました。管理者にお問い合わせください"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * ニュースの未読数を取得
      */
     public function count(Request $request)
@@ -44,6 +77,46 @@ class NreadManagementController extends Controller
     }
 
     /**
+     * @OA\Delete(
+     *     path="api/news/{news}/nread",
+     *     description="ニュースの未読データを物理削除する",
+     *     produces={"application/json"},
+     *     tags={"read_managements"},
+     *     @OA\Parameter(
+     *         name="news",
+     *         description="ニュースID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / 未読データを削除後、未読削除したニュースのデータを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="news",
+     *                 type="object",
+     *                 description="未読削除したニュースのデータを表示",
+     *                 ref="#/components/schemas/news_list"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="予期しないエラーが発生しました。管理者にお問い合わせください"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * 未読の削除用アクション
      */
     public function destroy(Request $request, $news)

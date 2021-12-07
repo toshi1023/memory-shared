@@ -1634,6 +1634,56 @@
                 ]
             }
         },
+        "api/users/{user}/mread": {
+            "delete": {
+                "tags": [
+                    "read_managements"
+                ],
+                "description": "メッセージの未読データを物理削除する",
+                "operationId": "App\\Http\\Controllers\\Api\\MreadManagementController::destroy",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ユーザID(自身)",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / 何も返さない",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "予期しないエラーが発生しました。管理者にお問い合わせください"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
         "api/news": {
             "get": {
                 "tags": [
@@ -2004,6 +2054,109 @@
                                     "properties": {
                                         "errors": {
                                             "$ref": "#/components/schemas/news_errors"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "api/nread": {
+            "get": {
+                "tags": [
+                    "read_managements"
+                ],
+                "description": "ログインユーザのニュース未読件数を取得する",
+                "operationId": "App\\Http\\Controllers\\Api\\NreadManagementController::count",
+                "responses": {
+                    "200": {
+                        "description": "Success / ログインユーザのニュース未読件数を表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "nread_count": {
+                                            "description": "ログインユーザのニュース未読件数を表示",
+                                            "type": "integer",
+                                            "example": 5
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "予期しないエラーが発生しました。管理者にお問い合わせください"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "api/news/{news}/nread": {
+            "delete": {
+                "tags": [
+                    "read_managements"
+                ],
+                "description": "ニュースの未読データを物理削除する",
+                "operationId": "App\\Http\\Controllers\\Api\\NreadManagementController::destroy",
+                "parameters": [
+                    {
+                        "name": "news",
+                        "in": "path",
+                        "description": "ニュースID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / 未読データを削除後、未読削除したニュースのデータを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "news": {
+                                            "$ref": "#/components/schemas/news_list"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "予期しないエラーが発生しました。管理者にお問い合わせください"
                                         }
                                     },
                                     "type": "object"

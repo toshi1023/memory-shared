@@ -20,6 +20,40 @@ class MreadManagementController extends Controller
     }
 
     /**
+     * @OA\Delete(
+     *     path="api/users/{user}/mread",
+     *     description="メッセージの未読データを物理削除する",
+     *     produces={"application/json"},
+     *     tags={"read_managements"},
+     *     @OA\Parameter(
+     *         name="user",
+     *         description="ユーザID(自身)",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / 何も返さない",
+     *         @OA\JsonContent(
+     *             type="object",
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="予期しないエラーが発生しました。管理者にお問い合わせください"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * 未読の削除用アクション
      */
     public function destroy(Request $request, $user)
@@ -32,10 +66,6 @@ class MreadManagementController extends Controller
                 'own_id'  => $user, 
                 'user_id' => Auth::user()->id
             ];
-            // $conditions = [
-            //     'own_id'  => $user, 
-            //     'user_id' => 1
-            // ];
 
             $messages = $this->db->searchQuery($conditions);
             
