@@ -15,6 +15,66 @@ use App\Jobs\SendEmail;
 class AuthController extends Controller
 {
     /**
+     * @OA\Post(
+     *     path="/login",
+     *     description="ログインを実行する",
+     *     produces={"application/json"},
+     *     tags={"auth"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="request",
+     *                 type="object",
+     *                 description="リクエストボディのjsonのプロパティの例",
+     *                 require={"status", "email", "password"},
+     *                 @OA\Property(property="status", type="integer", example=1, description="2,4はアカウント停止系の値のため、ログインエラーを返すように設定する"),
+     *                 @OA\Property(property="email", type="string", example="test@xxx.co.jp"),
+     *                 @OA\Property(property="password", type="string", example="test1234"),
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / ログインが正常に完了したメッセージとログインユーザのid,nameを返す(管理者ユーザの場合はワンタイムパスワードを発行してメール送信も実施する)",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="info_message",
+     *                 type="string",
+     *                 description="ログインが正常に完了したメッセージを表示",
+     *                 example="ログインに成功しました"
+     *             ),
+     *             @OA\Property(
+     *                 property="id",
+     *                 type="integer",
+     *                 description="ログインユーザのidを表示",
+     *                 example=2
+     *             ),
+     *             @OA\Property(
+     *                 property="name",
+     *                 type="string",
+     *                 description="ログインユーザのnameを表示",
+     *                 example="test name"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="メールアドレスもしくはパスワードが一致しません"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * ログイン処理
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -61,6 +121,52 @@ class AuthController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *     path="/logout",
+     *     description="ログアウトを実行する",
+     *     produces={"application/json"},
+     *     tags={"auth"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="request",
+     *                 type="object",
+     *                 description="リクエストボディのjsonのプロパティの例",
+     *                 require={"id"},
+     *                 @OA\Property(property="id", type="integer", example=2),
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / ログアウトが正常に完了したメッセージを返す(管理者ユーザの場合はDBからワンタイムパスワードの削除も実施する)",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="info_message",
+     *                 type="string",
+     *                 description="ログアウトが正常に完了したメッセージを表示",
+     *                 example="ログアウトしました"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="予期しないエラーが発生しました。管理者にお問い合わせください"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * ログアウト処理
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector

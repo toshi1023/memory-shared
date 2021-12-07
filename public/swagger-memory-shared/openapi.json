@@ -519,6 +519,173 @@
                 ]
             }
         },
+        "/login": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "description": "ログインを実行する",
+                "operationId": "App\\Http\\Controllers\\Api\\AuthController::login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "request": {
+                                        "description": "リクエストボディのjsonのプロパティの例",
+                                        "properties": {
+                                            "status": {
+                                                "description": "2,4はアカウント停止系の値のため、ログインエラーを返すように設定する",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "test@xxx.co.jp"
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "example": "test1234"
+                                            }
+                                        },
+                                        "type": "object",
+                                        "require": [
+                                            "status",
+                                            "email",
+                                            "password"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success / ログインが正常に完了したメッセージとログインユーザのid,nameを返す(管理者ユーザの場合はワンタイムパスワードを発行してメール送信も実施する)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "info_message": {
+                                            "description": "ログインが正常に完了したメッセージを表示",
+                                            "type": "string",
+                                            "example": "ログインに成功しました"
+                                        },
+                                        "id": {
+                                            "description": "ログインユーザのidを表示",
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "name": {
+                                            "description": "ログインユーザのnameを表示",
+                                            "type": "string",
+                                            "example": "test name"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "メールアドレスもしくはパスワードが一致しません"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "/logout": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "description": "ログアウトを実行する",
+                "operationId": "App\\Http\\Controllers\\Api\\AuthController::logout",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "request": {
+                                        "description": "リクエストボディのjsonのプロパティの例",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 2
+                                            }
+                                        },
+                                        "type": "object",
+                                        "require": [
+                                            "id"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success / ログアウトが正常に完了したメッセージを返す(管理者ユーザの場合はDBからワンタイムパスワードの削除も実施する)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "info_message": {
+                                            "description": "ログアウトが正常に完了したメッセージを表示",
+                                            "type": "string",
+                                            "example": "ログアウトしました"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "予期しないエラーが発生しました。管理者にお問い合わせください"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
         "/api/groups": {
             "get": {
                 "tags": [
