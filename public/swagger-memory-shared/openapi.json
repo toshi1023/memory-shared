@@ -2799,6 +2799,138 @@
                 ]
             }
         },
+        "api/users/{user}/messagelists": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "description": "自身がトークでメッセージのやり取りをしているすべてのユーザの情報と、それらのユーザに紐づく最新メッセージをすべて取得する",
+                "operationId": "App\\Http\\Controllers\\Api\\UserController::messages",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "ユーザID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / メッセージのやり取りをしているすべてのユーザの情報と、それらのユーザに紐づく最新メッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "メッセージのやり取りをしているすべてのユーザの情報と、それらのユーザに紐づく最新メッセージを表示",
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 24
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "元気にしてたー？"
+                                                    },
+                                                    "own_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "user_id": {
+                                                        "type": "integer",
+                                                        "example": 4
+                                                    },
+                                                    "update_user_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "example": "2021-04-25 12:02:55"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "example": "2021-04-28 14:13:00"
+                                                    },
+                                                    "otherid": {
+                                                        "type": "integer",
+                                                        "example": 4
+                                                    },
+                                                    "mcount": {
+                                                        "type": "integer",
+                                                        "example": 3
+                                                    },
+                                                    "other": {
+                                                        "description": "usersテーブルとのリレーションデータ",
+                                                        "required": [
+                                                            "id",
+                                                            "name",
+                                                            "image_file"
+                                                        ],
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 6
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "test user"
+                                                            },
+                                                            "image_file": {
+                                                                "type": "string",
+                                                                "example": "xxxxoooo.png"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "require": [
+                                                "id",
+                                                "content",
+                                                "own_id",
+                                                "user_id",
+                                                "update_user_id",
+                                                "created_at",
+                                                "updated_at",
+                                                "otherid",
+                                                "mcount",
+                                                "other"
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "ユーザ情報を取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
         "api/users/{user}/wgroups": {
             "get": {
                 "tags": [

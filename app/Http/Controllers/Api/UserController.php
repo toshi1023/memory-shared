@@ -922,7 +922,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="api/users/{user}/messages",
+     *     path="api/users/{user}/messagelists",
      *     description="自身がトークでメッセージのやり取りをしているすべてのユーザの情報と、それらのユーザに紐づく最新メッセージをすべて取得する",
      *     produces={"application/json"},
      *     tags={"users"},
@@ -942,7 +942,7 @@ class UserController extends Controller
      *                 property="data",
      *                 type="array",
      *                 description="メッセージのやり取りをしているすべてのユーザの情報と、それらのユーザに紐づく最新メッセージを表示",
-     *                 require={"id", "content", "own_id", "user_id", "update_user_id", "created_at", "updated_at", "otherid", "mcount"},
+     *                 require={"id", "content", "own_id", "user_id", "update_user_id", "created_at", "updated_at", "otherid", "mcount", "other"},
      *                 @OA\Items(
      *                      @OA\Property(property="id", type="integer", example=24),
      *                      @OA\Property(property="content", type="string", example="元気にしてたー？"),
@@ -954,7 +954,7 @@ class UserController extends Controller
      *                      @OA\Property(property="otherid", type="integer", example=4),
      *                      @OA\Property(property="mcount", type="integer", example=3),
      *                      @OA\Property(property="other", type="object", description="usersテーブルとのリレーションデータ", required={"id", "name", "image_file"},
-     *                          @OA\Property(property="id", type="integer", example="6"),
+     *                          @OA\Property(property="id", type="integer", example=6),
      *                          @OA\Property(property="name", type="string", example="test user"),
      *                          @OA\Property(property="image_file", type="string", example="xxxxoooo.png"),
      *                      )
