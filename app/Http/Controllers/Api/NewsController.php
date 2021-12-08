@@ -290,7 +290,7 @@ class NewsController extends Controller
     /**
      * @OA\Post(
      *     path="api/news",
-     *     description="アルバムデータを保存する",
+     *     description="ニュースデータを保存する",
      *     produces={"application/json"},
      *     tags={"news"},
      *     @OA\RequestBody(

@@ -1737,7 +1737,7 @@
                 "tags": [
                     "news"
                 ],
-                "description": "アルバムデータを保存する",
+                "description": "ニュースデータを保存する",
                 "operationId": "App\\Http\\Controllers\\Api\\NewsController::store",
                 "requestBody": {
                     "required": true,
