@@ -2170,6 +2170,65 @@
                 ]
             }
         },
+        "api/groups/{group}/posts": {
+            "get": {
+                "tags": [
+                    "posts"
+                ],
+                "description": "選択したグループの投稿内容をページネーション形式で取得する(件数：10件)",
+                "operationId": "App\\Http\\Controllers\\Api\\PostController::index",
+                "parameters": [
+                    {
+                        "name": "group",
+                        "in": "path",
+                        "description": "グループID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / 選択したグループの投稿内容データを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "posts": {
+                                            "description": "選択したグループの投稿内容データを表示",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/post_list"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "投稿を取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
         "/api/users": {
             "get": {
                 "tags": [
@@ -3888,7 +3947,7 @@
                         "type": "string",
                         "example": "null"
                     },
-                    "group": {
+                    "user": {
                         "required": [
                             "id",
                             "name",
@@ -4202,6 +4261,75 @@
                     "content": {
                         "type": "string",
                         "example": "ログインが出来ない不具合を解消しました"
+                    }
+                },
+                "type": "object"
+            },
+            "post_list": {
+                "required": [
+                    "id",
+                    "content",
+                    "user_id",
+                    "group_id",
+                    "update_user_id",
+                    "creater_at",
+                    "updated_at",
+                    "deleted_at"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "content": {
+                        "type": "string",
+                        "example": "●月●日に集会やりましょう！参加者はコメント欄に書き込みしてねー"
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "group_id": {
+                        "type": "integer",
+                        "example": 4
+                    },
+                    "update_user_id": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2021-04-25 12:02:55"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2021-04-28 14:13:00"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "example": "null"
+                    },
+                    "user": {
+                        "required": [
+                            "id",
+                            "name",
+                            "image_file"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 3
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "test user 3"
+                            },
+                            "image_file": {
+                                "type": "string",
+                                "example": "xxxxoooo.jpg"
+                            }
+                        },
+                        "type": "object"
                     }
                 },
                 "type": "object"
