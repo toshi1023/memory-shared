@@ -55,7 +55,7 @@ class GroupHistoryController extends Controller
      *     @OA\Property(property="created_at", type="string", example="2021-04-25 12:02:55"),
      *     @OA\Property(property="updated_at", type="string", example="2021-04-28 14:13:00"),
      *     @OA\Property(property="deleted_at", type="string", example="null"),
-     *     @OA\Property(property="group", type="object", required={"id", "name", "image_file"},
+     *     @OA\Property(property="user", type="object", required={"id", "name", "image_file"},
      *          @OA\Property(property="id", type="integer", example=3),
      *          @OA\Property(property="name", type="string", example="test user 3"),
      *          @OA\Property(property="image_file", type="string", example="xxxxoooo.jpg"),
