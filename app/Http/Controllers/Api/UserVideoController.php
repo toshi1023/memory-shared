@@ -42,31 +42,26 @@ class UserVideoController extends Controller
             $blacklist = $request->input('black_list') ? Common::setJsonType($request->input('black_list')) : null;
             $whitelist = $request->input('white_list') ? Common::setJsonType($request->input('white_list')) : null;
 
-            foreach($request->file('image_file') as $key => $value) {
-                // 保存データの設定
-                $data = [];
-                // データの保存処理(仮保存)
-                $userVideo = UserVideo::create([
-                    'user_id'       => $request->input('user_id'),
-                    'album_id'      => $request->input('album_id'),
-                    'image_file'    => config('const.UserVideo.BEFORE_SAVE_NAME'),
-                    'black_list'    => $blacklist,
-                    'white_list'    => $whitelist
-                ]);
-                
-                // ファイル名の生成
-                $filename = Common::getUniqueFilename($value, $userVideo->id);
-                $data['id'] = $userVideo->id;
-                $data['image_file'] = $filename;
-                $data['user_id'] = $userVideo->user_id;
-                $data['album_id'] = $userVideo->album_id;
-                // データの保存処理(正式保存)
-                $this->db->save($data);
-                
-                // // 動画の保存処理
-                // Common::fileSave($value, config('const.Aws.MAIN'), $request->input('album_id'), $filename);
-                // dump($data);
-            }
+            // 保存データの設定
+            $data = [];
+            // データの保存処理(仮保存)
+            $userVideo = UserVideo::create([
+                'user_id'       => $request->input('user_id'),
+                'album_id'      => $request->input('album_id'),
+                'image_file'    => config('const.UserVideo.BEFORE_SAVE_NAME'),
+                'black_list'    => $blacklist,
+                'white_list'    => $whitelist
+            ]);
+            
+            // ファイル名の生成
+            $filename = Common::getUniqueFilename($request->file('image_file'), $userVideo->id);
+            $data['id'] = $userVideo->id;
+            $data['image_file'] = $filename;
+            // データの保存処理(正式保存)
+            $this->db->save($data);
+            
+            // // 動画の保存処理
+            Common::fileSave($request->file('image_file'), config('const.Aws.MAIN'), $request->input('album_id'), $filename);
 
             DB::commit();
             return response()->json([
