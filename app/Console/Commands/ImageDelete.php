@@ -64,8 +64,8 @@ class ImageDelete extends Command
                 if (!DB::table('users')->where('id', substr($value, 5))->whereNull('deleted_at')->exists()) {
                     Storage::disk('s3')->deleteDirectory($value);
                     // 削除内容をログとターミナルに出力する
-                    logger()->info("\"".$value."\" is deleted");
-                    $this->info("\"".$value."\" is deleted");
+                    logger()->info("User directory name of \"".$value."\" is deleted");
+                    $this->info("User directory name of \"".$value."\" is deleted");
                 }
                 // $this->info(DB::table('users')->where('id', substr($value, 5))->exists());
             }
@@ -101,8 +101,8 @@ class ImageDelete extends Command
                 if (!DB::table('groups')->where('id', substr($value, 6))->whereNull('deleted_at')->exists()) {
                     Storage::disk('s3')->deleteDirectory($value);
                     // 削除内容をログとターミナルに出力する
-                    logger()->info("\"".$value."\" is deleted");
-                    $this->info("\"".$value."\" is deleted");
+                    logger()->info("Group directory name of \"".$value."\" is deleted");
+                    $this->info("Group directory name of \"".$value."\" is deleted");
                 }
             }
 
@@ -138,8 +138,8 @@ class ImageDelete extends Command
                 if (!DB::table('albums')->where('id', substr($value, 6))->whereNull('deleted_at')->exists()) {
                     Storage::disk('s3')->deleteDirectory($value);
                     // 削除内容をログとターミナルに出力する
-                    logger()->info("\"".$value."\" is deleted");
-                    $this->info("\"".$value."\" is deleted");
+                    logger()->info("Album directory name of \"".$value."\" is deleted");
+                    $this->info("Album directory name of \"".$value."\" is deleted");
                 }
             }
 
@@ -164,9 +164,8 @@ class ImageDelete extends Command
                 }
             }
 
-            /********** user_imagesの画像削除処理 **********/
+            /********** user_images & user_videos のファイル削除処理 **********/
 
-            $uimages = UserImage::all();
             $delete_flg = [];
 
             // Mainディレクトリ内のディレクトリ名を取得
@@ -176,66 +175,65 @@ class ImageDelete extends Command
                 if (!DB::table('albums')->where('id', substr($value, 5))->whereNull('deleted_at')->exists()) {
                     Storage::disk('s3')->deleteDirectory($value);
                     // 削除内容をログとターミナルに出力する
-                    logger()->info("\"".$value."\" is deleted");
-                    $this->info("\"".$value."\" is deleted");
+                    logger()->info("Relationship album directory name of \"".$value."\" is deleted");
+                    $this->info("Relationship album directory name of \"".$value."\" is deleted");
                 }
+                // アルバムIDをキーにして、画像名を2次元配列で取得
+                $main_images[substr($value, 5)] = Storage::disk('s3')->files(config('const.Aws.MAIN').'/'.substr($value, 5).'/');
             }
 
-            foreach($uimages as $value) {
-                // アルバムIDをキーにして、画像名を2次元配列で取得
-                $main_images[$value->album_id] = Storage::disk('s3')->files(config('const.Aws.MAIN').'/'.$value->album_id.'/');
-                
-            }
-            
-            // user_imagesの画像用配列をアルバムIDと画像名で分別
+            // Mainディレクトリの画像・動画用配列をアルバムIDとファイル名で分別
             foreach ($main_images as $key => $value) {
-                // S3のストレージに保存されている画像名がDBに存在するか確認
-                foreach ($value as $image) {
-                    if (!DB::table('user_images')->where('image_file', basename($image))->whereNull('deleted_at')->exists()) {
-                        // 存在しない場合は画像を削除する
-                        Storage::disk('s3')->delete(config('const.Aws.MAIN').'/'.$key.'/'.basename($image));
+                // S3のストレージに保存されているファイル名がDBに存在するか確認
+                foreach ($value as $file) {
+                    if (
+                        !DB::table('user_images')->where('image_file', basename($file))->whereNull('deleted_at')->exists() && 
+                        !DB::table('user_videos')->where('image_file', basename($file))->whereNull('deleted_at')->exists()
+                    ) {
+                        // 存在しない場合は画像もしくは動画を削除する
+                        Storage::disk('s3')->delete(config('const.Aws.MAIN').'/'.$key.'/'.basename($file));
                         // 削除内容をログとターミナルに出力する
-                        logger()->info("\"".config('const.Aws.MAIN').'/'.$key.'/'.basename($image)."\" is deleted");
-                        $this->info("\"".config('const.Aws.MAIN').'/'.$key.'/'.basename($image)."\" is deleted");
+                        logger()->info("\"".config('const.Aws.MAIN').'/'.$key.'/'.basename($file)."\" is deleted");
+                        $this->info("\"".config('const.Aws.MAIN').'/'.$key.'/'.basename($file)."\" is deleted");
                     }
                 }
                 // 画像が1件も存在しない場合は削除フラグをtrueにする（user_videosと同じフォルダを共有するため、削除処理はここでは実行しない）
-                if(!$value) {
-                    $delete_flg[$key] = true;
-                }
-            }
-
-            /********** user_videosの画像削除処理 **********/
-
-            $uvideos = UserVideo::all();
-
-            // Mainディレクトリ内のディレクトリ名を取得
-            $directory = Storage::disk('s3')->directories(config('const.Aws.MAIN').'/');
-
-            foreach($uvideos as $value) {
-                // アルバムIDをキーにして、動画名を2次元配列で取得
-                $main_videos[$value->album_id] = Storage::disk('s3')->files(config('const.Aws.MAIN').'/'.$value->album_id.'/');
-            }
-            // user_videosの動画用配列をアルバムIDと動画名で分別
-            foreach ($main_videos as $key => $value) {
-                // S3のストレージに保存されている動画名がDBに存在するか確認
-                foreach ($value as $video) {
-                    if (!DB::table('user_videos')->where('image_file', basename($video))->whereNull('deleted_at')->exists()) {
-                        // 存在しない場合は動画を削除する
-                        Storage::disk('s3')->delete(config('const.Aws.MAIN').'/'.$key.'/'.basename($video));
-                        // 削除内容をログとターミナルに出力する
-                        logger()->info("\"".config('const.Aws.MAIN').'/'.$key.'/'.basename($video)."\" is deleted");
-                        $this->info("\"".config('const.Aws.MAIN').'/'.$key.'/'.basename($video)."\" is deleted");
-                    }
-                }
-                // 動画が1件も存在しない、かつ画像も1件も存在しない場合は対象のフォルダを削除する
-                // if(!$value && $delete_flg[$key]) {
-                //     Storage::disk('s3')->deleteDirectory(config('const.Aws.MAIN').'/'.$key.'/');
-                //     // 削除内容をログとターミナルに出力する
-                //     logger()->info("\"".config('const.Aws.MAIN').'/'.$key."\" is deleted");
-                //     $this->info("\"".config('const.Aws.MAIN').'/'.$key."\" is deleted");
+                // if(!$value) {
+                //     $delete_flg[$key] = true;
                 // }
             }
+
+            // /********** user_videosの画像削除処理 **********/
+
+            // $uvideos = UserVideo::all();
+
+            // // Mainディレクトリ内のディレクトリ名を取得
+            // $directory = Storage::disk('s3')->directories(config('const.Aws.MAIN').'/');
+
+            // foreach($uvideos as $value) {
+            //     // アルバムIDをキーにして、動画名を2次元配列で取得
+            //     $main_videos[$value->album_id] = Storage::disk('s3')->files(config('const.Aws.MAIN').'/'.$value->album_id.'/');
+            // }
+            // // user_videosの動画用配列をアルバムIDと動画名で分別
+            // foreach ($main_videos as $key => $value) {
+            //     // S3のストレージに保存されている動画名がDBに存在するか確認
+            //     foreach ($value as $video) {
+            //         if (!DB::table('user_videos')->where('image_file', basename($video))->whereNull('deleted_at')->exists()) {
+            //             // 存在しない場合は動画を削除する
+            //             Storage::disk('s3')->delete(config('const.Aws.MAIN').'/'.$key.'/'.basename($video));
+            //             // 削除内容をログとターミナルに出力する
+            //             logger()->info("\"".config('const.Aws.MAIN').'/'.$key.'/'.basename($video)."\" is deleted");
+            //             $this->info("\"".config('const.Aws.MAIN').'/'.$key.'/'.basename($video)."\" is deleted");
+            //         }
+            //     }
+            //     // 動画が1件も存在しない、かつ画像も1件も存在しない場合は対象のフォルダを削除する
+            //     // if(!$value && $delete_flg[$key]) {
+            //     //     Storage::disk('s3')->deleteDirectory(config('const.Aws.MAIN').'/'.$key.'/');
+            //     //     // 削除内容をログとターミナルに出力する
+            //     //     logger()->info("\"".config('const.Aws.MAIN').'/'.$key."\" is deleted");
+            //     //     $this->info("\"".config('const.Aws.MAIN').'/'.$key."\" is deleted");
+            //     // }
+            // }
 
             // Logにメッセージを出力
             logger()->info('All images and all videos delete Completed!');
