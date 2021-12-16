@@ -28,7 +28,9 @@ class UserImageController extends Controller
      */
     public function userImageValidate(UserImageRegisterRequest $request)
     {
-        return;
+        return [
+            'validate_status' => config('const.SystemMessage.VALIDATE_STATUS')
+        ];
     }
 
     /**
@@ -41,32 +43,28 @@ class UserImageController extends Controller
             // ブラックリスト、ホワイトリスト作成(パラメーター例: black_list[] = 1, black_list[] = 2)
             $blacklist = $request->input('black_list') ? Common::setJsonType($request->input('black_list')) : null;
             $whitelist = $request->input('white_list') ? Common::setJsonType($request->input('white_list')) : null;
+
+            // 保存データの設定
+            $data = [];
+            // データの保存処理(仮保存)
+            $userImage = UserImage::create([
+                'user_id'       => $request->input('user_id'),
+                'album_id'      => $request->input('album_id'),
+                'image_file'    => config('const.UserImage.BEFORE_SAVE_NAME'),
+                'type'          => $request->input('type'),
+                'black_list'    => $blacklist,
+                'white_list'    => $whitelist
+            ]);
             
-            foreach($request->file('image_file') as $key => $value) {
-                // 保存データの設定
-                $data = [];
-                // データの保存処理(仮保存)
-                $userImage = UserImage::create([
-                    'user_id'       => $request->input('user_id'),
-                    'album_id'      => $request->input('album_id'),
-                    'image_file'    => config('const.UserImage.BEFORE_SAVE_NAME'),
-                    'black_list'    => $blacklist,
-                    'white_list'    => $whitelist
-                ]);
-                
-                // ファイル名の生成
-                $filename = Common::getUniqueFilename($value, $userImage->id);
-                $data['id'] = $userImage->id;
-                $data['image_file'] = $filename;
-                $data['user_id'] = $userImage->user_id;
-                $data['album_id'] = $userImage->album_id;
-                // データの保存処理(正式保存)
-                $this->db->save($data);
-                
-                // // 画像の保存処理
-                // Common::fileSave($value, config('const.Aws.MAIN'), $request->input('album_id'), $filename);
-                // dump($data);
-            }
+            // ファイル名の生成
+            $filename = Common::getUniqueFilename($request->file('image_file'), $userImage->id);
+            $data['id'] = $userImage->id;
+            $data['image_file'] = $filename;
+            // データの保存処理(正式保存)
+            $this->db->save($data);
+
+            // 画像の保存処理
+            Common::fileSave($request->file('image_file'), config('const.Aws.MAIN'), $request->input('album_id'), $filename);
 
             DB::commit();
             return response()->json([

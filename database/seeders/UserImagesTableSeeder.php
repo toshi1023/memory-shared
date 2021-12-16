@@ -38,6 +38,6 @@ class UserImagesTableSeeder extends Seeder
             'album_id'          => 1,
             'type'              => 3
         ]);
-        \App\Models\UserImage::factory(20)->create();
+        // \App\Models\UserImage::factory(20)->create();
     }
 }

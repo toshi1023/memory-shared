@@ -32,9 +32,7 @@ class UserImageMimeRule implements Rule
             'image/jpeg','image/png','image/jpg','image/gif'
         ];
 
-        foreach($value as $file) {
-            $bool = in_array($file->getMimeType(), $mimeType);
-        }
+        $bool = in_array($value->getMimeType(), $mimeType);
         
         return $bool;
     }
