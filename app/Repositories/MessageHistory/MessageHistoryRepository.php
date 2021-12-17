@@ -48,7 +48,7 @@ class MessageHistoryRepository extends BaseRepository implements MessageHistoryR
                       ->union($anotherQuery)
                       ->with(['own:id,name,image_file'])
                       ->whereNull('deleted_at')
-                      ->orderBy('id', 'asc')
+                      ->orderBy('id', 'desc')
                       ->paginate($paginate);
 
         return $query;
