@@ -48,6 +48,7 @@ class UserVideoController extends Controller
             $userVideo = UserVideo::create([
                 'user_id'       => $request->input('user_id'),
                 'album_id'      => $request->input('album_id'),
+                'type'          => $request->input('type'),
                 'image_file'    => config('const.UserVideo.BEFORE_SAVE_NAME'),
                 'black_list'    => $blacklist,
                 'white_list'    => $whitelist

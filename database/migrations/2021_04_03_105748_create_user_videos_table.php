@@ -18,6 +18,7 @@ class CreateUserVideosTable extends Migration
             $table->string('image_file')->comment('動画名');                        // サーバーサイドの動画名
             $table->integer('user_id')->unsigned()->comment('ユーザID');
             $table->integer('album_id')->unsigned()->comment('アルバムID');
+            $table->string('type')->default('video/mp4')->comment('動画のファイルタイプ');
             $table->json('black_list')->nullable()->comment('ブラックリスト');
             $table->json('white_list')->nullable()->comment('ホワイトリスト');
             $table->integer('update_user_id')->unsigned()->nullable()->comment('更新ユーザ');
