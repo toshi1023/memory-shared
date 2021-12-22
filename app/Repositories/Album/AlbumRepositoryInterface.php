@@ -11,7 +11,5 @@ interface AlbumRepositoryInterface
     public function baseDelete($id);
     public function baseForceDelete($id);
     public function getGroup($conditions);
-    public function getImages($conditions, int $paginate=30);
-    public function getVideos($conditions, int $paginate=15);
     public function save($data, $model=null);
 }
