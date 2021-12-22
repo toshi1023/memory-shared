@@ -23,6 +23,32 @@ class UserVideoController extends Controller
     }
 
     /**
+     * 動画取得用メソッド
+     */
+    public function index(Request $request, $group, $album)
+    {
+        try {
+            $data = [];
+
+            // 検索条件
+            $conditions = [];
+            $conditions['album_id'] = $album;
+
+            // 動画情報取得(black_list等の取得例: $data['image'][0]['black_list'][3])
+            $data = $this->db->searchQueryPaginate($conditions);
+            
+            return response()->json(['videos' => $data], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            return response()->json([
+              'error_message' => config('const.UserVideo.GET_ERR'),
+              'status'        => 500,
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
      * 動画バリデーション用メソッド
      *   ※データ登録時には非同期処理で常時確認に使用
      */

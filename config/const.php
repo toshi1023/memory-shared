@@ -68,6 +68,7 @@ return [
     ],
     // UserImage関連で使用する定数
     'UserImage' => [
+        'GET_ERR'            => '画像を取得出来ませんでした',
         'BEFORE_SAVE_NAME'   => 'before_save',
         'REGISTER_INFO'      => '画像を保存しました',
         'REGISTER_ERR'       => '画像の保存に失敗しました',
@@ -76,6 +77,7 @@ return [
     ],
     // UserVideo関連で使用する定数
     'UserVideo' => [
+        'GET_ERR'            => '動画を取得出来ませんでした',
         'BEFORE_SAVE_NAME'   => 'before_save',
         'TITLE'              => 'NoTitle',
         'REGISTER_INFO'      => '動画を保存しました',

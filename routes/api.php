@@ -45,11 +45,11 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/groups/{group}/albums/validate',  'Api\AlbumController@albumValidate');
     
     /********** 画像管理(user_images) **********/
-    Route::resource('/groups/{group}/albums/{album}/images',      'Api\UserImageController')->only('store', 'destroy');
+    Route::resource('/groups/{group}/albums/{album}/images',      'Api\UserImageController')->only('index', 'store', 'destroy');
     Route::post('/groups/{group}/albums/{album}/image/validate',  'Api\UserImageController@userImageValidate');
     
     /********** 動画管理(user_videos) **********/
-    Route::resource('/groups/{group}/albums/{album}/videos',      'Api\UserVideoController')->only('store', 'destroy');
+    Route::resource('/groups/{group}/albums/{album}/videos',      'Api\UserVideoController')->only('index', 'store', 'destroy');
     Route::post('/groups/{group}/albums/{album}/video/validate',  'Api\UserVideoController@userVideoValidate');
 
     /********** メッセージ管理(messages) **********/
