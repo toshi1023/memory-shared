@@ -23,6 +23,72 @@ class UserImageController extends Controller
     }
 
     /**
+     * @OA\Schema(
+     *     schema="image_list",
+     *     required={"id", "image_file", "user_id", "album_id", "black_list", "white_list", "update_user_id", "created_at", "updated_at", "deleted_at"},
+     *     @OA\Property(property="id", type="integer", example=5),
+     *     @OA\Property(property="image_file", type="string", example="xxxxoooo.png"),
+     *     @OA\Property(property="user_id", type="integer", example="4"),
+     *     @OA\Property(property="album_id", type="integer", example="1"),
+     *     @OA\Property(property="black_list", type="json", example="{black_list: 1, 3, 10}"),
+     *     @OA\Property(property="white_list", type="json", example="null"),
+     *     @OA\Property(property="update_user_id", type="integer", example="4"),
+     *     @OA\Property(property="created_at", type="string", example="2021-04-25 12:02:55"),
+     *     @OA\Property(property="updated_at", type="string", example="2021-04-28 14:13:00"),
+     *     @OA\Property(property="deleted_at", type="string", example="null"),
+     * )
+     */
+
+     /**
+     * @OA\Get(
+     *     path="api/groups/{group}/albums/{album}/images",
+     *     description="選択したアルバムデータに紐づく画像情報をページネーション形式で取得する(件数：30件)",
+     *     produces={"application/json"},
+     *     tags={"user_images"},
+     *     @OA\Parameter(
+     *         name="group",
+     *         description="グループID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Parameter(
+     *         name="album",
+     *         description="アルバムID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / 指定したアルバムの画像データを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 description="指定したアルバムの画像データを表示",
+     *                 @OA\Items(
+     *                      ref="#/components/schemas/image_list"
+     *                 ),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="画像を取得出来ませんでした"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * 画像取得用メソッド
      */
     public function index(Request $request, $group, $album)
