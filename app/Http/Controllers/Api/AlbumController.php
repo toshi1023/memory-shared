@@ -39,38 +39,6 @@ class AlbumController extends Controller
      */
     /**
      * @OA\Schema(
-     *     schema="image_list",
-     *     required={"id", "image_file", "user_id", "album_id", "black_list", "white_list", "update_user_id", "created_at", "updated_at", "deleted_at"},
-     *     @OA\Property(property="id", type="integer", example=5),
-     *     @OA\Property(property="image_file", type="string", example="xxxxoooo.png"),
-     *     @OA\Property(property="user_id", type="integer", example="4"),
-     *     @OA\Property(property="album_id", type="integer", example="1"),
-     *     @OA\Property(property="black_list", type="json", example="{black_list: 1, 3, 10}"),
-     *     @OA\Property(property="white_list", type="json", example="null"),
-     *     @OA\Property(property="update_user_id", type="integer", example="4"),
-     *     @OA\Property(property="created_at", type="string", example="2021-04-25 12:02:55"),
-     *     @OA\Property(property="updated_at", type="string", example="2021-04-28 14:13:00"),
-     *     @OA\Property(property="deleted_at", type="string", example="null"),
-     * )
-     */
-    /**
-     * @OA\Schema(
-     *     schema="video_list",
-     *     required={"id", "image_file", "user_id", "album_id", "black_list", "white_list", "update_user_id", "created_at", "updated_at", "deleted_at"},
-     *     @OA\Property(property="id", type="integer", example=5),
-     *     @OA\Property(property="image_file", type="string", example="xxxxoooo.mp4"),
-     *     @OA\Property(property="user_id", type="integer", example="4"),
-     *     @OA\Property(property="album_id", type="integer", example="1"),
-     *     @OA\Property(property="black_list", type="json", example="null"),
-     *     @OA\Property(property="white_list", type="json", example="{white_list: 2, 6, 8}"),
-     *     @OA\Property(property="update_user_id", type="integer", example="4"),
-     *     @OA\Property(property="created_at", type="string", example="2021-04-25 12:02:55"),
-     *     @OA\Property(property="updated_at", type="string", example="2021-04-28 14:13:00"),
-     *     @OA\Property(property="deleted_at", type="string", example="null"),
-     * )
-     */
-    /**
-     * @OA\Schema(
      *     schema="album_errors",
      *     required={"name", "image_file", "host_user_id"},
      *     @OA\Property(property="name", type="object", required={"required", "unique", "name.max"},
@@ -280,18 +248,6 @@ class AlbumController extends Controller
      *                 description="指定したアルバムデータを表示",
      *                 ref="#/components/schemas/album_list"
      *             ),
-     *             @OA\Property(
-     *                 property="image",
-     *                 type="object",
-     *                 description="アルバムに紐づく画像データを表示",
-     *                 ref="#/components/schemas/image_list"
-     *             ),
-     *             @OA\Property(
-     *                 property="video",
-     *                 type="object",
-     *                 description="アルバムに紐づく動画データを表示",
-     *                 ref="#/components/schemas/video_list"
-     *             )
      *         )
      *     ),
      *     @OA\Response(
