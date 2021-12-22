@@ -23,6 +23,72 @@ class UserVideoController extends Controller
     }
 
     /**
+     * @OA\Schema(
+     *     schema="video_list",
+     *     required={"id", "image_file", "user_id", "album_id", "black_list", "white_list", "update_user_id", "created_at", "updated_at", "deleted_at"},
+     *     @OA\Property(property="id", type="integer", example=5),
+     *     @OA\Property(property="image_file", type="string", example="xxxxoooo.mp4"),
+     *     @OA\Property(property="user_id", type="integer", example="4"),
+     *     @OA\Property(property="album_id", type="integer", example="1"),
+     *     @OA\Property(property="black_list", type="json", example="null"),
+     *     @OA\Property(property="white_list", type="json", example="{white_list: 2, 6, 8}"),
+     *     @OA\Property(property="update_user_id", type="integer", example="4"),
+     *     @OA\Property(property="created_at", type="string", example="2021-04-25 12:02:55"),
+     *     @OA\Property(property="updated_at", type="string", example="2021-04-28 14:13:00"),
+     *     @OA\Property(property="deleted_at", type="string", example="null"),
+     * )
+     */
+
+     /**
+     * @OA\Get(
+     *     path="api/groups/{group}/albums/{album}/videos",
+     *     description="選択したアルバムデータに紐づく動画情報をページネーション形式で取得する(件数：10件)",
+     *     produces={"application/json"},
+     *     tags={"user_videos"},
+     *     @OA\Parameter(
+     *         name="group",
+     *         description="グループID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Parameter(
+     *         name="album",
+     *         description="アルバムID",
+     *         in="path",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success / 指定したアルバムの動画データを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 description="指定したアルバムの動画データを表示",
+     *                 @OA\Items(
+     *                      ref="#/components/schemas/video_list"
+     *                 ),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error / サーバエラー用のメッセージを表示",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error_message",
+     *                 type="string",
+     *                 description="サーバエラー用のメッセージを表示",
+     *                 example="動画を取得出来ませんでした"
+     *             )
+     *         )
+     *     ),
+     * )
+     * 
      * 動画取得用メソッド
      */
     public function index(Request $request, $group, $album)

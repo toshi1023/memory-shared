@@ -7,7 +7,7 @@
                     "albums"
                 ],
                 "description": "IDの値が{group}のグループと紐づく、アルバムデータをページネーション形式で取得する(件数：20件)",
-                "operationId": "App\\Http\\Controllers\\Api\\AlbumController::index",
+                "operationId": "e5ede8a083b2488b7f83c2d4d884a5df",
                 "parameters": [
                     {
                         "name": "group",
@@ -120,7 +120,7 @@
                     "albums"
                 ],
                 "description": "アルバムデータを保存する",
-                "operationId": "App\\Http\\Controllers\\Api\\AlbumController::store",
+                "operationId": "c8ff0e87d77b3353c3e5b3cc5c5230d7",
                 "parameters": [
                     {
                         "name": "group",
@@ -192,7 +192,7 @@
                     "albums"
                 ],
                 "description": "指定したアルバムの情報とそのアルバムに紐づく画像、動画のデータをすべて取得する",
-                "operationId": "App\\Http\\Controllers\\Api\\AlbumController::show",
+                "operationId": "86b15ab5cc1185280a1c1c6d0e635048",
                 "parameters": [
                     {
                         "name": "group",
@@ -218,12 +218,6 @@
                                     "properties": {
                                         "album": {
                                             "$ref": "#/components/schemas/album_list"
-                                        },
-                                        "image": {
-                                            "$ref": "#/components/schemas/image_list"
-                                        },
-                                        "video": {
-                                            "$ref": "#/components/schemas/video_list"
                                         }
                                     },
                                     "type": "object"
@@ -258,7 +252,7 @@
                     "albums"
                 ],
                 "description": "アルバムデータを更新保存する",
-                "operationId": "App\\Http\\Controllers\\Api\\AlbumController::update",
+                "operationId": "ffe7bf82aa143c75dea93b3faa630710",
                 "parameters": [
                     {
                         "name": "group",
@@ -338,7 +332,7 @@
                     "albums"
                 ],
                 "description": "グループデータを論理削除する",
-                "operationId": "App\\Http\\Controllers\\Api\\AlbumController::destroy",
+                "operationId": "ae15096e4f157bebc178253f41fe318c",
                 "parameters": [
                     {
                         "name": "group",
@@ -402,7 +396,7 @@
                     "albums"
                 ],
                 "description": "アルバム登録・更新時のバリデーションを実行する",
-                "operationId": "App\\Http\\Controllers\\Api\\AlbumController::albumValidate",
+                "operationId": "91c0aa8d7c81463cc8124e90793718b1",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -463,7 +457,7 @@
                     "albums"
                 ],
                 "description": "編集対象のアルバム情報を取得する",
-                "operationId": "App\\Http\\Controllers\\Api\\AlbumController::edit",
+                "operationId": "48dcb69f90d5620a8f63c598c27fa559",
                 "parameters": [
                     {
                         "name": "group",
@@ -525,7 +519,7 @@
                     "auth"
                 ],
                 "description": "ログインを実行する",
-                "operationId": "App\\Http\\Controllers\\Api\\AuthController::login",
+                "operationId": "67d6d0fdd54fba132e1b6f55ca254183",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -619,7 +613,7 @@
                     "auth"
                 ],
                 "description": "ログアウトを実行する",
-                "operationId": "App\\Http\\Controllers\\Api\\AuthController::logout",
+                "operationId": "28d48c13fca984400ac8de99f54ee13a",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -692,7 +686,7 @@
                     "groups"
                 ],
                 "description": "private_flgが0(公開)のグループデータをページネーション形式で取得する(件数：50件)",
-                "operationId": "App\\Http\\Controllers\\Api\\GroupController::index",
+                "operationId": "ac30b3897794f3ee24af2af44d36ce5d",
                 "parameters": [
                     {
                         "name": "name@like",
@@ -763,7 +757,7 @@
                     "groups"
                 ],
                 "description": "グループデータを保存する",
-                "operationId": "App\\Http\\Controllers\\Api\\GroupController::store",
+                "operationId": "7e6685b499160ee7d51b1389568e86de",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -826,7 +820,7 @@
                     "groups"
                 ],
                 "description": "指定したグループの情報をすべて取得する",
-                "operationId": "App\\Http\\Controllers\\Api\\GroupController::show",
+                "operationId": "e2d6a534a8d1765ee2f8b583628fd816",
                 "parameters": [
                     {
                         "name": "group",
@@ -896,7 +890,7 @@
                     "groups"
                 ],
                 "description": "グループデータを更新保存する",
-                "operationId": "App\\Http\\Controllers\\Api\\GroupController::update",
+                "operationId": "e92f78d7006c10c6ee089b9bb58153e6",
                 "parameters": [
                     {
                         "name": "group",
@@ -969,7 +963,7 @@
                     "groups"
                 ],
                 "description": "グループデータを論理削除する",
-                "operationId": "App\\Http\\Controllers\\Api\\GroupController::destroy",
+                "operationId": "b94c1c749a1c9c46a0121a71adbde115",
                 "parameters": [
                     {
                         "name": "group",
@@ -1026,7 +1020,7 @@
                     "groups"
                 ],
                 "description": "グループ作成時もしくは更新時のバリデーションを実行する",
-                "operationId": "App\\Http\\Controllers\\Api\\GroupController::groupValidate",
+                "operationId": "ebdac4ae94171ae99ddbeacafad5f207",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1087,7 +1081,7 @@
                     "groups"
                 ],
                 "description": "指定したグループに参加しているユーザ情報をすべて取得する",
-                "operationId": "App\\Http\\Controllers\\Api\\GroupController::participating",
+                "operationId": "7c4a2b82ed578f881ab0b880fc3c466b",
                 "parameters": [
                     {
                         "name": "group",
@@ -1146,7 +1140,7 @@
                     "group_histories"
                 ],
                 "description": "クエリストリングによりリクエストしたパラメータと一致するグループ情報、もしくはユーザ情報を全件取得する",
-                "operationId": "App\\Http\\Controllers\\Api\\GroupHistoryController::index",
+                "operationId": "e80f05a463f36d2246dea09c81c6aab5",
                 "parameters": [
                     {
                         "name": "@not_equalstatus",
@@ -1240,7 +1234,7 @@
                     "group_histories"
                 ],
                 "description": "グループ申請状況のデータを保存する",
-                "operationId": "App\\Http\\Controllers\\Api\\GroupHistoryController::store",
+                "operationId": "dfbf722b6712e52978fe60c612a3db84",
                 "parameters": [
                     {
                         "name": "group",
@@ -1325,7 +1319,7 @@
                     "group_histories"
                 ],
                 "description": "グループ申請状況のデータを更新する",
-                "operationId": "App\\Http\\Controllers\\Api\\GroupHistoryController::update",
+                "operationId": "9ddedb6cae7ec58d19b5ca7af1bfa71a",
                 "parameters": [
                     {
                         "name": "group",
@@ -1442,7 +1436,7 @@
                     "message_histories"
                 ],
                 "description": "クエリストリングによりリクエストしたパラメータと一致するトーク情報を20件取得する",
-                "operationId": "App\\Http\\Controllers\\Api\\MessageHistoryController::index",
+                "operationId": "0a3a977ea242a6bbcd3ba6f09b852e50",
                 "parameters": [
                     {
                         "name": "user",
@@ -1506,7 +1500,7 @@
                     "message_histories"
                 ],
                 "description": "メッセージデータを保存する",
-                "operationId": "App\\Http\\Controllers\\Api\\MessageHistoryController::store",
+                "operationId": "738b03ec03024f93373878a2419299ed",
                 "parameters": [
                     {
                         "name": "user",
@@ -1576,7 +1570,7 @@
                     "message_histories"
                 ],
                 "description": "メッセージデータを論理削除する",
-                "operationId": "App\\Http\\Controllers\\Api\\MessageHistoryController::destroy",
+                "operationId": "36b43fa6cc994ccb58f83c945fd6c605",
                 "parameters": [
                     {
                         "name": "user",
@@ -1640,7 +1634,7 @@
                     "read_managements"
                 ],
                 "description": "メッセージの未読データを物理削除する",
-                "operationId": "App\\Http\\Controllers\\Api\\MreadManagementController::destroy",
+                "operationId": "4413bfaeb2b2837565e1b5517e18e54d",
                 "parameters": [
                     {
                         "name": "user",
@@ -1690,7 +1684,7 @@
                     "news"
                 ],
                 "description": "user_idカラムがログインしているユーザもしくは運営ナンバー(0)に紐づく、ニュースデータをページネーション形式で取得する(件数：15件)",
-                "operationId": "App\\Http\\Controllers\\Api\\NewsController::index",
+                "operationId": "3ebdf9cd87a53f698641261c646ea25d",
                 "responses": {
                     "200": {
                         "description": "Success / ニュースデータを表示",
@@ -1738,7 +1732,7 @@
                     "news"
                 ],
                 "description": "ニュースデータを保存する",
-                "operationId": "App\\Http\\Controllers\\Api\\NewsController::store",
+                "operationId": "e91eb1a3d58bc02551defaaee39cb061",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1801,7 +1795,7 @@
                     "news"
                 ],
                 "description": "指定したニュースデータを取得する",
-                "operationId": "App\\Http\\Controllers\\Api\\NewsController::show",
+                "operationId": "3baf57e4111eac9975c1497644e2de15",
                 "parameters": [
                     {
                         "name": "news",
@@ -1878,7 +1872,7 @@
                     "news"
                 ],
                 "description": "ニュースデータを更新保存する",
-                "operationId": "App\\Http\\Controllers\\Api\\NewsController::update",
+                "operationId": "eb1d4bb1a2035c3cf8fe3c14de8617c6",
                 "parameters": [
                     {
                         "name": "news",
@@ -1948,7 +1942,7 @@
                     "news"
                 ],
                 "description": "ニュースデータを物理削除する",
-                "operationId": "App\\Http\\Controllers\\Api\\NewsController::destroy",
+                "operationId": "df6cad9cba8304c2b61a0bb464f68829",
                 "parameters": [
                     {
                         "name": "news",
@@ -2012,7 +2006,7 @@
                     "news"
                 ],
                 "description": "ニュース登録・更新時のバリデーションを実行する",
-                "operationId": "App\\Http\\Controllers\\Api\\NewsController::newsValidate",
+                "operationId": "4fff1bf4f17512c44fcbb4a7a4d0dd31",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2073,7 +2067,7 @@
                     "read_managements"
                 ],
                 "description": "ログインユーザのニュース未読件数を取得する",
-                "operationId": "App\\Http\\Controllers\\Api\\NreadManagementController::count",
+                "operationId": "4cd251be3cc52bdec7365c1ff100d5b4",
                 "responses": {
                     "200": {
                         "description": "Success / ログインユーザのニュース未読件数を表示",
@@ -2121,7 +2115,7 @@
                     "read_managements"
                 ],
                 "description": "ニュースの未読データを物理削除する",
-                "operationId": "App\\Http\\Controllers\\Api\\NreadManagementController::destroy",
+                "operationId": "2d1a230dd79a9174eb9571ae74b90613",
                 "parameters": [
                     {
                         "name": "news",
@@ -2176,7 +2170,7 @@
                     "posts"
                 ],
                 "description": "選択したグループの投稿内容をページネーション形式で取得する(件数：10件)",
-                "operationId": "App\\Http\\Controllers\\Api\\PostController::index",
+                "operationId": "22286351ef4156492eff0d9842e8a90e",
                 "parameters": [
                     {
                         "name": "group",
@@ -2213,7 +2207,7 @@
                                 "schema": {
                                     "properties": {
                                         "error_message": {
-                                            "description": "サーバエラー用のメッセージを表示",
+                                            "description": "サーバエラー用のメッセージを表示(グループに加盟していないユーザが本リクエストを送ってきた場合も対象)",
                                             "type": "string",
                                             "example": "投稿を取得出来ませんでした"
                                         }
@@ -2235,7 +2229,7 @@
                     "users"
                 ],
                 "description": "statusがMEMBERもしくはADMINのユーザ情報をページネーション形式で取得する(件数：50件)",
-                "operationId": "App\\Http\\Controllers\\Api\\UserController::index",
+                "operationId": "566aed8efb436ca506e0ef51a032ecd9",
                 "parameters": [
                     {
                         "name": "name@like",
@@ -2306,7 +2300,7 @@
                     "users"
                 ],
                 "description": "ユーザデータを保存する",
-                "operationId": "App\\Http\\Controllers\\Api\\UserController::store",
+                "operationId": "be551c1d694a01c164966f58bfa77013",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2369,7 +2363,7 @@
                     "users"
                 ],
                 "description": "指定したユーザの情報をすべて取得する",
-                "operationId": "App\\Http\\Controllers\\Api\\UserController::show",
+                "operationId": "f310aa35b9243239c65dbc8b8f4b135e",
                 "parameters": [
                     {
                         "name": "user",
@@ -2439,7 +2433,7 @@
                     "users"
                 ],
                 "description": "ユーザデータを更新保存する",
-                "operationId": "App\\Http\\Controllers\\Api\\UserController::update",
+                "operationId": "f1f65c5e73cb0b10fdd850447b672c28",
                 "parameters": [
                     {
                         "name": "user",
@@ -2512,7 +2506,7 @@
                     "users"
                 ],
                 "description": "ユーザデータを論理削除する",
-                "operationId": "App\\Http\\Controllers\\Api\\UserController::destroy",
+                "operationId": "cf641f0b739211ff3a1c21b1ef310591",
                 "parameters": [
                     {
                         "name": "user",
@@ -2569,7 +2563,7 @@
                     "users"
                 ],
                 "description": "編集対象のユーザ情報を取得する",
-                "operationId": "App\\Http\\Controllers\\Api\\UserController::edit",
+                "operationId": "0181a59cd9af655104b0b5de8ffd00d5",
                 "parameters": [
                     {
                         "name": "user",
@@ -2624,7 +2618,7 @@
                     "users"
                 ],
                 "description": "ユーザ新規登録時のバリデーションを実行する",
-                "operationId": "App\\Http\\Controllers\\Api\\UserController::webValidate",
+                "operationId": "b99b5bba3f9c3c12c67808bfd68b51bc",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2685,7 +2679,7 @@
                     "users"
                 ],
                 "description": "ユーザ更新時のバリデーションを実行する",
-                "operationId": "App\\Http\\Controllers\\Api\\UserController::userValidate",
+                "operationId": "f8728e2d147b59541a233785a01988e8",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2746,7 +2740,7 @@
                     "users"
                 ],
                 "description": "同じグループに加盟しているユーザ情報をすべて取得する",
-                "operationId": "App\\Http\\Controllers\\Api\\UserController::families",
+                "operationId": "d8dcc28f0138535b32c2f472b2525013",
                 "parameters": [
                     {
                         "name": "user",
@@ -2805,7 +2799,7 @@
                     "users"
                 ],
                 "description": "自身が加盟しているグループ情報をすべて取得する",
-                "operationId": "App\\Http\\Controllers\\Api\\UserController::participating",
+                "operationId": "b79f93ca9e1c1119f1a0092238532b17",
                 "parameters": [
                     {
                         "name": "user",
@@ -2864,7 +2858,7 @@
                     "users"
                 ],
                 "description": "自身がトークでメッセージのやり取りをしているすべてのユーザの情報と、それらのユーザに紐づく最新メッセージをすべて取得する",
-                "operationId": "App\\Http\\Controllers\\Api\\UserController::messages",
+                "operationId": "339e2c2193f2fe6303189c1533356ffc",
                 "parameters": [
                     {
                         "name": "user",
@@ -2996,7 +2990,7 @@
                     "users"
                 ],
                 "description": "自身が作成したグループで、「歓迎中」として、すべてのユーザに公開するデータを取得する",
-                "operationId": "App\\Http\\Controllers\\Api\\UserController::welcomeGgroups",
+                "operationId": "691804381fd095a702b53c79141694cc",
                 "parameters": [
                     {
                         "name": "user",
@@ -3055,7 +3049,7 @@
                     "users"
                 ],
                 "description": "ユーザの詳細ページにて、そのユーザ参加していて、かつ公開設定が「公開」となっているグループ情報を取得する",
-                "operationId": "App\\Http\\Controllers\\Api\\UserController::participatingGroups",
+                "operationId": "8da4036030c5472420b960c7165de1d9",
                 "parameters": [
                     {
                         "name": "user",
@@ -3114,7 +3108,7 @@
                     "users"
                 ],
                 "description": "自身が作成したグループに、別ユーザを招待するためのデータを取得する",
-                "operationId": "App\\Http\\Controllers\\Api\\UserController::inviteGgroups",
+                "operationId": "a433087a2ef74e70314883616eff6aff",
                 "parameters": [
                     {
                         "name": "user",
@@ -3154,6 +3148,138 @@
                                             "description": "サーバエラー用のメッセージを表示",
                                             "type": "string",
                                             "example": "グループ情報を取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "api/groups/{group}/albums/{album}/images": {
+            "get": {
+                "tags": [
+                    "user_images"
+                ],
+                "description": "選択したアルバムデータに紐づく画像情報をページネーション形式で取得する(件数：30件)",
+                "operationId": "cec5e83ab55c582741e7f95d2281420e",
+                "parameters": [
+                    {
+                        "name": "group",
+                        "in": "path",
+                        "description": "グループID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "album",
+                        "in": "path",
+                        "description": "アルバムID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / 指定したアルバムの画像データを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "指定したアルバムの画像データを表示",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/image_list"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "画像を取得出来ませんでした"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ]
+            }
+        },
+        "api/groups/{group}/albums/{album}/videos": {
+            "get": {
+                "tags": [
+                    "user_videos"
+                ],
+                "description": "選択したアルバムデータに紐づく動画情報をページネーション形式で取得する(件数：10件)",
+                "operationId": "ee44d1e48d84460ef4bb7c09e7c9770d",
+                "parameters": [
+                    {
+                        "name": "group",
+                        "in": "path",
+                        "description": "グループID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "album",
+                        "in": "path",
+                        "description": "アルバムID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success / 指定したアルバムの動画データを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "指定したアルバムの動画データを表示",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/video_list"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error / サーバエラー用のメッセージを表示",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_message": {
+                                            "description": "サーバエラー用のメッセージを表示",
+                                            "type": "string",
+                                            "example": "動画を取得出来ませんでした"
                                         }
                                     },
                                     "type": "object"
@@ -3211,120 +3337,6 @@
                     "update_user_id": {
                         "type": "integer",
                         "example": "2"
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "example": "2021-04-25 12:02:55"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "example": "2021-04-28 14:13:00"
-                    },
-                    "deleted_at": {
-                        "type": "string",
-                        "example": "null"
-                    }
-                },
-                "type": "object"
-            },
-            "image_list": {
-                "required": [
-                    "id",
-                    "image_file",
-                    "user_id",
-                    "album_id",
-                    "black_list",
-                    "white_list",
-                    "update_user_id",
-                    "created_at",
-                    "updated_at",
-                    "deleted_at"
-                ],
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "example": 5
-                    },
-                    "image_file": {
-                        "type": "string",
-                        "example": "xxxxoooo.png"
-                    },
-                    "user_id": {
-                        "type": "integer",
-                        "example": "4"
-                    },
-                    "album_id": {
-                        "type": "integer",
-                        "example": "1"
-                    },
-                    "black_list": {
-                        "type": "json",
-                        "example": "{black_list: 1, 3, 10}"
-                    },
-                    "white_list": {
-                        "type": "json",
-                        "example": "null"
-                    },
-                    "update_user_id": {
-                        "type": "integer",
-                        "example": "4"
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "example": "2021-04-25 12:02:55"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "example": "2021-04-28 14:13:00"
-                    },
-                    "deleted_at": {
-                        "type": "string",
-                        "example": "null"
-                    }
-                },
-                "type": "object"
-            },
-            "video_list": {
-                "required": [
-                    "id",
-                    "image_file",
-                    "user_id",
-                    "album_id",
-                    "black_list",
-                    "white_list",
-                    "update_user_id",
-                    "created_at",
-                    "updated_at",
-                    "deleted_at"
-                ],
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "example": 5
-                    },
-                    "image_file": {
-                        "type": "string",
-                        "example": "xxxxoooo.mp4"
-                    },
-                    "user_id": {
-                        "type": "integer",
-                        "example": "4"
-                    },
-                    "album_id": {
-                        "type": "integer",
-                        "example": "1"
-                    },
-                    "black_list": {
-                        "type": "json",
-                        "example": "null"
-                    },
-                    "white_list": {
-                        "type": "json",
-                        "example": "{white_list: 2, 6, 8}"
-                    },
-                    "update_user_id": {
-                        "type": "integer",
-                        "example": "4"
                     },
                     "created_at": {
                         "type": "string",
@@ -4764,6 +4776,120 @@
                     "private_flg": {
                         "type": "integer",
                         "example": "0"
+                    }
+                },
+                "type": "object"
+            },
+            "image_list": {
+                "required": [
+                    "id",
+                    "image_file",
+                    "user_id",
+                    "album_id",
+                    "black_list",
+                    "white_list",
+                    "update_user_id",
+                    "created_at",
+                    "updated_at",
+                    "deleted_at"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "image_file": {
+                        "type": "string",
+                        "example": "xxxxoooo.png"
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": "4"
+                    },
+                    "album_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "black_list": {
+                        "type": "json",
+                        "example": "{black_list: 1, 3, 10}"
+                    },
+                    "white_list": {
+                        "type": "json",
+                        "example": "null"
+                    },
+                    "update_user_id": {
+                        "type": "integer",
+                        "example": "4"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2021-04-25 12:02:55"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2021-04-28 14:13:00"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "example": "null"
+                    }
+                },
+                "type": "object"
+            },
+            "video_list": {
+                "required": [
+                    "id",
+                    "image_file",
+                    "user_id",
+                    "album_id",
+                    "black_list",
+                    "white_list",
+                    "update_user_id",
+                    "created_at",
+                    "updated_at",
+                    "deleted_at"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "image_file": {
+                        "type": "string",
+                        "example": "xxxxoooo.mp4"
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": "4"
+                    },
+                    "album_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "black_list": {
+                        "type": "json",
+                        "example": "null"
+                    },
+                    "white_list": {
+                        "type": "json",
+                        "example": "{white_list: 2, 6, 8}"
+                    },
+                    "update_user_id": {
+                        "type": "integer",
+                        "example": "4"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2021-04-25 12:02:55"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2021-04-28 14:13:00"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "example": "null"
                     }
                 },
                 "type": "object"
