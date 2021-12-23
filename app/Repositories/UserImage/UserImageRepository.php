@@ -31,7 +31,7 @@ class UserImageRepository extends BaseRepository implements UserImageRepositoryI
      */
     public function searchQueryPaginate($conditions=[], $order=[], int $paginate=30)
     {
-        return $this->baseSearchQuery($conditions)
+        return $this->baseSearchQuery($conditions, $order)
                     ->where('black_list', '=', null)
                     ->where('white_list', '=', null)
                     ->orWhere('black_list->'.Auth::user()->id, '!=', Auth::user()->id)

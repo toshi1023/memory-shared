@@ -94,14 +94,16 @@ class UserImageController extends Controller
     public function index(Request $request, $group, $album)
     {
         try {
-            $data = [];
-
             // 検索条件
             $conditions = [];
             $conditions['album_id'] = $album;
 
+            // ソート条件
+            $order = [];
+            $order['id'] = 'desc';
+
             // 画像情報取得(black_list等の取得例: $data['image'][0]['black_list'][3])
-            $data = $this->db->searchQueryPaginate($conditions);
+            $data = $this->db->searchQueryPaginate($conditions, $order);
             
             return response()->json(['images' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
