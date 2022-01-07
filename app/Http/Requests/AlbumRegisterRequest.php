@@ -30,7 +30,7 @@ class AlbumRegisterRequest extends FormRequest
         return [
             // アルバムのバリデーションチェック
             'name'                  => ['required', 'max:50'],
-            'image_file'            => 'image|mimes:jpeg,png,jpg,gif|max:1024',
+            'image_file'            => 'image|mimes:jpeg,png,jpg,gif|max:10240',
             'host_user_id'          => ['required', new GroupMemberRule, new AlbumUpdateRule]
         ];
     }
@@ -44,7 +44,7 @@ class AlbumRegisterRequest extends FormRequest
             "name.required"         => "アルバム名は必須です",
             "name.max"              => "アルバム名は50文字以内で入力してください",
             "mines"                 => "指定された拡張子（PNG/JPG/GIF）ではありません。",
-            "image_file.max"        => "1Mを超えています。",
+            "image_file.max"        => "10Mを超えています。",
         ];
     }
 

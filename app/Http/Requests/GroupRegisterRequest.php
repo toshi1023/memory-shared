@@ -31,7 +31,7 @@ class GroupRegisterRequest extends FormRequest
         return [
             // グループのバリデーションチェック
             'name'                  => ['required', 'max:50', new GroupNameRule],
-            'image_file'            => 'image|mimes:jpeg,png,jpg,gif|max:1024',
+            'image_file'            => 'image|mimes:jpeg,png,jpg,gif|max:10240',
             'host_user_id'          => ['required', new GroupUpdateRule]
         ];
     }
@@ -44,7 +44,7 @@ class GroupRegisterRequest extends FormRequest
         return [
             "name.max"                      => "グループ名は50文字以内で入力してください",
             "mines"                         => "指定された拡張子（PNG/JPG/GIF）ではありません。",
-            "image_file.max"                => "1Mを超えています。",
+            "image_file.max"                => "10Mを超えています。",
         ];
     }
 

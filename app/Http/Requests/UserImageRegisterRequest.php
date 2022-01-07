@@ -29,7 +29,7 @@ class UserImageRegisterRequest extends FormRequest
     {
         return [
             // 画像のバリデーションチェック
-            'image_file'       => ['required', 'max:1024', new UserImageMimeRule],
+            'image_file'       => ['required', 'max:10240', new UserImageMimeRule],
             'user_id'          => ['required', new UserImageUploadRule]
         ];
     }
@@ -40,7 +40,7 @@ class UserImageRegisterRequest extends FormRequest
     public function messages()
     {
         return [
-            "image_file.max"                => "1Mを超えています。",
+            "image_file.max"                => "10Mを超えています。",
         ];
     }
 
