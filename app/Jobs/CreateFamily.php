@@ -78,7 +78,7 @@ class CreateFamily implements ShouldQueue
                     $exists = $familyRepository->confirmFamily($this->user_id, $family->user_id);
                     
                     if(!$exists) {
-                        $familyRepository->save(['user_id1' => $this->user_id, 'user_id2' => $family->user_id]);
+                        $familyRepository->save($this->user_id, $family->user_id);
                     }
                 }
             }
