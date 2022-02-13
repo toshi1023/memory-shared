@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Lib\Common;
@@ -190,6 +191,60 @@ class AuthController extends Controller
             Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
 
             return response()->json(["error_message" => config('const.SystemMessage.UNEXPECTED_ERR')], 200, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
+     * パスワード再設定用メールの送信
+     */
+    public function forgotPassword(Request $request)
+    {
+        // メールアドレスのバリデーションチェック
+        $request->validate(['email' => 'required|email']);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        return $status === Password::RESET_LINK_SENT
+                    ? response()->json(['info_message' => config('const.SystemMessage.SEND_EMAIL_INFO'), 'status' => __($status)], 200, [], JSON_UNESCAPED_UNICODE)
+                    : response()->json(['error_message' => config('const.SystemMessage.SEND_EMAIL_ERR'), 'status' => __($status)], 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * パスワード再設定
+     */
+    public function passwordReset(Request $request)
+    {
+        try {
+            // バリデーションチェック
+            $credentials = $request->validate([
+                'email'                 => 'required|email',
+                'token'                 => 'required|string',
+                'password'              => ['required', 'min:6', 'confirmed', 'regex:/^[0-9a-zA-Z\_@!?#%&]+$/'],
+                'password_confirmation' => ['required', 'min:6', 'regex:/^[0-9a-zA-Z\_@!?#%&]+$/'],
+            ]);
+
+            // パスワードの変更処理
+            $reset_password_status = Password::reset($credentials, function ($user, $password) {
+                $user->password = bcrypt($password);
+                $user->save();
+            });
+
+            // トークンが異なる場合の処理
+            if ($reset_password_status == Password::INVALID_TOKEN) {
+                throw new Exception('Token does not match. IP adress: '.$request->ip().' , UserAgent: ').$request->header('User-Agent');
+            }
+
+            return response()->json([
+                'info_message' => config('const.SystemMessage.RESET_PASSWORD_INFO')
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch(Exception $e) {
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+
+            return response()->json([
+                'error_message' => config('const.SystemMessage.RESET_PASSWORD_ERR')
+            ], 200, [], JSON_UNESCAPED_UNICODE);
         }
     }
 

@@ -141,7 +141,12 @@ return [
         'UNAUTHORIZATION'    => 'ログイン権限がありません',
         'LOGIN_ERR'          => 'メールアドレスもしくはパスワードが一致しません',
         'UNEXPECTED_ERR'     => '予期しないエラーが発生しました。管理者にお問い合わせください',
-        'VALIDATE_STATUS'    => 'OK'
+        'VALIDATE_STATUS'    => 'OK',
+        'SEND_EMAIL_INFO'    => 'パスワード再設定メールを送信しました',
+        'SEND_EMAIL_ERR'     => 'パスワード再設定メールを送信できませんでした',
+        'RESET_PASSWORD_INFO'   => 'パスワードの再設定が完了しました',
+        'RESET_PASSWORD_ERR'    => 'パスワードの再設定に失敗しました',
+
     ],
     // AWSのバケット名で使用する定数
     'Aws' => [

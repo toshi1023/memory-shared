@@ -20,6 +20,7 @@ Route::group(['middleware' => 'cors'], function() {
     Route::post('/validate',                'Api\UserController@webValidate');
     Route::post('/register',                'Api\UserController@store')->name('register');
     Route::post('/login',                   'Api\AuthController@login')->name('login');
-    Route::post('/reset-password/{token}',  'Api\AuthController@passwordReset')->name('passwordReset');
+    Route::post('/forgot-password',         'Api\AuthController@forgotPassword')->name('forgotPassword');
+    Route::post('/reset-password/{email}/{token}',  'Api\AuthController@passwordReset')->name('passwordReset');
     Route::post('/logout',                  'Api\AuthController@logout')->name('logout');
 });
