@@ -93,16 +93,24 @@ class AuthController extends Controller
                 'password' => 'required'
             ]);
             if($this->getGuard()->attempt($credentials)) {
+                $repository = app()->make(UserRepositoryInterface::class);
+
                 // 管理者の場合はワンタイムパスワードを保存
                 if(Auth::user()->status === config('const.User.ADMIN')) {
                     // ワンタイムパスワード発行
                     $onePass = Common::issueOnetimePassword(false);
                     // ワンタイムパスワードを保存
-                    $repository = app()->make(UserRepositoryInterface::class);
                     $repository->saveOnePass($onePass, Auth::user()->id);
                     // ワンタイムパスワードの通知メールを送信
                     SendEmail::dispatch(['id' => Auth::user()->id, 'email' => Auth::user()->email]);
                 }
+
+                // User-Agentを保存
+                $data = [
+                    'id'            => Auth::user()->id,
+                    'user_agent'    => $request->header('User-Agent')
+                ];
+                $repository->save($data);
 
                 return response()->json([
                     "id"           => Auth::user()->id,

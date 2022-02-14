@@ -563,6 +563,7 @@ class UserController extends Controller
             // パスワードのハッシュ処理
             $data['password'] = Hash::make($data['password']);
             $data['image_file'] = $filename;
+            $data['user_agent'] = $request->header('User-Agent');
             
             // データの保存処理
             $data = $this->db->save($data);
