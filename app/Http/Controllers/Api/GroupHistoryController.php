@@ -198,7 +198,7 @@ class GroupHistoryController extends Controller
                 'ghusers'         => $users,
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             return response()->json([
               'error_message' => config('const.Group.GET_ERR'),
@@ -340,7 +340,7 @@ class GroupHistoryController extends Controller
             }
         } catch (Exception $e) {
             DB::rollback();
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             // 申請の場合
             if((int)$data['status'] === config('const.GroupHistory.APPLY')) {
@@ -526,7 +526,7 @@ class GroupHistoryController extends Controller
             }
         } catch (Exception $e) {
             DB::rollback();
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             // 承認の場合
             if((int)$request->input('status') === config('const.GroupHistory.APPROVAL')) {

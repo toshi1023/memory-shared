@@ -76,7 +76,7 @@ class MreadManagementController extends Controller
             return response()->json([], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             return response()->json([
               'error_message' => config('const.SystemMessage.UNEXPECTED_ERR'),

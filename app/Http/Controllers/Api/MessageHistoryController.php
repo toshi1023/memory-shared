@@ -120,7 +120,7 @@ class MessageHistoryController extends Controller
 
             return response()->json(['talks' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             return response()->json([
               'error_message' => config('const.Message.GET_ERR'),
@@ -209,7 +209,7 @@ class MessageHistoryController extends Controller
             return response()->json(['talk' => $talk], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             // 作成失敗時はエラーメッセージを返す
             return response()->json([
@@ -286,7 +286,7 @@ class MessageHistoryController extends Controller
             return response()->json(['info_message' => config('const.Message.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             return response()->json([
               'error_message' => config('const.Message.DELETE_ERR'),

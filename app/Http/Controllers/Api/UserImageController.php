@@ -107,7 +107,7 @@ class UserImageController extends Controller
             
             return response()->json(['images' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             return response()->json([
               'error_message' => config('const.UserImage.GET_ERR'),
@@ -166,7 +166,7 @@ class UserImageController extends Controller
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             // ロールバックした場合は仮保存したデータも物理削除
             $this->db->baseForceDelete($userImage->id);
@@ -194,7 +194,7 @@ class UserImageController extends Controller
             return response()->json(['info_message' => config('const.UserImage.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             return response()->json([
               'error_message' => config('const.UserImage.DELETE_ERR'),

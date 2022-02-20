@@ -207,7 +207,7 @@ class AlbumController extends Controller
             
             return response()->json(['albums' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             return response()->json([
               'error_message' => config('const.Album.GET_ERR'),
@@ -281,7 +281,7 @@ class AlbumController extends Controller
             
             return response()->json(['album' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             return response()->json([
               'error_message' => config('const.Album.GET_ERR'),
@@ -429,7 +429,7 @@ class AlbumController extends Controller
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             // 作成失敗時はエラーメッセージを返す
             return response()->json([
@@ -504,7 +504,7 @@ class AlbumController extends Controller
             
             return response()->json(['album' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             return response()->json([
               'error_message' => config('const.Album.GET_ERR'),
@@ -609,7 +609,7 @@ class AlbumController extends Controller
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             // 作成失敗時はエラーメッセージを返す
             return response()->json([
@@ -681,7 +681,7 @@ class AlbumController extends Controller
             return response()->json(['info_message' => config('const.Album.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             return response()->json([
               'error_message' => config('const.Album.DELETE_ERR'),

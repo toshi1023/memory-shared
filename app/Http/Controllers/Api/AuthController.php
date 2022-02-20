@@ -122,7 +122,7 @@ class AuthController extends Controller
             // 認証に失敗した場合
             return response()->json(["error_message" => config('const.SystemMessage.LOGIN_ERR')], 401, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             // 認証に失敗した場合
             return response()->json(["error_message" => config('const.SystemMessage.LOGIN_ERR')], 401, [], JSON_UNESCAPED_UNICODE);
@@ -196,7 +196,7 @@ class AuthController extends Controller
                 return response()->json(["info_message" => config('const.SystemMessage.LOGOUT_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
             }
         } catch (Exception $e) {
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             return response()->json(["error_message" => config('const.SystemMessage.UNEXPECTED_ERR')], 200, [], JSON_UNESCAPED_UNICODE);
         }
@@ -248,7 +248,7 @@ class AuthController extends Controller
                 'info_message' => config('const.SystemMessage.RESET_PASSWORD_INFO')
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch(Exception $e) {
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
+            $this->getErrorLog($request, $e, get_class($this), __FUNCTION__);
 
             return response()->json([
                 'error_message' => config('const.SystemMessage.RESET_PASSWORD_ERR')
