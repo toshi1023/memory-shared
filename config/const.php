@@ -146,7 +146,7 @@ return [
         'SEND_EMAIL_ERR'     => 'パスワード再設定メールを送信できませんでした',
         'RESET_PASSWORD_INFO'   => 'パスワードの再設定が完了しました',
         'RESET_PASSWORD_ERR'    => 'パスワードの再設定に失敗しました',
-
+        'SLACK_LOG_WARN'        => 'LOGにエラー内容が出力されました。内容: '
     ],
     // AWSのバケット名で使用する定数
     'Aws' => [

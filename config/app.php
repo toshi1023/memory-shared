@@ -56,6 +56,8 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    'slack_url' => env('SLACK_URL'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -177,6 +179,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
         App\Providers\DataBaseQueryServiceProvider::class,
+        App\Providers\SlackServiceProvider::class,
 
     ],
 
@@ -230,6 +233,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Slack' => App\Lib\SlackFacade::class,
 
     ],
 

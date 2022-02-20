@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Exception;
+use App\Lib\SlackFacade;
 
 class Controller extends BaseController
 {
@@ -37,6 +36,12 @@ class Controller extends BaseController
      */
     protected function getErrorLog($request, $e, $class, $function)
     {
-        Log::error(config('const.SystemMessage.SYSTEM_ERR').$class.'::'.$function.":".$e->getMessage(). $this->getUserInfo($request));
+        $msg = config('const.SystemMessage.SYSTEM_ERR').$class.'::'.$function.":".$e->getMessage(). $this->getUserInfo($request);
+
+        // Logに出力
+        Log::error($msg);
+
+        // Slackに通知
+        SlackFacade::send(config('const.SystemMessage.SLACK_LOG_WARN').$msg);
     }
 }
