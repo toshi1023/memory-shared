@@ -36,10 +36,20 @@ class Controller extends BaseController
      */
     protected function getErrorLog($request, $e, $class, $function)
     {
-        $msg = config('const.SystemMessage.SYSTEM_ERR').$class.'::'.$function.":".$e->getMessage(). $this->getUserInfo($request);
+        $msg = config('const.SystemMessage.SYSTEM_ERR').$class.'::'.$function.' ('.$e->getLine().') 行目 : '.$e->getMessage(). $this->getUserInfo($request);
 
-        // Logに出力
+        // 標準メッセージをLogに出力
         Log::error($msg);
+
+        // stack traceをLogに出力
+        $index = 1;
+        foreach($e->getTrace() as $val) {
+            // 例) StackTrace[1] :: /home/test/app/Http/Controllers/TestController.php 22行目, { class: Test , function: test }
+            $trace = 'StackTrace['.$index.'] :: '.$val["file"].' '.$val["line"].'行目 , { class: '.$val["class"].' , function: '.$val["function"].' }';
+            Log::error($trace);
+
+            $index += 1;
+        }
 
         // Slackに通知
         SlackFacade::send(config('const.SystemMessage.SLACK_LOG_WARN').$msg);
