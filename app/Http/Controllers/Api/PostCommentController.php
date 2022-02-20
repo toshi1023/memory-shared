@@ -40,7 +40,7 @@ class PostCommentController extends Controller
             
             return response()->json(['comments' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
 
             return response()->json([
               'error_message' => config('const.PostComment.GET_ERR'),
@@ -83,7 +83,7 @@ class PostCommentController extends Controller
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
 
             // 作成失敗時はエラーメッセージを返す
             return response()->json([
@@ -125,7 +125,7 @@ class PostCommentController extends Controller
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
 
             return response()->json([
               'error_message' => config('const.PostComment.DELETE_ERR'),

@@ -198,7 +198,7 @@ class GroupHistoryController extends Controller
                 'ghusers'         => $users,
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
 
             return response()->json([
               'error_message' => config('const.Group.GET_ERR'),
@@ -297,7 +297,7 @@ class GroupHistoryController extends Controller
             ];
             // 既存データが存在しないかどうか確認
             if($this->db->searchExists($conditions)) {
-                throw new Exception('すでに履歴データが存在するユーザ・グループ間のデータ保存処理が実行されようとしました。 グループID：'.$data['group_id'].', ユーザID：'.$data['user_id']);
+                throw new Exception('すでに履歴データが存在するユーザ・グループ間のデータ保存処理が実行されようとしました。 グループID: '.$data['group_id'].', ユーザID：'.$data['user_id']);
             }
             
             // データの保存処理
@@ -340,7 +340,7 @@ class GroupHistoryController extends Controller
             }
         } catch (Exception $e) {
             DB::rollback();
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
 
             // 申請の場合
             if((int)$data['status'] === config('const.GroupHistory.APPLY')) {
@@ -461,7 +461,7 @@ class GroupHistoryController extends Controller
 
             // グループのホストであるかどうかを確認
             if(!$this->db->confirmGroupHost(Auth::user()->id, $group)) {
-                throw new Exception('ホストでないユーザがグループの承認作業を実行されようとしました。 グループID：'.$group.', ユーザID：'.Auth::user()->id);
+                throw new Exception('ホストでないユーザがグループの承認作業を実行されようとしました。 グループID: '.$group.', ユーザID: '.Auth::user()->id);
             }
             
             // データの保存処理
@@ -526,7 +526,7 @@ class GroupHistoryController extends Controller
             }
         } catch (Exception $e) {
             DB::rollback();
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
 
             // 承認の場合
             if((int)$request->input('status') === config('const.GroupHistory.APPROVAL')) {

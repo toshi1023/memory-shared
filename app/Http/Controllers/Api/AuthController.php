@@ -185,7 +185,7 @@ class AuthController extends Controller
         try {
             if((int)$request->id === Auth::user()->id) {
                 // 管理者の場合はワンタイムパスワードを削除
-                if(Auth::user()->status === 3) {
+                if(Auth::user()->status === config('const.User.ADMIN')) {
                     // ワンタイムパスワードを削除
                     $repository = app()->make(UserRepositoryInterface::class);
                     $repository->saveOnePass(null, Auth::user()->id);
@@ -196,7 +196,7 @@ class AuthController extends Controller
                 return response()->json(["info_message" => config('const.SystemMessage.LOGOUT_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
             }
         } catch (Exception $e) {
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
 
             return response()->json(["error_message" => config('const.SystemMessage.UNEXPECTED_ERR')], 200, [], JSON_UNESCAPED_UNICODE);
         }
@@ -241,14 +241,14 @@ class AuthController extends Controller
 
             // トークンが異なる場合の処理
             if ($reset_password_status == Password::INVALID_TOKEN) {
-                throw new Exception('Token does not match. IP adress: '.$request->ip().' , UserAgent: ').$request->header('User-Agent');
+                throw new Exception('Token does not match. ');
             }
 
             return response()->json([
                 'info_message' => config('const.SystemMessage.RESET_PASSWORD_INFO')
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch(Exception $e) {
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
 
             return response()->json([
                 'error_message' => config('const.SystemMessage.RESET_PASSWORD_ERR')

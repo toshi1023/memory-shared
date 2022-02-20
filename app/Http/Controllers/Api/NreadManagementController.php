@@ -67,7 +67,7 @@ class NreadManagementController extends Controller
             
             return response()->json(['nread_count' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
 
             return response()->json([
               'error_message' => config('const.SystemMessage.UNEXPECTED_ERR'),
@@ -145,7 +145,7 @@ class NreadManagementController extends Controller
             return response()->json(['news' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
 
             return response()->json([
               'error_message' => config('const.SystemMessage.UNEXPECTED_ERR'),

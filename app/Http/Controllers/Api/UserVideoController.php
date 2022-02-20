@@ -107,7 +107,7 @@ class UserVideoController extends Controller
             
             return response()->json(['videos' => $data], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
 
             return response()->json([
               'error_message' => config('const.UserVideo.GET_ERR'),
@@ -164,7 +164,7 @@ class UserVideoController extends Controller
             ], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
 
             // 作成失敗時はエラーメッセージを返す
             return response()->json([
@@ -177,7 +177,7 @@ class UserVideoController extends Controller
     /**
      * 動画データ削除(論理削除)
      */
-    public function destroy($group, $album, $video)
+    public function destroy(Request $request, $group, $album, $video)
     {
         try {
             DB::beginTransaction();
@@ -189,7 +189,7 @@ class UserVideoController extends Controller
             return response()->json(['info_message' => config('const.UserVideo.DELETE_INFO')], 200, [], JSON_UNESCAPED_UNICODE);
         } catch (Exception $e) {
             DB::rollback();
-            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage());
+            Log::error(config('const.SystemMessage.SYSTEM_ERR').get_class($this).'::'.__FUNCTION__.":".$e->getMessage(). $this->getUserInfo($request));
 
             return response()->json([
               'error_message' => config('const.UserVideo.DELETE_ERR'),
