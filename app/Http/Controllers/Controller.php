@@ -36,7 +36,8 @@ class Controller extends BaseController
      */
     protected function getErrorLog($request, $e, $class, $function)
     {
-        $msg = config('const.SystemMessage.SYSTEM_ERR').$class.'::'.$function.' ('.$e->getLine().') 行目 : '.$e->getMessage(). $this->getUserInfo($request);
+        $msg = config('const.SystemMessage.SYSTEM_ERR').$class.'::'.$function.' : '.$e->getMessage(). $this->getUserInfo($request);
+        $msg2 = '';
 
         // 標準メッセージをLogに出力
         Log::error($msg);
@@ -48,10 +49,12 @@ class Controller extends BaseController
             $trace = 'StackTrace['.$index.'] :: '.$val["file"].' '.$val["line"].'行目 , { class: '.$val["class"].' , function: '.$val["function"].' }';
             Log::error($trace);
 
+            if($index === 1) $msg2 = $trace;
+
             $index += 1;
         }
 
         // Slackに通知
-        SlackFacade::send(config('const.SystemMessage.SLACK_LOG_WARN').$msg);
+        SlackFacade::send(config('const.SystemMessage.SLACK_LOG_WARN').$msg.' , '.$msg2);
     }
 }
