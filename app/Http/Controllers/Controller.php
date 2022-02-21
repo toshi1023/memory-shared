@@ -21,10 +21,12 @@ class Controller extends BaseController
     {
         if (Auth::check()) {
             // ログイン済みの場合
-            return ' :: [ user_id: '.Auth::id().' , IP Adress: '.$request->ip().' , UserAgent: '.$request->header('User-Agent').' ]';
+            // return ' :: [ user_id: '.Auth::id().' , IP Adress: '.$request->ip().' , UserAgent: '.$request->header('User-Agent').' ]';
+            return ' :: [ user_id: '.Auth::id().' , IP Adress: 0.0.0.0 , UserAgent: '.$request->header('User-Agent').' ]';
         }
         // ログアウトされている場合
-        return ' :: [ user_id: already logout , IP Adress: '.$request->ip().' , UserAgent: '.$request->header('User-Agent').' ]';
+        // return ' :: [ user_id: already logout , IP Adress: '.$request->ip().' , UserAgent: '.$request->header('User-Agent').' ]';
+        return ' :: [ user_id: already logout , IP Adress: 0.0.0.0 , UserAgent: '.$request->header('User-Agent').' ]';
     }
 
     /**
