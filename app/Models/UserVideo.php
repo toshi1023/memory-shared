@@ -24,7 +24,7 @@ class UserVideo extends Model
     public function getVideoUrlAttribute()
     {
         // 画像パスを設定
-        return env('AWS_BUCKET_URL').'/'.config('const.Aws.MAIN').'/'.$this->album_id.'/'.$this->image_file;
+        return config('const.Aws.URL').'/'.config('const.Aws.MAIN').'/'.$this->album_id.'/'.$this->image_file;
     }
 
     /**

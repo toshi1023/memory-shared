@@ -22,9 +22,9 @@ class Group extends Model
     {
         // 画像パスを設定
         if($this->image_file) {
-            return env('AWS_BUCKET_URL').'/'.config('const.Aws.GROUP').'/'.$this->id.'/'.$this->image_file;
+            return config('const.Aws.URL').'/'.config('const.Aws.GROUP').'/'.$this->id.'/'.$this->image_file;
         }
-        return env('AWS_BUCKET_URL').'/no-image.jpg';
+        return config('const.Aws.URL').'/no-image.jpg';
     }
 
     /**

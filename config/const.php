@@ -150,6 +150,7 @@ return [
     ],
     // AWSのバケット名で使用する定数
     'Aws' => [
+        'URL'                => env('AWS_BUCKET_URL'),
         'USER'               => 'User',
         'GROUP'              => 'Group',
         'ALBUM'              => 'Album',
